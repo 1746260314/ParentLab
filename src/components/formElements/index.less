@@ -1,0 +1,120 @@
+.pl-input,
+.pl-textarea {
+    width: 100%;
+    height: 56px;
+    border: none;
+    background-color: #ecf1f2;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #02323D;
+    padding: 0 16px;
+    box-sizing: border-box;
+}
+
+.pl-textarea {
+    padding: 16px;
+    min-height: 120px;
+}
+
+.pl-input::-webkit-input-placeholder,
+.pl-textarea::-webkit-input-placeholder {
+    color: #A4C1C8;
+}
+
+.pl-input-focus,
+.pl-textarea-focus {
+    background: #FFE9E2;
+    border: 2px solid #FF8863;
+}
+
+.pl-input-error,
+.pl-textarea-error {
+    border: 2px solid #e20000;
+}
+
+.radio-tag {
+    display: flex;
+    margin-bottom: 4px;
+
+    .tag,
+    .tag-active {
+        margin-right: 8px;
+        flex: 1;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        background: #ECF1F2;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 16px;
+        color: #17505C;
+    }
+
+    .tag:last-child,
+    .tag-active:last-child {
+        margin-right: 0px;
+    }
+
+    .tag-active {
+        background: #FFC19E;
+    }
+}
+
+.radio-bars {
+    margin-bottom: 4px;
+
+    .tag,
+    .tag-active {
+        margin-bottom: 16px;
+        padding: 20px 24px;
+        height: 64px;
+        border-radius: 8px;
+        line-height: 24px;
+        font-weight: 500;
+        font-size: 16px;
+        color: #02323D;
+    }
+
+    .tag:last-child,
+    .tag-active:last-child {
+        margin-bottom: 0px;
+    }
+
+    .tag {
+        border: 2px solid #A4C1C8;
+    }
+
+    .tag-active {
+        border: 2px solid #FF8863;
+        background: #FFC19E;
+    }
+}
+
+.pl-checkbox {
+    margin-bottom: 4px;
+
+    .option {
+        padding: 12px 8px;
+        border-bottom: 1px solid #ECF1F2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .option-name {
+            margin-right: 16px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            color: #17505C;
+        }
+
+        .option-icon {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .option:last-child {
+        border: none;
+    }
+}

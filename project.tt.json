@@ -1,0 +1,9 @@
+{
+    "miniprogramRoot": "./",
+    "projectname": "Parent Lab 养育实验室",
+    "appid": "testAppId",
+    "setting": {
+        "es6": false,
+        "minified": false
+    }
+}

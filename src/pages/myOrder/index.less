@@ -1,0 +1,151 @@
+.my-order {
+    .order-card {
+        margin: 16px;
+        padding: 24px 16px;
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+
+            .order-time {
+                font-size: 14px;
+                line-height: 16px;
+                color: #17505C;
+            }
+
+            .status {
+                font-size: 14px;
+                line-height: 16px;
+                color: #02323D;
+                opacity: 0.4;
+            }
+
+            .focus {
+                color: #CD461D;
+                opacity: 1;
+            }
+        }
+
+        .event-title {
+            margin-top: 16px;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            text-transform: capitalize;
+            color: #02323D;
+        }
+
+        .address-bar {
+            margin-top: 16px;
+            display: flex;
+
+            .address-icon {
+                width: 16px;
+                height: 16px;
+            }
+
+            .address {
+                margin-left: 10px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 16px;
+                text-transform: capitalize;
+                color: #17505C;
+            }
+
+        }
+
+        .activity-time {
+            min-width: 200px;
+            margin-top: 8px;
+            padding: 0 8px;
+            height: 24px;
+            background: #FFFFFF;
+            border: 1px solid #A4C1C8;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 24px;
+            color: #02323D;
+        }
+
+        .price-bar {
+            margin-top: 32px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+
+            .label {
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 18px;
+                color: #02323D;
+                opacity: 0.4;
+                margin-right: 4px;
+            }
+
+            .currency {
+                font-weight: 600;
+                // font-size: 14px;
+                line-height: 18px;
+                color: #02323D;
+            }
+
+            .price {
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
+            }
+
+            .focus {
+                color: #CD461D;
+            }
+        }
+
+        .pay-btn,
+        .detail-btn {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 56px;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            color: #02323D;
+        }
+
+        .pay-btn {
+            background: #FFC19E;
+        }
+
+        .detail-btn {
+            border: 2px solid #A4C1C8;
+        }
+    }
+
+    .no-data {
+        margin-top: 100px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .icon {
+            margin: 0;
+            width: 97px;
+            height: 119px;
+        }
+
+        .text {
+            margin-top: 24px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+            color: #17505C;
+        }
+    }
+}

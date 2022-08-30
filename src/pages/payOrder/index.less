@@ -1,0 +1,176 @@
+.pay-order {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .order-info {
+        padding: 24px 16px;
+        background: #FFE9E2;
+        border-radius: 0px 0px 24px 24px;
+
+        .event-title {
+            font-family: 'Tropiline';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 32px;
+            color: #02323D;
+        }
+
+        .user-name {
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 16px;
+            text-transform: capitalize;
+            color: #17505C;
+        }
+
+        .address-and-time {
+            margin-top: 16px;
+            padding: 16px;
+            background: #FFFFFF;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+
+            .city {
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+                text-transform: capitalize;
+                color: #02323D;
+            }
+
+            .address {
+                margin-top: 4px;
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                line-height: 24px;
+                text-transform: capitalize;
+                color: #02323D;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 4px;
+                }
+            }
+
+            .time {
+                margin-top: 16px;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+                color: #02323D;
+            }
+        }
+    }
+
+    .price-info {
+        padding: 24px 16px;
+
+        .price-bar {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .label {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 24px;
+                color: #17505C;
+            }
+
+            .list-price {
+                display: flex;
+                align-items: flex-end;
+                color: #02323D;
+
+                .units {
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 16px;
+
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 24px;
+                }
+
+            }
+
+            .promotion-price {
+                display: flex;
+                align-items: flex-end;
+                color: #E20000;
+
+                .units {
+                    font-weight: 600;
+                    font-size: 12px;
+                    line-height: 18px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 24px;
+                }
+            }
+
+            .total-price {
+                display: flex;
+                align-items: flex-end;
+                color: #02323D;
+
+                .units {
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 28px;
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+
+    .pay-btn-wrap {
+        height: 122px;
+        padding: 0 16px;
+
+        .prompt {
+            text-align: center;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: #02323D;
+
+            .emphasize {
+                font-weight: 500;
+                color: #FF8863;
+            }
+        }
+
+        .pay-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 6px;
+            height: 56px;
+            background: #FFC19E;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 16px;
+            color: #02323D;
+        }
+    }
+
+}
