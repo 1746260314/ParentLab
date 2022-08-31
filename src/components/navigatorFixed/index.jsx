@@ -5,6 +5,9 @@ import home from '../../images/home.png'
 import homeActive from '../../images/home_active.png'
 import personal from '../../images/personal.png'
 import personalActive from '../../images/personal_active.png'
+import assessment from '../../images/assessment.png'
+import assessmentActive from '../../images/assessment_active.png'
+
 import './index.less'
 
 export default class NavigatorFixed extends Component {
@@ -28,7 +31,8 @@ export default class NavigatorFixed extends Component {
 
   navData = [
     { key: 1, activeIcon: homeActive, icon: home, label: '首页', path: '/pages/index/index' },
-    { key: 2, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
+    { key: 2, activeIcon: assessmentActive, icon: assessment, label: '测一测', path: '/pages/assessmentCenter/index' },
+    { key: 3, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
   ]
   render() {
     const { selected } = this.props

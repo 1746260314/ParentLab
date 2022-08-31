@@ -108,7 +108,7 @@ export default class PersonalCenter extends Component {
           退出登录
         </View>
 
-        <NavigatorFixed selected={2} />
+        <NavigatorFixed selected={3} />
       </View>
     )
   }
