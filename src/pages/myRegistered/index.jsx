@@ -13,13 +13,13 @@ export default class MyRegistered extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() {
-    this._getRegisteredList()
-  }
+  componentDidMount() {}
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getRegisteredList()
+  }
 
   componentDidHide() { }
 
@@ -41,7 +41,7 @@ export default class MyRegistered extends Component {
     const hasProfile = Taro.getStorageSync('hasProfile')
 
     let url = getQueryRegisterProgressUrl(hasProfile, state, id, event_id)
-    Taro.redirectTo({ url })
+    Taro.navigateTo({ url })
   }
 
   // 配置分享

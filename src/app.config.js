@@ -13,7 +13,7 @@ export default defineAppConfig({
     'pages/agreementPreview/index',
     'pages/ratifyAccord/index',
     'pages/payOrder/index',
-    
+    'pages/paymentSuccess/index',
     
   ],
   window: {

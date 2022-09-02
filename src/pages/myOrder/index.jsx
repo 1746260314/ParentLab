@@ -15,13 +15,13 @@ export default class MyOrder extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() {
-    this._getOrderList()
-  }
+  componentDidMount() { }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this._getOrderList()
+  }
 
   componentDidHide() { }
 
@@ -32,8 +32,8 @@ export default class MyOrder extends Component {
     }
   }
 
-  goToDetail = (eventID) => {
-    Taro.navigateTo({ url: `pages/detail/index?eventID=${eventID}` })
+  goToDetail = (registerID) => {
+    Taro.navigateTo({ url: `/pages/paymentSuccess/index?registerID=${registerID}` })
   }
 
   goToPay = (registerID) => {
@@ -93,7 +93,7 @@ export default class MyOrder extends Component {
             {order.state === 'paid' ? (
               <View
                 className='detail-btn'
-                onClick={() => this.goToDetail(order.event_id)}
+                onClick={() => this.goToDetail(order.id)}
               >
                 查看详情
               </View>

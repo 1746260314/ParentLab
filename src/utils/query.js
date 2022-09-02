@@ -126,3 +126,22 @@ export async function logout() {
 export async function getWeChatSettings() {
     return request('/wechat_mp/settings')
 }
+
+// 获取微信支付参数
+export async function getWeChatPayParams(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/wx_pay`, {
+        method: 'POST'
+    })
+}
+
+// 获取已支付订单的详情
+export async function getPaidOrderInfo(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/check_payment_status`)
+}
+
+// 发起退款
+export async function initiateRefund(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/refund`, {
+        method: 'POST'
+    })
+}

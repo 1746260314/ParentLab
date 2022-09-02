@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Swiper, SwiperItem, Button } from '@tarojs/components'
+import { View, Image, Swiper, SwiperItem } from '@tarojs/components'
 import NavigatorFixed from '../../components/navigatorFixed'
 import CustomerService from '../../components/customerService'
 import { getHomepageBanners, getHomepageEvents } from '../../utils/query'
