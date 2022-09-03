@@ -14,6 +14,7 @@ export default defineAppConfig({
     'pages/ratifyAccord/index',
     'pages/payOrder/index',
     'pages/paymentSuccess/index',
+    'pages/bannerDetail/index',
     
   ],
   window: {

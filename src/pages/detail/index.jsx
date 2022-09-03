@@ -79,7 +79,7 @@ export default class Detail extends Component {
         this.setState({ show: true })
       } else {
         !token && login()
-        !hasUserWeChatInfo && this.getUserProfile()
+        this.getUserProfile()
       }
     } catch (e) {
       // Do something when catch error
@@ -87,9 +87,11 @@ export default class Detail extends Component {
   }
 
   getUserProfile = () => {
+    let _this = this
     Taro.getUserProfile({
       desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
       success: (res) => {
+        _this.setState({ show: true })
         // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
         Taro.setStorageSync('hasUserWeChatInfo', true)
         const { avatarUrl, gender, nickName, ...other } = res.userInfo
@@ -239,7 +241,7 @@ export default class Detail extends Component {
       <View className='detail'>
         <CustomerService />
         {event_images.map((img, index) => (
-          <Image src={img} key={index} mode='widthFix' />
+          <Image className='detail-img' src={img} key={index} mode='widthFix' />
         ))}
         <View className='btn-wrap'>
           {event.allow_registration ? (
