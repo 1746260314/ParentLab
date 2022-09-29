@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { login } from './utils/weChatLogin'
+import { login } from './utils'
 import { getWeChatSettings } from './utils/query'
 import './app.less'
 

@@ -31,7 +31,7 @@ export default class NavigatorFixed extends Component {
 
   navData = [
     { key: 1, activeIcon: homeActive, icon: home, label: '首页', path: '/pages/index/index' },
-    { key: 2, activeIcon: assessmentActive, icon: assessment, label: '测一测', path: '/pages/assessmentCenter/index' },
+    { key: 2, activeIcon: assessmentActive, icon: assessment, label: '养育测试', path: '/pages/assessmentCenter/index' },
     { key: 3, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
   ]
   render() {

@@ -126,3 +126,77 @@ export async function logout() {
 export async function getWeChatSettings() {
     return request('/wechat_mp/settings')
 }
+
+// 获取微信支付参数
+export async function getWeChatPayParams(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/wx_pay`, {
+        method: 'POST'
+    })
+}
+
+// 获取已支付订单的详情
+export async function getPaidOrderInfo(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/check_payment_status`)
+}
+
+// 发起退款
+export async function initiateRefund(registerID) {
+    return request(`/wechat_mp/event_registrations/${registerID}/refund`, {
+        method: 'POST'
+    })
+}
+
+// 获取测评分类
+export async function getAssessmentCategories() {
+    return request('/wechat_mp/assessment_categories')
+}
+
+// 根据分类查询测评列表
+export async function getAssessmentsForCategoriesID(ategoryId) {
+    return request(`/wechat_mp/assessments?q[assessment_category_id_eq]=${ategoryId}`, {
+        method: 'GET',
+    })
+}
+
+// 获取测评详情
+export async function getAssessmentDetail(assessmentID) {
+    return request(`/wechat_mp/assessments/${assessmentID}`)
+}
+
+// 获取测评进度和题目
+export async function getAssessmentQuestions(data) {
+    return request('/wechat_mp/assessment_user_relations', {
+        method: 'POST',
+        data
+    })
+}
+
+// 更新答题进度
+export async function updateProgress(relationsID, data) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}`, {
+        method: 'PUT',
+        data
+    })
+}
+
+// 更新答题进度
+export async function assessmentFinished(relationsID) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}/finish`, {
+        method: 'PUT',
+    })
+}
+
+// 更新答题进度
+export async function getReportInfo(relationsID) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}`)
+}
+
+// 获取用户公开信息信息
+export async function getUserPublicInfo(openid) {
+    return request(`/wechat_mp/users/${openid}/public_info`)
+}
+
+// 获取我的测评列表
+export async function getMyAssessments() {
+    return request('/wechat_mp/assessment_user_relations')
+}

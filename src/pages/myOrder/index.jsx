@@ -3,8 +3,8 @@ import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
 import { getOrderList } from '../../utils/query'
 import { formatTime } from '../../utils/util'
+import Empty from '../../components/empty'
 import addressIcon from '../../images/address.png'
-import noDataIcon from '../../images/no_data.png'
 import './index.less'
 
 export default class MyOrder extends Component {
@@ -15,13 +15,13 @@ export default class MyOrder extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() {
-    this._getOrderList()
-  }
+  componentDidMount() { }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this._getOrderList()
+  }
 
   componentDidHide() { }
 
@@ -32,8 +32,8 @@ export default class MyOrder extends Component {
     }
   }
 
-  goToDetail = (eventID) => {
-    Taro.navigateTo({ url: `pages/detail/index?eventID=${eventID}` })
+  goToDetail = (registerID) => {
+    Taro.navigateTo({ url: `/pages/paymentSuccess/index?registerID=${registerID}` })
   }
 
   goToPay = (registerID) => {
@@ -93,7 +93,7 @@ export default class MyOrder extends Component {
             {order.state === 'paid' ? (
               <View
                 className='detail-btn'
-                onClick={() => this.goToDetail(order.event_id)}
+                onClick={() => this.goToDetail(order.id)}
               >
                 查看详情
               </View>
@@ -109,12 +109,7 @@ export default class MyOrder extends Component {
         ))}
 
         {orders.length === 0 && (
-          <View className='no-data'>
-            <Image className='icon' src={noDataIcon} />
-            <View className='text'>
-              暂无订单
-            </View>
-          </View>
+          <Empty />
         )}
 
       </View>

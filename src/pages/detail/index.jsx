@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, Image, PageContainer } from '@tarojs/components'
 import { getEventForID, updateUsersWechatInfo, registrations } from '../../utils/query'
 import { getQueryRegisterProgressUrl } from '../../utils/util'
-import { login } from '../../utils/weChatLogin'
+import { login, getUserProfile } from '../../utils'
 import CustomerService from '../../components/customerService'
 import downIcon from '../../images/down.png'
 import './index.less'
@@ -76,34 +76,14 @@ export default class Detail extends Component {
       const token = Taro.getStorageSync('token')
       const hasUserWeChatInfo = Taro.getStorageSync('hasUserWeChatInfo')
       if (token && hasUserWeChatInfo) {
-        this.setState({ show: true })
+        this.onShow()
       } else {
         !token && login()
-        !hasUserWeChatInfo && this.getUserProfile()
+        getUserProfile(this.onShow)
       }
     } catch (e) {
       // Do something when catch error
     }
-  }
-
-  getUserProfile = () => {
-    Taro.getUserProfile({
-      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-      success: (res) => {
-        // 开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
-        Taro.setStorageSync('hasUserWeChatInfo', true)
-        const { avatarUrl, gender, nickName, ...other } = res.userInfo
-        const params = {
-          wechat_user: {
-            ...other,
-            sex: gender,
-            headimgurl: avatarUrl,
-            nickname: nickName,
-          }
-        }
-        updateUsersWechatInfo(params)
-      }
-    })
   }
 
   initialData = (data) => {
@@ -153,6 +133,10 @@ export default class Detail extends Component {
       citysMapping,
       timesMapping
     })
+  }
+
+  onShow = () => {
+    this.setState({ show: true })
   }
 
   onHide = () => {
@@ -239,7 +223,7 @@ export default class Detail extends Component {
       <View className='detail'>
         <CustomerService />
         {event_images.map((img, index) => (
-          <Image src={img} key={index} mode='widthFix' />
+          <Image className='detail-img' src={img} key={index} mode='widthFix' />
         ))}
         <View className='btn-wrap'>
           {event.allow_registration ? (

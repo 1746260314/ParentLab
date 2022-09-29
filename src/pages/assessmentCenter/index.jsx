@@ -1,31 +1,25 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
+import { getAssessmentCategories, getAssessmentsForCategoriesID } from '../../utils/query'
 import NavigatorFixed from '../../components/navigatorFixed'
 import pageviewIcon from '../../images/pageview.png'
 import './index.less'
 
-const tabs = [
-  { id: 0, title: '全部' },
-  { id: 1, title: '孩子成长' },
-  { id: 2, title: '夫妻关系' },
-  { id: 3, title: '自我诊断' },
-  { id: 4, title: '家庭关系' },
-  { id: 5, title: '情感两性' },
-  { id: 6, title: '情商&智商' },
-]
-
-const lists = [1, 2, 3]
-
 export default class AssessmentCenter extends Component {
 
   state = {
-    currentTab: 0,
+    tabs: [],
+    ategoryId: '',
+    assessments: [],
   }
 
   componentWillMount() { }
 
-  componentDidMount() { }
+  componentDidMount() {
+    this._getAssessmentCategories()
+    this._getAssessmentsForCategoriesID()
+  }
 
   componentWillUnmount() { }
 
@@ -44,24 +38,50 @@ export default class AssessmentCenter extends Component {
     }
   }
 
-  handleChangeTab = (id) => {
-    const { currentTab } = this.state
-    if (id === currentTab) return
-    this.setState({ currentTab: id })
+  // 获取分类
+  _getAssessmentCategories = async () => {
+    const res = await getAssessmentCategories()
+    if (res.status === 'success') {
+      this.setState({ tabs: [{ id: '', title: '全部' }, ...res.data] })
+    }
+  }
 
+  // 查询列表
+  _getAssessmentsForCategoriesID = async () => {
+    const params = { assessment_category_id_eq: this.state.ategoryId }
+    const res = await getAssessmentsForCategoriesID(this.state.ategoryId)
+    if (res.status === 'success') {
+      this.setState({ assessments: res.data })
+    }
+  }
+
+  // 切换标签
+  handleChangeTab = (id) => {
+    const { ategoryId } = this.state
+    if (id === ategoryId) return
+    this.setState(
+      { ategoryId: id },
+      () => this._getAssessmentsForCategoriesID()
+    )
+  }
+
+  // 前往详情页
+  toDetail = (assessmentID) => {
+    Taro.navigateTo({
+      url: `/pages/assessmentDetail/index?assessmentID=${assessmentID}`
+    })
   }
 
 
-
   render() {
-    const { currentTab } = this.state
+    const { tabs, ategoryId, assessments } = this.state
     return (
       <View className='assessment-center'>
         <NavigatorFixed selected={2} />
         <View className='tabs-bar'>
           {tabs.map(tab => (
             <View
-              className={`tab ${tab.id === currentTab ? 'active' : ''}`}
+              className={`tab ${tab.id === ategoryId ? 'active' : ''}`}
               key={tab.id}
               onClick={() => this.handleChangeTab(tab.id)}
             >
@@ -71,25 +91,32 @@ export default class AssessmentCenter extends Component {
         </View>
 
 
-        {lists.map(card => (
+        {assessments.map(assessment => (
           <View
             className='assessment-card'
-            key={card}
+            key={assessment.id}
+            onClick={() => this.toDetail(assessment.id)}
           >
-            <View className='tag'>
-              自我诊断
-            </View>
+            {assessment.tags.map(tag => (
+              <View
+                key={tag}
+                className='tag'
+              >
+                {tag}
+              </View>
+            ))}
+
             <View className='title'>
-              测一测你有多依赖你的另一半测一测你有多依赖你的另一半测一测你有多依赖你的另一半
+              {assessment.title}
             </View>
             <View className='desc'>
-              这是一个评测简介说明，最多3行。这是一个评测简介说明，最多3行。这是一个评测简介说明，最多3行。这是一个评测简介说明，最多3行。这是一个评测简介说明，最多3行。这是一个评测简介说明，最多3行。
+              {assessment.short_desc}
             </View>
 
             <View className='btn-bar'>
               <View className='pageview'>
                 <Image className='icon' src={pageviewIcon} />
-                1187人已测过
+                {assessment.take_counts}人已测过
               </View>
               <View className='btn'>
                 开始测试

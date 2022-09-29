@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Swiper, SwiperItem, Button } from '@tarojs/components'
+import { View, Image, Swiper, SwiperItem } from '@tarojs/components'
 import NavigatorFixed from '../../components/navigatorFixed'
 import CustomerService from '../../components/customerService'
 import { getHomepageBanners, getHomepageEvents } from '../../utils/query'
@@ -41,8 +41,14 @@ export default class Index extends Component {
     }
   }
 
-  travelTo = (url) => {
-    console.log(url)
+  travelTo = (data) => {
+    let url = ''
+    if (data.banner_type === 'external') {
+      url = `/pages/bannerDetail/index?url=${data.target_link}`
+    } else {
+      url = data.target_link
+    }
+    Taro.navigateTo({ url })
   }
 
   toDetail = (id) => {
@@ -52,7 +58,7 @@ export default class Index extends Component {
   }
 
   // 配置分享
-  onShareAppMessage () {
+  onShareAppMessage() {
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -82,7 +88,7 @@ export default class Index extends Component {
                 <Image
                   className='swiper-item'
                   src={banner.banner_image_url}
-                  onClick={() => this.travelTo(banner.target_link)}
+                  onClick={() => this.travelTo(banner)}
                 />
               </SwiperItem>
             ))}

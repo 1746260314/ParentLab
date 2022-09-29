@@ -3,23 +3,24 @@ import { Component } from 'react'
 import { View } from '@tarojs/components'
 import { getRegisteredList } from '../../utils/query'
 import { getQueryRegisterProgressUrl, formatTime } from '../../utils/util'
+import Empty from '../../components/empty'
 import './index.less'
 
 export default class MyRegistered extends Component {
 
   state = {
-    lists:[],
+    lists: [],
   }
 
   componentWillMount() { }
 
-  componentDidMount() {
-    this._getRegisteredList()
-  }
+  componentDidMount() { }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this._getRegisteredList()
+  }
 
   componentDidHide() { }
 
@@ -41,11 +42,11 @@ export default class MyRegistered extends Component {
     const hasProfile = Taro.getStorageSync('hasProfile')
 
     let url = getQueryRegisterProgressUrl(hasProfile, state, id, event_id)
-    Taro.redirectTo({ url })
+    Taro.navigateTo({ url })
   }
 
   // 配置分享
-  onShareAppMessage () {
+  onShareAppMessage() {
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -87,6 +88,9 @@ export default class MyRegistered extends Component {
 
           </View>
         ))}
+        {lists.length === 0 && (
+          <Empty />
+        )}
       </View>
     )
   }

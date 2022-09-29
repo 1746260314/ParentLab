@@ -57,15 +57,9 @@ export default class RatifyAccord extends Component {
     })
     const res = await agreementSigned(registerID)
     if (res.status === 'success') {
-      await Taro.hideLoading()
       await Taro.redirectTo({ url: `/pages/payOrder/index?registerID=${registerID}` })
-    } else {
-      await Taro.showToast({
-        title: '查询失败，请重试',
-        icon: 'none',
-        duration: 2000
-      })
-    }
+    } 
+    await Taro.hideLoading()
   }
 
   _getUserProfile = async () => {

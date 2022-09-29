@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { proTarget } from '../request'
 // 微信登录
-export const login = () => {
+export default function weChatLogin () {
   Taro.login({
     success: (res) => {
       if (res.code) {

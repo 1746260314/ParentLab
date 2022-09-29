@@ -1,0 +1,59 @@
+.my-assessment {
+    padding: 16px;
+    width: 100%;
+    min-height: 100vh;
+
+    .assessment-card {
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin-bottom: 16px;
+        overflow: hidden;
+
+        .content {
+            overflow: hidden;
+            padding: 24px 16px 20px;
+
+            .title {
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 24px;
+                color: #02323D;
+            }
+
+            .state-bar {
+                margin-top: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .time {
+                    font-size: 14px;
+                    letter-spacing: -0.03em;
+                    color: #17505C;
+                }
+
+                .btn-full,
+                .btn-line {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 128px;
+                    height: 40px;
+                    border-radius: 100px;
+                    font-weight: 500;
+                    font-size: 16px;
+                    color: #02323D;
+                }
+
+                .btn-full {
+                    background: #FFC19E;
+                }
+
+                .btn-line {
+                    border: 2px solid #A4C1C8;
+                }
+            }
+        }
+    }
+}

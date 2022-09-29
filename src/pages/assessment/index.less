@@ -1,0 +1,75 @@
+.assessment {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .progress-num {
+        margin-top: 20px;
+        padding: 0 32px;
+        height: 24px;
+        text-align: right;
+        font-family: 'Acumin Pro Wide';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -0.2px;
+        color: #9AADB1;
+    }
+
+    .question-wrap {
+        margin-top: 8px;
+        padding: 0 40px;
+        flex: 1;
+
+        .title {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            color: #17505C;
+            margin-bottom: 40px;
+        }
+
+    }
+
+    .controller-wrap {
+        display: flex;
+        height: 82px;
+    }
+
+    .controller {
+        height: 48px;
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .prev-text,
+        .next-text {
+            font-size: 16px;
+            line-height: 24px;
+            color: #17505C;
+        }
+
+        .prev-text {
+            margin: 0 40px 0 16px;
+        }
+
+        .next-text {
+            margin: 0 16px 0 40px;
+        }
+
+        .disabled {
+            color: #A4C1C8;
+        }
+    }
+
+
+
+}

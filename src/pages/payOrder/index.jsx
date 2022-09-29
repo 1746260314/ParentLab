@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
-import { getOrderInfo } from '../../utils/query'
+import { getOrderInfo, getWeChatPayParams } from '../../utils/query'
 import addressIcon from '../../images/address.png'
 import './index.less'
 
@@ -31,16 +31,45 @@ export default class PayOrder extends Component {
     }
   }
 
-  handlePay = () => {
-    Taro.showToast({
-      title: '敬请期待。。。',
-      icon: 'none',
-      duration: 2000
+  handlePay = async () => {
+    Taro.showLoading({
+      title: 'loading...',
+      mask: true
     })
+    const res = await getWeChatPayParams(this.state.registerID)
+    if (res.status === 'success') {
+      const { timeStamp, nonceStr, signType, paySign } = res.data
+      let _this = this
+      Taro.requestPayment({
+        timeStamp,
+        nonceStr,
+        package: res.data.package,
+        signType,
+        paySign,
+        success: function (resSucc) {
+          console.log('success:', resSucc)
+          Taro.showToast({
+            title: '支付成功',
+            icon: 'success',
+            duration: 2000
+          })
+          Taro.redirectTo({url: `/pages/paymentSuccess/index?registerID=${_this.state.registerID}`})
+         },
+        fail: function (resFail) { 
+          console.log('fail:', resFail)
+          Taro.showToast({
+            title: '支付失败',
+            icon: 'error',
+            duration: 2000
+          })
+        }
+      })
+    }
+    await Taro.hideLoading()
   }
 
   // 配置分享
-  onShareAppMessage () {
+  onShareAppMessage() {
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -129,7 +158,7 @@ export default class PayOrder extends Component {
           <View className='prompt'>
             还剩
             <Text className='emphasize'>
-              12
+              {order.remaining_participants}
             </Text>
             个名额，请在
             <Text className='emphasize'>
@@ -137,8 +166,8 @@ export default class PayOrder extends Component {
             </Text>
             小时内支付
           </View>
-          <View 
-            className='pay-btn' 
+          <View
+            className='pay-btn'
             onClick={this.handlePay}
           >
             支付{(order.total_price?.cents / 100).toFixed(2)}

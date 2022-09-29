@@ -111,10 +111,10 @@ export default class MyProfile extends Component {
   }
 
   // 多选处理器
-  handleCheckboxChange = value => {
-    this.setState({ profile: { ...this.state.profile, join_reason: value.join(';') } })
-    this.setState({ join_reason_error: '' })
-  }
+  // handleCheckboxChange = value => {
+  //   this.setState({ profile: { ...this.state.profile, join_reason: value.join(';') } })
+  //   this.setState({ join_reason_error: '' })
+  // }
 
   submit = async () => {
     const { loading, wechat_info, profile, children } = this.state
@@ -329,7 +329,7 @@ export default class MyProfile extends Component {
             onChange={value => this.handleRadioChange('kinship', value)}
           />
         </FormItem>
-
+        {/* 
         <FormItem
           num='08'
           required
@@ -384,7 +384,7 @@ export default class MyProfile extends Component {
             value={profile.parenting_feeling}
             handleChange={this.handleChangeProfile}
           />
-        </FormItem>
+        </FormItem> */}
 
         <View
           className='submit-btn-wrap'
