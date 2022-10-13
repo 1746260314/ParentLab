@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, PageContainer, Text, Image, Button } from '@tarojs/components'
-import shareIcon from '../../images/share.png'
+import shareIcon from '../../images/share2.png'
 import downIcon from '../../images/down.png'
 import './index.less'
 
