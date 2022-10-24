@@ -1,8 +1,10 @@
 export default defineAppConfig({
   pages: [
-    'pages/index/index',   // 首页
-    'pages/personalCenter/index',  // 个人中心
-    'pages/detail/index',  // 活动详情页
+    // 'pages/index/index',   // 首页
+    // 'pages/personalCenter/index',  // 个人中心
+    // 'pages/detail/index',  // 活动详情页
+    // 'pages/login/index',  // 登录页
+    'pages/transition/index',  // 中转页
     'pages/questionnaire/index',   // 问卷
     'pages/register/index',     // 预约面谈
     'pages/registerFinished/index', // 预约面谈完成
