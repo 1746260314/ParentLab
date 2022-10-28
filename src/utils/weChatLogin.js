@@ -1,12 +1,12 @@
 import Taro from '@tarojs/taro'
-import { proTarget } from '../request'
+import { target } from '../request'
 // 微信登录
 export default function weChatLogin () {
   Taro.login({
     success: (res) => {
       if (res.code) {
         Taro.request({
-          url: proTarget + '/wechat_mp/login',
+          url: target + '/wechat_mp/login',
           method: 'POST',
           data: {
             code: res.code

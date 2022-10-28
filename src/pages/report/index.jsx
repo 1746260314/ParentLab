@@ -35,7 +35,7 @@ export default class Report extends Component {
       this._getUserPublicInfo(inviterOpenid)
     }
   }
-  
+
   componentWillUnmount() { }
 
   componentDidShow() { }
@@ -185,9 +185,14 @@ export default class Report extends Component {
           {report?.title}
           <Image className='underline' src={underline} />
         </View>
-        <Image className='summary-img' src={report?.summary_image_url} mode='widthFix' />
+        {/* <Image className='summary-img' src={report?.summary_image_url} mode='widthFix' /> */}
+
         <View className='content'>
-          <RichText className='rich-text' nodes={report?.content_html} />
+          {/* <RichText className='rich-text' nodes={report?.content_html} /> */}
+          {report?.summary_images?.map((img, i) => (
+            <Image key={i} src={img} mode='widthFix' />
+          ))}
+
         </View>
 
         <View
