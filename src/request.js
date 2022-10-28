@@ -1,11 +1,12 @@
 import Taro from '@tarojs/taro'
 
-export const proTarget = 'https://admin.parentlab.cn';
-export const dev = 'https://staging-api.parentlab.cn';
+const proTarget = 'https://admin.parentlab.cn';
+const dev = 'https://staging-api.parentlab.cn';
+export const target = proTarget
+// export const target = dev
 export const request = async (url, option = {}) => {
     const params = Object.assign({
-        // url: proTarget + url,
-        url: dev + url,
+        url: target + url,
         data: {},
         header: {
             'content-type': 'application/json'
