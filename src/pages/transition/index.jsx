@@ -11,8 +11,8 @@ import './index.less'
 export default class Transition extends Component {
 
   state = {
-    eventID: Taro.getCurrentInstance().router.params.eventID || 21,
-    show: true,
+    eventID: Taro.getCurrentInstance().router.params.eventID,
+    show: false,
     event: {},
     initialTimes: [],
     initialTimes: [],
@@ -184,9 +184,9 @@ export default class Transition extends Component {
     const { city, time, skuID, eventID, event: { hold_form } } = this.state
     if ((city || hold_form === 'online') && time) {
       const res = await registrations({ event_sku_id: skuID })
-      const { status, data: { state, id } } = res
+      const { status, data: { id } } = res
       if (status === 'success') {
-        Taro.navigateTo({ url: '' })
+        Taro.redirectTo({ url: `/pages/payOrder/index?registerID=${id}` })
       } else {
         this.setState({ show: false })
       }

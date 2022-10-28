@@ -14,7 +14,7 @@ export default class Login extends Component {
 
   state = {
     eventID: Taro.getCurrentInstance().router.params.id,
-    agree: false,
+    agreed: false,
   }
 
   componentWillMount() { }
@@ -29,8 +29,8 @@ export default class Login extends Component {
 
   handleLogin = () => {
     const token = Taro.getStorageSync('token')
-    const { agree } = this.state
-    if(!agree) {
+    const { agreed } = this.state
+    if(!agreed) {
       Taro.showToast({
         title: '请先勾选用户协议',
         icon: 'none',
@@ -49,22 +49,22 @@ export default class Login extends Component {
     Taro.redirectTo({url: `/pages/transition/index?eventID=${eventID}`})
   }
   handleChangeAgree = () => {
-    this.setState({ agree: !this.state.agree })
+    this.setState({ agreed: !this.state.agreed })
   }
 
   render() {
-    const { agree } = this.state
+    const { agreed } = this.state
     return (
       <View className='login'>
         <View className='bg' />
         <Image className='logo' src={logo} />
         <Button 
-          className={agree ? 'btn' : 'btn disabled'}
+          className={agreed ? 'btn' : 'btn disabled'}
           onClick={this.handleLogin}
           openType='getPhoneNumber'
           onGetPhoneNumber={this.getPhoneNumber}
         >
-          <Image className='icon' src={agree ? wechatBlack : wechatGray} />
+          <Image className='icon' src={agreed ? wechatBlack : wechatGray} />
           微信用户一键登录
         </Button>
         <View className='agreement'>
@@ -72,7 +72,7 @@ export default class Login extends Component {
             className='hotspot'
             onClick={this.handleChangeAgree}
           >
-            <Image className='icon' src={agree ? selected : uncheck} />
+            <Image className='icon' src={agreed ? selected : uncheck} />
             同意网站
           </View>
           <View className='link'>
