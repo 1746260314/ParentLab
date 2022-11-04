@@ -10,10 +10,11 @@ import './index.less'
 export default class PayOrder extends Component {
 
   state = {
-    registerID: Taro.getCurrentInstance().router.params.registerID || 241,
+    registerID: Taro.getCurrentInstance().router.params.registerID,
     order: {},
     agreed: false,
     showModal: false,
+    countdown: '00:00:00',
   }
 
   componentWillMount() { }
@@ -43,8 +44,37 @@ export default class PayOrder extends Component {
     const res = await getOrderInfo(this.state.registerID)
     if (res.status === 'success') {
       this.setState({ order: res.data })
+      this.countTime(res.data.create_at_timestamps)
     }
   }
+
+  countTime = (create) => {
+    let hours, minutes, seconds;
+    let that = this;
+    let now = parseInt(new Date().getTime() / 1000);
+    let end = create + 86400; //设置截止时间
+    let leftTime = end - now; //时间差                         
+    if (leftTime >= 0) {
+      hours = Math.floor(leftTime / 60 / 60 % 24);
+      minutes = Math.floor(leftTime / 60 % 60);
+      seconds = Math.floor(leftTime % 60);
+      seconds = seconds < 10 ? "0" + seconds : seconds
+      minutes = minutes < 10 ? "0" + minutes : minutes
+      hours = hours < 10 ? "0" + hours : hours
+      that.setState({
+        countdown: hours + ":" + minutes + ":" + seconds,
+      })
+      //递归每秒调用countTime方法，显示动态时间效果
+      setTimeout(that.countTime, 1000);
+    } else {
+      that.setState({
+        countdown: '00:00:00'
+      })
+      Taro.redirectTo({
+        url:`/pages/orderExpired/index?registerID=${that.state.registerID}`
+      })
+    }
+ }
 
   handlePay = async () => {
     const { agreed, registerID } = this.state
@@ -111,12 +141,24 @@ export default class PayOrder extends Component {
     this.handlePay()
   }
 
+  goAgreement = () =>  {
+    Taro.navigateTo({url: '/pages/orderAgreement/index'})
+  }
+
   render() {
-    const { order, agreed, showModal } = this.state
+    const { order, agreed, showModal, countdown } = this.state
     return (
       <View className='pay-order'>
         <View className='info-wrap'>
           <View className='order-info'>
+            <View className='count-down'>
+              请在
+              <View className='count-down-num'>
+                {countdown}
+              </View>
+              内支付订单
+            </View>
+
             <View className='event-title'>
               {order.event_title}
             </View>
@@ -195,7 +237,7 @@ export default class PayOrder extends Component {
               订单编号
             </View>
             <View className='num'>
-
+              {order.order_num}
             </View>
           </View>
         </View>
@@ -227,8 +269,8 @@ export default class PayOrder extends Component {
               <Image className='icon' src={agreed ? selected : uncheck} />
               已同意
             </View>
-            <View className='link'>
-              服务协议
+            <View className='link'  onClick={this.goAgreement}>
+              用户服务协议
             </View>
           </View>
         </View>

@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, Button } from '@tarojs/components'
-import { } from '../../utils/query'
+import { updatePhoneNumber } from '../../utils/query'
 import { login, getUserProfile } from '../../utils'
 import logo from '../../images/login_logo.png'
 import wechatGray from '../../images/wechat_gray.png'
@@ -13,7 +13,7 @@ import './index.less'
 export default class Login extends Component {
 
   state = {
-    eventID: Taro.getCurrentInstance().router.params.id,
+    eventID: Taro.getCurrentInstance().router.params.eventID,
     agreed: false,
   }
 
@@ -45,11 +45,15 @@ export default class Login extends Component {
 
   getPhoneNumber = (data) => {
     const { eventID } = this.state
-    console.log(data);
+    updatePhoneNumber({code: data.detail.code})
     Taro.redirectTo({url: `/pages/transition/index?eventID=${eventID}`})
   }
   handleChangeAgree = () => {
     this.setState({ agreed: !this.state.agreed })
+  }
+
+  goAgreement = () =>  {
+    Taro.navigateTo({url: '/pages/userAgreement/index'})
   }
 
   render() {
@@ -73,10 +77,10 @@ export default class Login extends Component {
             onClick={this.handleChangeAgree}
           >
             <Image className='icon' src={agreed ? selected : uncheck} />
-            同意网站
+            同意
           </View>
-          <View className='link'>
-            用户协议
+          <View className='link' onClick={this.goAgreement}>
+            网站许可及服务协议
           </View>
         </View>
       </View>

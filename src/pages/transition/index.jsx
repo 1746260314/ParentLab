@@ -22,7 +22,8 @@ export default class Transition extends Component {
     timesMapping: {},
     city: '',
     time: '',
-    skuID: '',
+    selectedSku: null,
+    prices: [],
   }
 
   componentWillMount() { }
@@ -90,16 +91,18 @@ export default class Transition extends Component {
     })
 
     if (data.event.hold_form === 'online') {
-      initialTimes = data.event_skus.map(item => { return { id: item.id, time: item.hold_time, disable: false } })
+      initialTimes = data.event_skus.map(item => ({...item, id: item.id, time: item.hold_time, disable: false }))
     }
+
+    let prices = skus.map(item => item.list_price.cents).sort((x, y) => x - y)
 
     let city = ''
     let time = ''
-    let skuID = ''
-    if(skus.length === 1) {
+    let selectedSku = null
+    if (skus.length === 1) {
       city = skus[0].hold_city || ''
       time = skus[0].hold_time || ''
-      skuID = skus[0].id
+      selectedSku = skus[0]
     }
 
     this.setState({
@@ -109,9 +112,10 @@ export default class Transition extends Component {
       times: initialTimes,
       city,
       time,
-      skuID,
+      selectedSku,
       citysMapping,
-      timesMapping
+      timesMapping,
+      prices,
     })
   }
 
@@ -140,13 +144,13 @@ export default class Transition extends Component {
     if (data.city === city) {
       this.setState({
         city: '',
-        skuID: '',
+        selectedSku: null,
         times: initialTimes
       })
     } else {
       this.setState({
         city: data.city,
-        skuID: data.id || '',
+        selectedSku: data,
         times: newTimes
       })
     }
@@ -168,22 +172,22 @@ export default class Transition extends Component {
     if (data.time === time) {
       this.setState({
         time: '',
-        skuID: '',
+        selectedSku: null,
         citys: initialCitys
       })
     } else {
       this.setState({
         time: data.time,
-        skuID: data.id || '',
+        selectedSku: data,
         citys: newCitys
       })
     }
   }
 
   next = async () => {
-    const { city, time, skuID, eventID, event: { hold_form } } = this.state
+    const { city, time, selectedSku, event: { hold_form } } = this.state
     if ((city || hold_form === 'online') && time) {
-      const res = await registrations({ event_sku_id: skuID })
+      const res = await registrations({ event_sku_id: selectedSku.id })
       const { status, data: { id } } = res
       if (status === 'success') {
         Taro.redirectTo({ url: `/pages/payOrder/index?registerID=${id}` })
@@ -195,7 +199,7 @@ export default class Transition extends Component {
 
 
   render() {
-    const { event, citys, city, times, time } = this.state
+    const { event, citys, city, times, time, selectedSku, prices } = this.state
     return (
       <View className='transition'>
         <Image className='img1' src={img1} />
@@ -227,17 +231,29 @@ export default class Transition extends Component {
         >
           <View className='drawer'>
             <View className='label'>确认订单</View>
-            <View className='price-bar'>
-              <View className='units'>
-                ￥
+            {selectedSku ? (
+              <View className='price-bar'>
+                <View className='units'>
+                  ￥
+                </View>
+                <View className='num'>
+                  {(selectedSku?.list_price?.cents / 100).toFixed(2)}
+                </View>
+                <View className='discounts'>
+                  限时优惠￥{(selectedSku?.current_promotion_price?.cents / 100).toFixed(2)}
+                </View>
               </View>
-              <View className='num'>
-                88990.00
+            ) : (
+              <View className='price-section'>
+                <View className='units'>
+                  ￥
+                </View>
+                <View className='num'>
+                  {(prices[0] / 100).toFixed(2)} {prices.length > 1 && ('-'(prices[prices.length - 1] / 100).toFixed(2))}
+                </View>
               </View>
-              <View className='discounts'>
-                限时优惠￥800
-              </View>
-            </View>
+            )}
+
             <View className='selected'>
               已选择：{city + time}
             </View>

@@ -2,7 +2,7 @@
     min-height: 100vh;
 
 
-    .order-info {
+    .order-detail {
         padding: 24px 16px;
         background: #FFE9E2;
         border-radius: 0px 0px 24px 24px;
@@ -57,109 +57,248 @@
                 color: #02323D;
 
             }
-
         }
 
-
-
-        .user-name {
-            margin-top: 8px;
-            font-size: 14px;
-            line-height: 16px;
-            text-transform: capitalize;
-            color: #17505C;
-        }
-
-        .order-content {
+        .opening {
             margin-top: 16px;
-            padding: 16px;
-            background: #FFFFFF;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
+            height: 12px;
+            background: #CD461D;
+            border-radius: 8px;
+        }
+    }
 
-            .content-bar {
-                display: flex;
-                align-items: center;
+    .bill {
+        margin: -30px auto 0;
+        padding: 24px 16px;
+        width: 366px;
+        height: 176px;
+        background: linear-gradient(180deg, rgba(205, 70, 30, 0.25) 0%, rgba(204, 70, 30, 0) 13.64%), #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 0px 0px 8px 8px;
 
-                .content {
-                    flex: 1;
-                    overflow: hidden;
+        .price-bar {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
 
-                    .desc {
-                        font-size: 16px;
-                        line-height: 24px;
-                        text-transform: capitalize;
-                        color: #02323D;
-                    }
-
-                    .wechat-id {
-                        margin-top: 4px;
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 24px;
-                        text-transform: capitalize;
-                        color: #02323D;
-                    }
-
-                    .city {
-                        font-weight: 600;
-                        font-size: 16px;
-                        line-height: 24px;
-                        text-transform: capitalize;
-                        color: #02323D;
-                    }
-
-                    .address-bar {
-                        margin-top: 4px;
-                        display: flex;
-                        align-items: center;
-
-                        .icon {
-                            width: 16px;
-                            height: 16px;
-                            margin-right: 4px;
-                        }
-
-                        .address {
-                            flex: 1;
-                            font-size: 16px;
-                            line-height: 24px;
-                            text-transform: capitalize;
-                            color: #02323D;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-
-                }
-
-                .operation {
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                    width: 68px;
-                    height: 40px;
-                    font-weight: 600;
-                    font-size: 16px;
-                    line-height: 24px;
-                    color: #02323D;
-                    border-left: 1px solid #D3E3E7;
-
-                    .icon {
-                        width: 16px;
-                        height: 16px;
-                        margin-right: 4px;
-                    }
-                }
+            .label {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 24px;
+                color: #17505C;
             }
 
+            .price {
+                display: flex;
+                align-items: flex-end;
+                color: #02323D;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
 
-            .time {
+                .units {
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin: 0 4px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 24px;
+                }
+
+            }
+
+            .total-price {
                 margin-top: 16px;
+                display: flex;
+                align-items: flex-end;
+                color: #CD461D;
                 font-weight: 500;
-                font-size: 12px;
-                line-height: 16px;
+                font-size: 20px;
+                line-height: 24px;
+
+                .units {
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-left: 8px;
+                    margin-right: 4px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 28px;
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+
+    .block-title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        text-transform: capitalize;
+        color: #02323D;
+    }
+
+    .order-info {
+        padding: 16px;
+        margin: 24px auto 0;
+        width: 366px;
+        height: 176px;
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        order: 1;
+
+        .item {
+            margin-top: 16px;
+            display: flex;
+
+            .label {
+                font-size: 16px;
+                line-height: 24px;
+                color: #9AADB1;
+                margin-right: 16px;
+            }
+
+            .value {
+                font-size: 16px;
+                line-height: 24px;
+                color: #02323D;
+            }
+        }
+    }
+
+    .support-staff {
+        margin: 24px auto 0;
+        padding: 16px;
+        width: 366px;
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+
+        .wechat-bar {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+
+            .wechat-icon {
+                width: 24px;
+                height: 24px;
+                display: block;
+            }
+
+            .wechat-num {
+                margin-left: 8px;
+                margin-right: 16px;
+                flex: 1;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
+                text-transform: capitalize;
+                color: #02323D;
+            }
+
+            .operation {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                width: 68px;
+                height: 40px;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+                color: #02323D;
+                border-left: 1px solid #D3E3E7;
+
+                .copy-icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 4px;
+                }
+            }
+        }
+
+        .tips {
+            margin-top: 8px;
+            font-size: 12px;
+            line-height: 16px;
+            color: #9AADB1;
+        }
+
+
+    }
+
+    .questions {
+        margin: 24px auto 0;
+        padding: 16px;
+        width: 366px;
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+
+        .btn-bar {
+            margin-top: 16px;
+            display: flex;
+
+            .desc {
+                margin-right: 16px;
+                font-size: 16px;
+                line-height: 24px;
+                text-transform: capitalize;
+                color: #02323D;
+            }
+
+            .btn {
+                width: 60px;
+                height: 32px;
+                border: 2px solid #A4C1C8;
+                border-radius: 100px;
+                font-size: 14px;
+                line-height: 32px;
+                text-align: center;
+                text-transform: capitalize;
+                color: #02323D;
+            }
+        }
+    }
+
+    .invite {
+        margin: 24px auto 0;
+        padding: 16px;
+        width: 366px;
+        background: #FFFFFF;
+        box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+
+        .btn-bar {
+            margin-top: 16px;
+            display: flex;
+
+            .desc {
+                margin-right: 16px;
+                font-size: 16px;
+                line-height: 24px;
+                text-transform: capitalize;
+                color: #02323D;
+            }
+
+            .btn {
+                padding: 0;
+                width: 88px;
+                height: 32px;
+                background: #FFC19E;
+                border-radius: 100px;
+                font-size: 14px;
+                line-height: 32px;
+                text-align: center;
+                text-transform: capitalize;
                 color: #02323D;
             }
         }
@@ -181,29 +320,19 @@
         }
     }
 
-    .btn-wrap {
-        height: 144px;
-        padding: 0 16px;
-
-        .pay-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 24px;
-            height: 56px;
-            background: #FFC19E;
-            border-radius: 100px;
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 16px;
-            color: #02323D;
-
-            .icon {
-                width: 16px;
-                height: 16px;
-                margin-right: 8px;
-            }
-        }
+    .back-btn {
+        margin: 32px auto 0;
+        width: 382px;
+        height: 55px;
+        left: 16px;
+        top: 1094px;
+        border: 2px solid #A4C1C8;
+        border-radius: 100px;
+        font-weight: 500;
+        line-height: 55px;
+        text-align: center;
+        font-size: 16px;
+        color: #02323D;
     }
 
     .mask {

@@ -39,10 +39,10 @@ export default class PersonalCenter extends Component {
 
   renderMenu = () => {
     const Menus = [
-      { icon: calendarIcon, label: '我的报名活动', path: '/pages/myRegistered/index' },
-      { icon: orderIcon, label: '我支付的订单', path: '/pages/myOrder/index' },
+      // { icon: calendarIcon, label: '我的报名活动', path: '/pages/myRegistered/index' },
+      { icon: orderIcon, label: '我的订单', path: '/pages/myOrder/index' },
       { icon: testIcon, label: '我的测评', path: '/pages/myAssessment/index' },
-      { icon: profileIcon, label: '我的基本信息', path: '/pages/myProfile/index' },
+      // { icon: profileIcon, label: '我的基本信息', path: '/pages/myProfile/index' },
     ]
     return Menus.map(item => {
       return (

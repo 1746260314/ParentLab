@@ -15,6 +15,7 @@ export default defineAppConfig({
     'pages/agreementPreview/index',   // 协议预览
     'pages/ratifyAccord/index',   // 签署协议
     'pages/payOrder/index',   // 待支付
+    'pages/orderExpired/index',   // 订单已失效
     'pages/paymentSuccess/index',   // 支付已完成
     'pages/bannerDetail/index',   // 打开banner 公众号文章
     'pages/assessmentCenter/index',   // 测一测
@@ -22,7 +23,8 @@ export default defineAppConfig({
     'pages/myAssessment/index',   // 我的测评
     'pages/assessment/index',   // 测评
     'pages/report/index',   // 测评结果
-    
+    'pages/userAgreement/index',   // 网站许可及服务协议
+    'pages/orderAgreement/index',   // 用户服务协议
   ],
   window: {
     backgroundTextStyle: 'light',

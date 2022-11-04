@@ -32,6 +32,11 @@ export default class MyOrder extends Component {
     }
   }
 
+  // 去填写问卷
+  handleAnswer = (order, registerID) => {
+    Taro.navigateTo({ url: `/pages/questionnaire/index?eventID=${order.event_id}&registerID=${registerID}` })
+  }
+
   goToDetail = (registerID) => {
     Taro.navigateTo({ url: `/pages/paymentSuccess/index?registerID=${registerID}` })
   }
@@ -91,12 +96,21 @@ export default class MyOrder extends Component {
             </View>
 
             {order.state === 'paid' ? (
-              <View
-                className='detail-btn'
-                onClick={() => this.goToDetail(order.id)}
-              >
-                查看详情
-              </View>
+              order.need_questionnaire ? (
+                <View
+                  className='detail-btn'
+                  onClick={() => this.handleAnswer(order.id, order.event_id)}
+                >
+                  填写调查问卷
+                </View>
+              ) : (
+                <View
+                  className='detail-btn'
+                  onClick={() => this.goToDetail(order.id)}
+                >
+                  查看详情
+                </View>
+              )
             ) : (
               <View
                 className='pay-btn'
