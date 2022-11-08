@@ -58,23 +58,18 @@ export default class Detail extends Component {
 
   clickStart = () => {
     try {
+      const { assessmentID } = this.state
       const token = Taro.getStorageSync('token')
-      const hasUserWeChatInfo = Taro.getStorageSync('hasUserWeChatInfo')
-      if (token && hasUserWeChatInfo) {
-        this.handleStart()
+      const hasUserPhoneNumber = Taro.getStorageSync('hasUserPhoneNumber')
+      const url = `/pages/assessment/index?assessmentID=${assessmentID}`
+      if (token && hasUserPhoneNumber) {
+        Taro.navigateTo({ url })
       } else {
-        !token && login()
-        getUserProfile(this.handleStart)
+        Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessment/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })
       }
     } catch (e) {
       // Do something when catch error
     }
-  }
-
-  handleStart = () => {
-    Taro.navigateTo({
-      url: `/pages/assessment/index?assessmentID=${this.state.assessmentID}`
-    })
   }
 
   render() {

@@ -74,13 +74,20 @@ export default class Questionnaire extends Component {
     const res = await submitQuestionnaire(params, registerID)
     if (res.status === 'success') {
       this.setState({ loading: false })
-      let url = '';
-      if (res.data.state === 'questionnaire_completed') {
-        url = `/pages/register/index?registerID=${registerID}`
-      } else if (res.data.state === 'to_be_signed') {
-        url = `/pages/agreementPreview/index?registerID=${registerID}`
-      }
-      Taro.navigateTo({ url })
+      Taro.showToast({
+        title: '保存成功',
+        icon: 'success',
+        duration: 2000
+    })
+      // let url = '';
+      // if (res.data.state === 'questionnaire_completed') {
+      //   url = `/pages/register/index?registerID=${registerID}`
+      // } else if (res.data.state === 'to_be_signed') {
+      //   url = `/pages/agreementPreview/index?registerID=${registerID}`
+      // }
+      Taro.navigateBack({
+        delta: 1
+      })
     }
   }
 

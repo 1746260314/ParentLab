@@ -32,6 +32,11 @@ export default class MyOrder extends Component {
     }
   }
 
+  // 去填写问卷
+  handleAnswer = (eventID, registerID) => {
+    Taro.navigateTo({ url: `/pages/questionnaire/index?eventID=${eventID}&registerID=${registerID}` })
+  }
+
   goToDetail = (registerID) => {
     Taro.navigateTo({ url: `/pages/paymentSuccess/index?registerID=${registerID}` })
   }
@@ -61,7 +66,7 @@ export default class MyOrder extends Component {
               <View className='order-time'>
                 {order.registered_at && formatTime(new Date(order.registered_at).getTime(), 'Y/M/D h:m')}
               </View>
-              <View className={`status ${order.state === 'paid' ? 'focus' : ''}`}>
+              <View className={`status ${order.state === 'paid' ? '' : 'focus'}`}>
                 {order.state === 'paid' ? '已支付' : '待支付'}
               </View>
             </View>
@@ -82,21 +87,37 @@ export default class MyOrder extends Component {
             </View>
             <View className='price-bar'>
               <View className='label'>总费用</View>
-              <View className={`currency ${order.state === 'paid' ? 'focus' : ''}`}>
+              <View className={`currency ${order.state === 'paid' ? '' : 'focus'}`}>
                 ￥
               </View>
-              <View className={`price ${order.state === 'paid' ? 'focus' : ''}`}>
-                {order.list_price?.cents && (order.list_price.cents / 100).toFixed(2)}元
+              <View className={`price ${order.state === 'paid' ? '' : 'focus'}`}>
+                {order.total_price?.cents && (order.total_price.cents / 100).toFixed(2)}元
               </View>
+
+              {order.promotion_price?.cents > 0 && (
+                <View className='promotion-price'>
+                  ￥{order.list_price?.cents && (order.list_price.cents / 100).toFixed(2)}元
+                </View>
+              )}
+
             </View>
 
             {order.state === 'paid' ? (
-              <View
-                className='detail-btn'
-                onClick={() => this.goToDetail(order.id)}
-              >
-                查看详情
-              </View>
+              order.need_questionnaire ? (
+                <View
+                  className='detail-btn'
+                  onClick={() => this.handleAnswer(order.event_id, order.id)}
+                >
+                  填写问卷
+                </View>
+              ) : (
+                <View
+                  className='detail-btn'
+                  onClick={() => this.goToDetail(order.id)}
+                >
+                  查看详情
+                </View>
+              )
             ) : (
               <View
                 className='pay-btn'

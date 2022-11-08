@@ -3,6 +3,8 @@ export default defineAppConfig({
     'pages/index/index',   // 首页
     'pages/personalCenter/index',  // 个人中心
     'pages/detail/index',  // 活动详情页
+    'pages/login/index',  // 登录页
+    'pages/transition/index',  // 中转页
     'pages/questionnaire/index',   // 问卷
     'pages/register/index',     // 预约面谈
     'pages/registerFinished/index', // 预约面谈完成
@@ -13,6 +15,7 @@ export default defineAppConfig({
     'pages/agreementPreview/index',   // 协议预览
     'pages/ratifyAccord/index',   // 签署协议
     'pages/payOrder/index',   // 待支付
+    'pages/orderExpired/index',   // 订单已失效
     'pages/paymentSuccess/index',   // 支付已完成
     'pages/bannerDetail/index',   // 打开banner 公众号文章
     'pages/assessmentCenter/index',   // 测一测
@@ -20,7 +23,8 @@ export default defineAppConfig({
     'pages/myAssessment/index',   // 我的测评
     'pages/assessment/index',   // 测评
     'pages/report/index',   // 测评结果
-    
+    'pages/userAgreement/index',   // 网站许可及服务协议
+    'pages/orderAgreement/index',   // 用户服务协议
   ],
   window: {
     backgroundTextStyle: 'light',

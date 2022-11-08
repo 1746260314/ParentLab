@@ -5,17 +5,38 @@
     justify-content: space-between;
 
     .order-info {
-        padding: 24px 16px;
+        padding: 0px 16px 24px;
         background: #FFE9E2;
         border-radius: 0px 0px 24px 24px;
 
+        .count-down {
+            font-size: 14px;
+            line-height: 16px;
+            display: flex;
+            justify-content: center;
+            color: #17505C;
+            .count-down-num {
+                color: #FF8863;
+                margin: 0 4px;
+            }
+
+        }
+
         .event-title {
+            margin-top: 32px;
             font-family: 'Tropiline';
             font-style: normal;
             font-weight: 600;
             font-size: 24px;
             line-height: 32px;
             color: #02323D;
+        }
+
+        .sku {
+            margin-top: 16px;
+            font-size: 16px;
+            line-height: 24px;
+            color: #17505C;
         }
 
         .user-name {
@@ -83,16 +104,19 @@
                 color: #17505C;
             }
 
-            .list-price {
+            .price {
                 display: flex;
                 align-items: flex-end;
                 color: #02323D;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
 
                 .units {
                     font-weight: 500;
                     font-size: 12px;
                     line-height: 16px;
-
+                    margin: 0 4px;
                 }
 
                 .num {
@@ -101,35 +125,22 @@
                     line-height: 24px;
                 }
 
-            }
-
-            .promotion-price {
-                display: flex;
-                align-items: flex-end;
-                color: #E20000;
-
-                .units {
-                    font-weight: 600;
-                    font-size: 12px;
-                    line-height: 18px;
-                }
-
-                .num {
-                    font-weight: 600;
-                    font-size: 20px;
-                    line-height: 24px;
-                }
             }
 
             .total-price {
                 display: flex;
                 align-items: flex-end;
-                color: #02323D;
+                color: #CD461D;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 24px;
 
                 .units {
                     font-weight: 500;
                     font-size: 16px;
                     line-height: 24px;
+                    margin-left: 8px;
+                    margin-right: 4px;
                 }
 
                 .num {
@@ -141,9 +152,27 @@
         }
     }
 
+    .order-num {
+        padding-top: 24px;
+        border-top: 1px solid #ECF1F2;
+        margin: 7px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+        line-height: 24px;
+
+        .label {
+            color: #9AADB1;
+        }
+
+        .num {
+            color: #02323D;
+        }
+    }
+
     .pay-btn-wrap {
-        height: 122px;
-        padding: 0 16px;
+        padding: 0 16px 40px;
 
         .prompt {
             text-align: center;
@@ -170,6 +199,39 @@
             font-size: 16px;
             line-height: 16px;
             color: #02323D;
+        }
+
+        .disabled {
+            background: #ECF1F2;
+            color: #A4C1C8;
+        }
+
+        .agreement {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+
+            .hotspot {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #17505C;
+
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 8px;
+                    display: block;
+                }
+            }
+
+            .link {
+                color: #FF8863;
+            }
         }
     }
 

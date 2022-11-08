@@ -12,7 +12,7 @@
     "lazyloadPlaceholderEnable": false,
     "preloadBackgroundData": false,
     "autoAudits": false,
-    "uglifyFileName": false,
+    "uglifyFileName": true,
     "uploadWithSourceMap": true,
     "enhance": false,
     "showShadowRootInWxmlPanel": true,
@@ -30,6 +30,7 @@
     "disableUseStrict": false,
     "useCompilerPlugins": false,
     "minifyWXML": false,
+    "ignoreDevUnusedFiles": false,
     "ignoreUploadUnusedFiles": false
   },
   "compileType": "miniprogram",

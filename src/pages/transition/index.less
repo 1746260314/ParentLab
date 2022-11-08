@@ -1,0 +1,207 @@
+.transition {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    .block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .img1 {
+        display: block;
+        width: 187px;
+        height: 140px;
+        margin-bottom: 8px;
+        margin-top: 20px;
+    }
+
+    .img2 {
+        display: block;
+        width: 187px;
+        height: 187px;
+        margin-bottom: 8px;
+        margin-top: 40px;
+    }
+
+    .desc {
+        font-family: 'PingFang SC';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
+        text-transform: capitalize;
+        color: #02323D;
+    }
+
+    .btn {
+        margin-top: 16px;
+        width: 284px;
+        height: 55px;
+        border-radius: 100px;
+        font-weight: 500;
+        font-size: 16px;
+        color: #02323D;
+        line-height: 55px;
+    }
+
+    .btn-line {
+        border: 2px solid #A4C1C8;
+    }
+
+    .btn-full {
+        background: #FFC19E;
+    }
+
+
+    .drawer {
+        width: 100%;
+        height: 90vh;
+        overflow: hidden;
+        padding: 0px 16px 34px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        .label {
+            margin: 24px 8px 0;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            text-transform: capitalize;
+            color: #17505C;
+        }
+
+        .price-bar,
+        .price-section {
+            margin: 24px 8px 12px;
+            display: flex;
+            align-items: flex-end;
+            margin-top: 24px;
+
+            .units {
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 16px;
+                text-transform: capitalize;
+            }
+
+            .num {
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 24px;
+            }
+
+            .discounts {
+                margin-left: 14px;
+                padding: 0 6px;
+                width: auto;
+                height: 22px;
+                overflow: hidden;
+                background: #CD461D;
+                border-radius: 8px 8px 8px 0px;
+                text-align: center;
+                line-height: 22px;
+                font-weight: 500;
+                font-size: 12px;
+                text-transform: uppercase;
+                color: #FFFFFF;
+            }
+        }
+
+        .price-bar {
+            color: #CD461D;
+        }
+
+        .price-section {
+            color: #02323D;
+        }
+
+        .selected {
+            padding: 0px 8px 24px;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 16px;
+            color: #17505C;
+            border-bottom: 1px solid #ECF1F2;
+        }
+
+        .down-icon {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 24px;
+            height: 24px;
+        }
+
+        .sku-wrap {
+            flex: 1;
+            overflow-y: scroll;
+        }
+
+        .title {
+            margin: 24px 8px 0;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            color: #17505C;
+        }
+
+        .city-options {
+            width: 100%;
+            height: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .option {
+            margin: 16px 8px;
+            padding: 8px 16px;
+            min-height: 40px;
+            background: #ECF1F2;
+            border-radius: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #17505C;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 24px;
+        }
+
+        .active {
+            background: #FFC19E;
+        }
+
+        .disable {
+            background: #ECF1F2;
+            color: #17505C;
+            opacity: 0.6;
+        }
+
+        .next-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            border-radius: 100px;
+            margin-top: 32px;
+            font-weight: 500;
+            font-size: 16px;
+            background: #ECF1F2;
+            color: #A4C1C8;
+        }
+
+        .clickable {
+            background: #FFC19E;
+            color: #17505C;
+        }
+    }
+}

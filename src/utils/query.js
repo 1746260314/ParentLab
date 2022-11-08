@@ -85,7 +85,7 @@ export async function getRegisteredList() {
 
 // 获取支付和待支付订单列表
 export async function getOrderList() {
-    return request('/wechat_mp/event_registrations/my_paied_events')
+    return request('/wechat_mp/event_registrations/my_orders')
 }
 
 // 提交用户协议信息
@@ -110,7 +110,7 @@ export async function agreementSigned(registerID) {
     })
 }
 
-// 获取支付和待支付订单列表
+// 获取待支付订单详情
 export async function getOrderInfo(registerID) {
     return request(`/wechat_mp/event_registrations/${registerID}`)
 }
@@ -199,4 +199,12 @@ export async function getUserPublicInfo(openid) {
 // 获取我的测评列表
 export async function getMyAssessments() {
     return request('/wechat_mp/assessment_user_relations')
+}
+
+// 上报微信手机code
+export async function updatePhoneNumber(data) {
+    return request('/wechat_mp/users/update_phone_number', {
+        method: 'PUT',
+        data
+    })
 }

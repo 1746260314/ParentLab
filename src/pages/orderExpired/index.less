@@ -1,0 +1,137 @@
+.pay-order {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .order-info {
+        position: relative;
+        padding: 32px 16px 24px;
+        background: #ECF1F2;
+        border-radius: 0px 0px 24px 24px;
+
+        .expired-icon {
+            width: 96px;
+            height: 115px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .event-title {
+            font-family: 'Tropiline';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 32px;
+            color: #02323D;
+        }
+
+        .sku {
+            margin-top: 16px;
+            font-size: 16px;
+            line-height: 24px;
+            color: #17505C;
+        }
+
+    }
+
+    .price-info {
+        padding: 24px 16px;
+
+        .price-bar {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .label {
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 24px;
+                color: #17505C;
+            }
+
+            .price {
+                display: flex;
+                align-items: flex-end;
+                color: #02323D;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
+
+                .units {
+                    font-weight: 500;
+                    font-size: 12px;
+                    line-height: 16px;
+                    margin: 0 4px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 20px;
+                    line-height: 24px;
+                }
+
+            }
+
+            .total-price {
+                display: flex;
+                align-items: flex-end;
+                color: #02323D;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 24px;
+
+                .units {
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-left: 8px;
+                    margin-right: 4px;
+                }
+
+                .num {
+                    font-weight: 600;
+                    font-size: 28px;
+                    line-height: 32px;
+                }
+            }
+        }
+    }
+
+    .order-num {
+        padding-top: 24px;
+        border-top: 1px solid #ECF1F2;
+        margin: 7px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 16px;
+        line-height: 24px;
+
+        .label {
+            color: #9AADB1;
+        }
+
+        .num {
+            color: #02323D;
+        }
+    }
+
+    .back-btn {
+        margin: 34px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 6px;
+        width: 382px;
+        height: 56px;
+        border: 2px solid #A4C1C8;
+        border-radius: 100px;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 16px;
+        color: #02323D;
+    }
+}
