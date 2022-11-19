@@ -23,7 +23,9 @@ export default class NavigatorFixed extends Component {
   componentDidHide() { }
 
   go = (item) => {
-    if(item.key === this.props.selected) return
+    if (item.key === this.props.selected) return
+    const { onClick } = this.props
+    onClick && onClick()
     Taro.redirectTo({
       url: item.path
     })
@@ -39,8 +41,8 @@ export default class NavigatorFixed extends Component {
     return (
       <View className='navigator-fixed'>
         {this.navData.map((item) => (
-          <View 
-            className='item' 
+          <View
+            className='item'
             key={item.key}
             onClick={() => this.go(item)}
           >

@@ -9,9 +9,9 @@ import calendarIcon from '../../images/calendar.png'
 import orderIcon from '../../images/my_order.png'
 import testIcon from '../../images/my_test.png'
 import profileIcon from '../../images/my_profile.png'
-
 import './index.less'
 
+const app = getApp()
 export default class PersonalCenter extends Component {
 
   componentWillMount() { }
@@ -25,9 +25,12 @@ export default class PersonalCenter extends Component {
   componentDidHide() { }
 
 
-  travelTo = (url) => {
-    if (url) {
-      Taro.navigateTo({ url })
+  travelTo = ({path, TDEventID}) => {
+    if(TDEventID) {
+      app.td_app_sdk.event({ id: `个人中心-${TDEventID}` });
+    }
+    if (path) {
+      Taro.navigateTo({ url: path })
     } else {
       Taro.showToast({
         title: '敬请期待。。。',
@@ -40,13 +43,13 @@ export default class PersonalCenter extends Component {
   renderMenu = () => {
     const Menus = [
       // { icon: calendarIcon, label: '我的报名活动', path: '/pages/myRegistered/index' },
-      { icon: orderIcon, label: '我的订单', path: '/pages/myOrder/index' },
-      { icon: testIcon, label: '我的测评', path: '/pages/myAssessment/index' },
+      { icon: orderIcon, label: '我的订单', path: '/pages/myOrder/index', TDEventID: '订单列表' },
+      { icon: testIcon, label: '我的测评', path: '/pages/myAssessment/index', TDEventID: '我的测评' },
       // { icon: profileIcon, label: '我的基本信息', path: '/pages/myProfile/index' },
     ]
     return Menus.map(item => {
       return (
-        <View className='menu-item' key={item.title} onClick={() => this.travelTo(item.path)}>
+        <View className='menu-item' key={item.title} onClick={() => this.travelTo(item)}>
           <Image className='icon' src={item.icon} />
           <View className='label-bar' >
             <View className='label' >

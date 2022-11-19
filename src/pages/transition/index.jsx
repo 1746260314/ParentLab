@@ -8,6 +8,7 @@ import img2 from '../../images/transition2.png'
 import downIcon from '../../images/down.png'
 import './index.less'
 
+const app = getApp()
 export default class Transition extends Component {
 
   state = {
@@ -121,6 +122,7 @@ export default class Transition extends Component {
   }
 
   onShow = () => {
+    app.td_app_sdk.event({ id: '分流页面-立即购买' });
     this.setState({ show: true })
   }
 
@@ -207,6 +209,10 @@ export default class Transition extends Component {
     }
   }
 
+  clickCustomerServiceEventTracking = () => {
+    app.td_app_sdk.event({ id: '分流页面-客服按钮点击' });
+  }
+
   render() {
     const { event, citys, city, times, time, selectedSku, prices } = this.state
     return (
@@ -219,7 +225,7 @@ export default class Transition extends Component {
           <View className='desc'>
             请点击这里
           </View>
-          <Button className='btn btn-line' openType='contact'>
+          <Button className='btn btn-line' openType='contact'  onClick={this.clickCustomerServiceEventTracking} >
             我要咨询客服
           </Button>
         </View>

@@ -5,9 +5,14 @@ import './index.less'
 
 export default class CustomerService extends Component {
 
+  handleClick = () => {
+    const { onClick } = this.props;
+    onClick && onClick()
+  }
+  
   render() {
     return (
-      <Button openType='contact' className='customer-service' >
+      <Button openType='contact' className='customer-service' onClick={this.handleClick} >
         <Image className='icon' src={customerService} />
       </Button>
     )

@@ -6,6 +6,7 @@ import CustomerService from '../../components/customerService'
 import { getHomepageBanners, getHomepageEvents } from '../../utils/query'
 import './index.less'
 
+const app = getApp()
 export default class Index extends Component {
 
   state = {
@@ -42,6 +43,7 @@ export default class Index extends Component {
   }
 
   travelTo = (data) => {
+    app.td_app_sdk.event({ id: 'home-banner点击' });
     let url = ''
     if (data.banner_type === 'external') {
       url = `/pages/bannerDetail/index?url=${data.target_link}`
@@ -52,6 +54,7 @@ export default class Index extends Component {
   }
 
   toDetail = (id) => {
+    app.td_app_sdk.event({ id: 'home-产品点击' });
     Taro.navigateTo({
       url: `/pages/detail/index?id=${id}`
     })
@@ -68,11 +71,19 @@ export default class Index extends Component {
     }
   }
 
+  clickCustomerServiceEventTracking = () => {
+    app.td_app_sdk.event({ id: 'home-客服按钮点击' });
+  }
+
+  clickNavigatorEventTracking = () => {
+    app.td_app_sdk.event({ id: 'home-导航点击' });
+  }
+
   render() {
     const { banners, events } = this.state
     return (
       <View className='index'>
-        <CustomerService />
+        <CustomerService onClick={this.clickCustomerServiceEventTracking} />
         {banners.length > 0 && (
           <Swiper
             className='swiper'
@@ -122,7 +133,7 @@ export default class Index extends Component {
           </View>
         ))}
 
-        <NavigatorFixed selected={1} />
+        <NavigatorFixed selected={1} onClick={this.clickNavigatorEventTracking} />
       </View>
     )
   }

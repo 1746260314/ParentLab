@@ -11,6 +11,7 @@ import nextIcon from '../../images/next.png'
 import wxIcon from '../../images/wx_icon.png'
 import './index.less'
 
+const app = getApp()
 export default class Assessment extends Component {
 
   state = {
@@ -39,6 +40,7 @@ export default class Assessment extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
+      app.td_app_sdk.event({ id: '答题-分享' });
       const { assessment, assessmentID } = this.state
       return {
         title: assessment.wechat_share_title,
@@ -114,7 +116,7 @@ export default class Assessment extends Component {
       this.setState(
         { current: current === questions.length - 1 ? current : current + 1 },
         () => this.confirmCompletion()
-        )
+      )
     }
     await Taro.hideLoading()
   }
@@ -139,9 +141,11 @@ export default class Assessment extends Component {
       confirmText: '查看报告',
       success: function (res) {
         if (res.confirm) {
+          app.td_app_sdk.event({ id: '答题-pop1' });
           _this._assessmentFinished()
         } else if (res.cancel) {
           // console.log('用户点击取消')
+          app.td_app_sdk.event({ id: '答题-pop2' });
         }
       }
     })
@@ -218,7 +222,7 @@ export default class Assessment extends Component {
             onClick={this.handleNext}
           >
             <Text className={`next-text ${nextDisabled ? 'disabled' : ''}`}>
-              { (!nextDisabled && current === questions.length - 1 && progress === questions.length) ? '查看报告' : '下一题'}
+              {(!nextDisabled && current === questions.length - 1 && progress === questions.length) ? '查看报告' : '下一题'}
             </Text>
             <Image className='icon' src={nextDisabled ? nextDisabledIcon : nextIcon} />
           </View>

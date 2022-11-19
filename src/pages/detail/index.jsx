@@ -3,9 +3,9 @@ import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
 import { getEventForID } from '../../utils/query'
 import CustomerService from '../../components/customerService'
-
 import './index.less'
 
+const app = getApp()
 export default class Detail extends Component {
 
   state = {
@@ -40,6 +40,7 @@ export default class Detail extends Component {
       // 来自页面内转发按钮
       // console.log(res.target)
     }
+    app.td_app_sdk.event({ id: '产品介绍-分享' });
     return {
       title: this.state.data.event.wechat_share_title,
       path: `/pages/detail/index?id=${this.state.eventID}`,
@@ -48,6 +49,7 @@ export default class Detail extends Component {
   }
 
   signUp = () => {
+    app.td_app_sdk.event({ id: '产品介绍-报名点击' });
     const { eventID } = this.state
     try {
       const token = Taro.getStorageSync('token')
@@ -63,12 +65,16 @@ export default class Detail extends Component {
     }
   }
 
+  clickCustomerServiceEventTracking = () => {
+    app.td_app_sdk.event({ id: '产品介绍-客服按钮点击' });
+  }
+
   render() {
     const { data } = this.state
     const { event_images = [], event = {} } = data
     return (
       <View className='detail'>
-        <CustomerService />
+        <CustomerService onClick={this.clickCustomerServiceEventTracking} />
         {event_images.map((img, index) => (
           <Image className='detail-img' src={img} key={index} mode='widthFix' />
         ))}

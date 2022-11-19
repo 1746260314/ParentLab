@@ -7,6 +7,7 @@ import uncheck from '../../images/checkbox_uncheck.png'
 import selected from '../../images/checkbox_selected.png'
 import './index.less'
 
+const app = getApp()
 export default class PayOrder extends Component {
 
   state = {
@@ -81,6 +82,7 @@ export default class PayOrder extends Component {
  }
 
   handlePay = async () => {
+    app.td_app_sdk.event({ id: '支付页面-去支付按钮' });
     const { agreed, registerID } = this.state
     if (!agreed) return
     Taro.showLoading({

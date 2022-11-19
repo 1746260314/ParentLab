@@ -6,6 +6,7 @@ import NavigatorFixed from '../../components/navigatorFixed'
 import pageviewIcon from '../../images/pageview.png'
 import './index.less'
 
+const app = getApp()
 export default class AssessmentCenter extends Component {
 
   state = {
@@ -59,6 +60,7 @@ export default class AssessmentCenter extends Component {
   handleChangeTab = (id) => {
     const { ategoryId } = this.state
     if (id === ategoryId) return
+    app.td_app_sdk.event({ id: '测评页面-切换tab' });
     this.setState(
       { ategoryId: id },
       () => this._getAssessmentsForCategoriesID()
@@ -67,6 +69,7 @@ export default class AssessmentCenter extends Component {
 
   // 前往详情页
   toDetail = (assessmentID) => {
+    app.td_app_sdk.event({ id: '测评页面-开始测评' });
     Taro.navigateTo({
       url: `/pages/assessmentDetail/index?assessmentID=${assessmentID}`
     })

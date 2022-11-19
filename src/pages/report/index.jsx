@@ -9,9 +9,9 @@ import underline from '../../images/underline2.png'
 import wxIcon from '../../images/wx_icon.png'
 import shareReportIcon from '../../images/share_icon_report.png'
 import shareCircleIcon from '../../images/share_icon_circle.png'
-
 import './index.less'
 
+const app = getApp()
 export default class Report extends Component {
 
   state = {
@@ -47,15 +47,18 @@ export default class Report extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
+      app.td_app_sdk.event({ id: '报告-分享' });
       const { type } = res.target.dataset
       const { assessment, report, relationsID, wechatInfo } = this.state
       if (type === 'assessment') {
+        app.td_app_sdk.event({ id: '报告-分享pop1' });
         return {
           title: assessment.wechat_share_title,
           path: `/pages/assessmentDetail/index?assessmentID=${assessment.id}`,
           imageUrl: assessment.wechat_share_image_url
         }
       } else if (type === 'report') {
+        app.td_app_sdk.event({ id: '报告-分享pop2' });
         return {
           title: report.mp_share_title,
           path: `/pages/report/index?relationsID=${relationsID}&inviterOpenid=${wechatInfo.openid}`,
@@ -106,11 +109,13 @@ export default class Report extends Component {
   }
 
   more = () => {
+    app.td_app_sdk.event({ id: '报告-返回按钮' });
     Taro.redirectTo({ url: '/pages/assessmentCenter/index' })
   }
 
   // 显示海报弹窗
   showPoster = () => {
+    app.td_app_sdk.event({ id: '报告-分享pop3' });
     this.setState({ showPoster: true })
   }
 

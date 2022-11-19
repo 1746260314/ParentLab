@@ -7,6 +7,7 @@ import ShareContainer from '../../components/shareContainer'
 import wxIcon from '../../images/wx_icon.png'
 import './index.less'
 
+const app = getApp()
 export default class Detail extends Component {
 
   state = {
@@ -30,6 +31,7 @@ export default class Detail extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
+      app.td_app_sdk.event({ id: '评测详情-分享2' });
       const { data: { wechat_share_title, wechat_share_image_url }, assessmentID } = this.state
       return {
         title: wechat_share_title,
@@ -37,6 +39,7 @@ export default class Detail extends Component {
         imageUrl: wechat_share_image_url
       }
     }
+    app.td_app_sdk.event({ id: '评测详情-分享1' });
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -57,6 +60,7 @@ export default class Detail extends Component {
   }
 
   clickStart = () => {
+    app.td_app_sdk.event({ id: '评测详情-开始答题' });
     try {
       const { assessmentID } = this.state
       const token = Taro.getStorageSync('token')

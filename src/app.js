@@ -4,6 +4,9 @@ import { login } from './utils'
 import { getWeChatSettings } from './utils/query'
 import './app.less'
 
+// eslint-disable-next-line no-unused-vars
+const tdweapp = require('./utils/tdweapp.js');
+
 class App extends Component {
 
   componentDidMount() {
