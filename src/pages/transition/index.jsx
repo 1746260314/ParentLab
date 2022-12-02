@@ -155,11 +155,11 @@ export default class Transition extends Component {
         city: data.city,
         times: newTimes,
       })
-      if(time) {
+      if (time) {
         this.setState({
           selectedSku: citysMapping[data.city].find(item => item.id === data.id)
         })
-      } 
+      }
     }
   }
 
@@ -187,12 +187,12 @@ export default class Transition extends Component {
         time: data.time,
         citys: newCitys
       })
- 
-      if(city || event.hold_form === 'online') {
+
+      if (city || event.hold_form === 'online') {
         this.setState({
           selectedSku: timesMapping[data.time].find(item => item.id === data.id)
         })
-      } 
+      }
     }
   }
 
@@ -225,7 +225,7 @@ export default class Transition extends Component {
           <View className='desc'>
             请点击这里
           </View>
-          <Button className='btn btn-line' openType='contact'  onClick={this.clickCustomerServiceEventTracking} >
+          <Button className='btn btn-line' openType='contact' onClick={this.clickCustomerServiceEventTracking} >
             我要咨询客服
           </Button>
         </View>
@@ -260,9 +260,11 @@ export default class Transition extends Component {
                 <View className='num'>
                   {(selectedSku?.list_price?.cents / 100).toFixed(2)}
                 </View>
-                <View className='discounts'>
-                  限时优惠￥{(selectedSku?.current_promotion_price?.cents / 100).toFixed(2)}
-                </View>
+                {selectedSku?.current_promotion_price && (
+                  <View className='discounts'>
+                    限时优惠￥{(selectedSku?.current_promotion_price?.cents / 100).toFixed(2)}
+                  </View>
+                )}
               </View>
             ) : (
               <View className='price-section'>
