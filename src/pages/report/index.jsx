@@ -1,8 +1,8 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, RichText } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import { getReportInfo, getUserProfile, getUserPublicInfo } from '../../utils/query'
-import ShareContainer from '../../components/shareContainer'
+import ShareDrawer from '../../components/shareDrawer'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
 import underline from '../../images/underline2.png'
@@ -22,7 +22,8 @@ export default class Report extends Component {
     showPoster: false,
     showAlert: false,
     wechatInfo: {},
-    inviter: {}
+    inviter: {},
+    show: false,
   }
 
   componentWillMount() { }
@@ -108,9 +109,12 @@ export default class Report extends Component {
     }
   }
 
-  more = () => {
-    app.td_app_sdk.event({ id: '报告-返回按钮' });
-    Taro.redirectTo({ url: '/pages/assessmentCenter/index' })
+  handleShowDrawer = () => {
+    this.setState({ show: true })
+  }
+
+  onHide = () => {
+    this.setState({ show: false })
   }
 
   // 显示海报弹窗
@@ -141,8 +145,18 @@ export default class Report extends Component {
     Taro.redirectTo({ url: `/pages/assessmentDetail/index?assessmentID=${assessment.id}` })
   }
 
+  more = () => {
+    app.td_app_sdk.event({ id: '报告-返回按钮' });
+    Taro.redirectTo({ url: '/pages/assessmentCenter/index' })
+  }
+
+  toReportInterpretation = () => {
+    Taro.navigateTo({url: `/pages/reportInterpretation/index?relationsID=${this.state.relationsID}`})
+  }
+  
+
   render() {
-    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert } = this.state
+    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, show } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -190,24 +204,33 @@ export default class Report extends Component {
           {report?.title}
           <Image className='underline' src={underline} />
         </View>
+
         {/* <Image className='summary-img' src={report?.summary_image_url} mode='widthFix' /> */}
 
         <View className='content'>
-          {/* <RichText className='rich-text' nodes={report?.content_html} /> */}
           {report?.summary_images?.map((img, i) => (
             <Image key={i} src={img} mode='widthFix' />
           ))}
-
         </View>
 
-        <View
+        <View className='btn-wrap'>
+          <View className='btn-line' onClick={this.handleShowDrawer}>
+            邀请另一半测试
+          </View>
+
+          <View className='btn-full' onClick={this.toReportInterpretation}>
+            查看详细解读
+          </View>
+        </View>
+
+        {/* <View
           className='more-btn'
           onClick={this.more}
         >
           去做更多测试
-        </View>
+        </View> */}
 
-        <ShareContainer options={shareOptions} showPoster={this.showPoster} />
+        <ShareDrawer show={show} options={shareOptions} showPoster={this.showPoster} onHide={this.onHide} />
 
         {showPoster && (
           <SharePoster poster={report.moment_share_image_url} inviter={wechatInfo} onHide={this.hidePoster} success={this.saveSuccess} />

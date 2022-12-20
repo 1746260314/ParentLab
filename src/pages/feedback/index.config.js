@@ -1,4 +1,4 @@
 export default definePageConfig({
-  navigationBarTitleText: ' ',
+  navigationBarTitleText: '吐槽我们',
   navigationBarBackgroundColor: '#ffffff',
 })

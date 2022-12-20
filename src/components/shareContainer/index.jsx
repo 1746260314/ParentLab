@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { View, PageContainer, Text, Image, Button } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
+import ShareDrawer  from '../shareDrawer'
 import shareIcon from '../../images/share2.png'
-import downIcon from '../../images/down.png'
 import './index.less'
 
 export default class ShareContainer extends Component {
@@ -35,57 +35,12 @@ export default class ShareContainer extends Component {
           分享
         </View>
 
-        <PageContainer
+        <ShareDrawer 
           show={show}
-          position='bottom'
-          round
-          onClickOverlay={this.onHide}
-        >
-          <View className='drawer'>
-            <View className='title'>
-              <Text>分享</Text>
-              <Image
-                className='down-icon'
-                src={downIcon}
-                onClick={this.onHide}
-              />
-            </View>
-            <View className='options'>
-              {options.map(option => (
-                <View className='option' key={option.type}>
-                  {option.type === 'poster' ? (
-                    <View 
-                      className='shaer-btn'
-                      onClick={this.showPoster}
-                    >
-                      <Image
-                        className='icon'
-                        src={option.icon}
-                      />
-                    </View>
-                  ) : (
-                    <Button
-                      data-type={option.type}
-                      openType='share'
-                      className='shaer-btn'
-                    >
-                      <Image
-                        className='icon'
-                        src={option.icon}
-                      />
-                    </Button>
-                  )
-                  }
-
-                  <Text className='share-text'>
-                    {option.text}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        </PageContainer>
-
+          onHide={this.onHide}
+          showPoster={this.showPoster}
+          options={options}
+        />
       </View>
     )
   }

@@ -23,6 +23,8 @@ export default defineAppConfig({
     'pages/myAssessment/index',   // 我的测评
     'pages/assessment/index',   // 测评
     'pages/report/index',   // 测评结果
+    'pages/reportInterpretation/index',   // 详情解读
+    'pages/feedback/index',   // 吐槽我们
     'pages/userAgreement/index',   // 网站许可及服务协议
     'pages/orderAgreement/index',   // 用户服务协议
   ],
