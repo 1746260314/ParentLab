@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
 import { getReportInfo, getUserProfile, getUserPublicInfo } from '../../utils/query'
 import ShareDrawer from '../../components/shareDrawer'
-import ShareContainer from '../../components/ShareContainer'
+import ShareFixed from '../../components/shareFixed'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
 import underline from '../../images/underline2.png'
@@ -315,7 +315,7 @@ export default class ReportInterpretation extends Component {
 
         <ShareDrawer show={showDrawer} options={shareOptions} showPoster={this.showPoster} onHide={this.onHideShareDrawer} />
 
-        <ShareContainer options={shareOptions} showPoster={this.showPoster} />
+        <ShareFixed options={shareOptions} showPoster={this.showPoster} />
 
         {showPoster && (
           <SharePoster poster={report.moment_share_image_url} inviter={wechatInfo} onHide={this.hidePoster} success={this.saveSuccess} />

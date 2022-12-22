@@ -80,7 +80,7 @@ export default class Feedback extends Component {
           <Textarea
             className='content'
             placeholder='输入内容'
-            onBlur={this.handleChangeContent}
+            onInput={this.handleChangeContent}
           />
         </View>
 

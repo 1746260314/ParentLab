@@ -4,7 +4,7 @@ import ShareDrawer  from '../shareDrawer'
 import shareIcon from '../../images/share2.png'
 import './index.less'
 
-export default class ShareContainer extends Component {
+export default class ShareFixed extends Component {
 
   state = {
     show: false

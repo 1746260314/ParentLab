@@ -79,10 +79,9 @@
 
         .price-bar,
         .price-section {
-            margin: 24px 8px 12px;
+            margin-top: 24px;
             display: flex;
             align-items: flex-end;
-            margin-top: 24px;
 
             .units {
                 font-weight: 500;
@@ -122,8 +121,16 @@
             color: #02323D;
         }
 
+        .list-price {
+            font-size: 14px;
+            line-height: 16px;
+            text-decoration-line: line-through;
+            color: #9AADB1;
+        }
+
         .selected {
-            padding: 0px 8px 24px;
+            margin-top: 16px;
+            padding-bottom: 24px;
             font-weight: 400;
             font-size: 14px;
             line-height: 16px;
@@ -145,7 +152,7 @@
         }
 
         .title {
-            margin: 24px 8px 0;
+            margin-top: 24px;
             display: flex;
             justify-content: space-between;
             font-weight: 600;
@@ -161,8 +168,9 @@
             grid-template-columns: 1fr 1fr;
         }
 
-        .option {
-            margin: 16px 8px;
+        .option,
+        .time-option {
+            margin: 16px 0px;
             padding: 8px 16px;
             min-height: 40px;
             background: #ECF1F2;
@@ -175,6 +183,11 @@
             font-size: 16px;
             line-height: 24px;
         }
+
+        .time-option {
+            width: max-content;
+        }
+
 
         .active {
             background: #FFC19E;

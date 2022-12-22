@@ -12,7 +12,7 @@ const app = getApp()
 export default class Transition extends Component {
 
   state = {
-    eventID: Taro.getCurrentInstance().router.params.eventID,
+    eventID: Taro.getCurrentInstance().router.params.eventID || 21,
     show: false,
     event: {},
     initialTimes: [],
@@ -258,7 +258,7 @@ export default class Transition extends Component {
                   ￥
                 </View>
                 <View className='num'>
-                  {(selectedSku?.list_price?.cents / 100).toFixed(2)}
+                  {(selectedSku?.current_price?.cents / 100).toFixed(2)}
                 </View>
                 {selectedSku?.current_promotion_price && (
                   <View className='discounts'>
@@ -274,6 +274,12 @@ export default class Transition extends Component {
                 <View className='num'>
                   {(prices[0] / 100).toFixed(2)} {prices.length > 1 && ('- ' + (prices[prices.length - 1] / 100).toFixed(2))}
                 </View>
+              </View>
+            )}
+
+            {selectedSku && selectedSku?.current_promotion_price && (
+              <View className='list-price'>
+                原价：￥{(selectedSku?.list_price?.cents / 100).toFixed(2)}
               </View>
             )}
 
@@ -312,7 +318,7 @@ export default class Transition extends Component {
               {times.map(item => (
                 <View
                   key={item.time}
-                  className={`option ${item.time === time ? 'active' : ''} ${item.disable ? 'disable' : ''}`}
+                  className={`time-option ${item.time === time ? 'active' : ''} ${item.disable ? 'disable' : ''}`}
                   onClick={() => this.clickTime(item)}
                 >
                   {item.time}

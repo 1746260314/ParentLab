@@ -5,7 +5,7 @@ import { getReportInfo, getUserProfile, getUserPublicInfo } from '../../utils/qu
 import ShareDrawer from '../../components/shareDrawer'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
-import underline from '../../images/underline2.png'
+import underline from '../../images/underline2.png' 
 import wxIcon from '../../images/wx_icon.png'
 import shareReportIcon from '../../images/share_icon_report.png'
 import shareCircleIcon from '../../images/share_icon_circle.png'

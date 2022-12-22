@@ -1,10 +1,14 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image } from '@tarojs/components'
-import { getOrderInfo, getWeChatPayParams } from '../../utils/query'
+import { View, Image, Input } from '@tarojs/components'
+import { getOrderInfo, getWeChatPayParams, getUserProfileInfo, updatePhone } from '../../utils/query'
+import { isPhone } from '../../utils/util'
 import ConfirmModal from '../../components/confirmModal'
 import uncheck from '../../images/checkbox_uncheck.png'
 import selected from '../../images/checkbox_selected.png'
+import phoneIcon from '../../images/phone.png'
+import close from '../../images/close.png'
+
 import './index.less'
 
 const app = getApp()
@@ -13,15 +17,19 @@ export default class PayOrder extends Component {
   state = {
     registerID: Taro.getCurrentInstance().router.params.registerID,
     order: {},
+    profileInfo: {},
     agreed: false,
     showModal: false,
     countdown: '00:00:00',
+    showPhoneModal: false,
+    phone_number: '',
   }
 
   componentWillMount() { }
 
   componentDidMount() {
     this._getOrderInfo()
+    this._getUserProfileInfo()
   }
 
   componentWillUnmount() { }
@@ -48,12 +56,11 @@ export default class PayOrder extends Component {
         { order: res.data },
         () => this.countTime()
       )
-      
     }
   }
 
   countTime = () => {
-    const {order} = this.state
+    const { order } = this.state
     let hours, minutes, seconds;
     let that = this;
     let now = parseInt(new Date().getTime() / 1000);
@@ -76,10 +83,51 @@ export default class PayOrder extends Component {
         countdown: '00:00:00'
       })
       Taro.redirectTo({
-        url:`/pages/orderExpired/index?registerID=${that.state.registerID}`
+        url: `/pages/orderExpired/index?registerID=${that.state.registerID}`
       })
     }
- }
+  }
+
+  // 获取用户手昵称手机号
+  _getUserProfileInfo = async () => {
+    const res = await getUserProfileInfo()
+    if (res.status === 'success') {
+      this.setState({
+        profileInfo: res.data,
+        phone_number: res.data.phone_number
+      })
+    }
+  }
+
+  // 打开关闭手机号modal
+  showOrHideModal = () => {
+    this.setState({ 
+      showPhoneModal: !this.state.showPhoneModal,
+      phone_number: this.state.profileInfo.phone_number
+     })
+  }
+
+  // 修改手机号
+  handleChangePhone = (e) => {
+    const { value } = e.detail
+    console.log(value)
+    this.setState({ phone_number: value })
+  }
+
+  // 保存手机号
+  savePhone = async () => {
+    const { phone_number } = this.state
+    if (!isPhone(phone_number)) return
+    const res = await updatePhone({ phone_number })
+    if (res.status === 'success') {
+      this.setState({ profileInfo: { ...this.state.profileInfo, phone_number } })
+      Taro.showToast({
+        title: '保存成功',
+        icon: 'success',
+        duration: 2000
+      })
+    }
+  }
 
   handlePay = async () => {
     app.td_app_sdk.event({ id: '支付页面-去支付按钮' });
@@ -147,12 +195,12 @@ export default class PayOrder extends Component {
     this.handlePay()
   }
 
-  goAgreement = () =>  {
-    Taro.navigateTo({url: '/pages/orderAgreement/index'})
+  goAgreement = () => {
+    Taro.navigateTo({ url: '/pages/orderAgreement/index' })
   }
 
   render() {
-    const { order, agreed, showModal, countdown } = this.state
+    const { order, agreed, showModal, countdown, profileInfo, showPhoneModal, phone_number } = this.state
     return (
       <View className='pay-order'>
         <View className='info-wrap'>
@@ -164,6 +212,54 @@ export default class PayOrder extends Component {
               </View>
               内支付订单
             </View>
+
+            <View className='user-profile'>
+              <Image className='icon' src={phoneIcon} />
+              <View className='profile'>
+                <View className='nickname'>
+                  {profileInfo.nickname}
+                </View>
+                <View className={profileInfo.phone_number ? 'phone' : 'no-phone'}>
+                  {profileInfo.phone_number || '未填写手机号'}
+                </View>
+              </View>
+              <View
+                className='btn'
+                onClick={this.showOrHideModal}
+              >
+                {profileInfo.phone_number ? '修改' : '添加'}
+              </View>
+            </View>
+
+            {showPhoneModal && (
+              <View className='change-phone-mask'>
+                <View className='wrap'>
+                  <View className='close-bar'>
+                    <Image className='close' src={close} onClick={this.showOrHideModal} />
+                  </View>
+                  <View className='title'>
+                    {profileInfo.phone_number ? '修改手机号' : '添加手机号'}
+                  </View>
+                  <View className='input-wrap'>
+                    <View className='prefix'>+86</View>
+                    <Input
+                      maxlength={11}
+                      type='number'
+                      className='phone-input'
+                      placeholder='输入手机号'
+                      value={phone_number}
+                      onInput={this.handleChangePhone}
+                    />
+                  </View>
+                  <View
+                    className={isPhone(phone_number) ? 'btn' : 'btn-disabled'}
+                    onClick={this.savePhone}
+                  >
+                    保存
+                  </View>
+                </View>
+              </View>
+            )}
 
             <View className='event-title'>
               {order.event_title}
@@ -262,7 +358,7 @@ export default class PayOrder extends Component {
             小时内支付
           </View> */}
           <View
-            className={agreed ? 'pay-btn' : 'pay-btn disabled'}
+            className={(agreed && this.state.profileInfo.phone_number) ? 'pay-btn' : 'pay-btn disabled'}
             onClick={this.handlePay}
           >
             支付{(order.total_price?.cents / 100).toFixed(2)}
@@ -275,7 +371,7 @@ export default class PayOrder extends Component {
               <Image className='icon' src={agreed ? selected : uncheck} />
               已同意
             </View>
-            <View className='link'  onClick={this.goAgreement}>
+            <View className='link' onClick={this.goAgreement}>
               《用户服务协议》
             </View>
           </View>

@@ -208,3 +208,18 @@ export async function updatePhoneNumber(data) {
         data
     })
 }
+
+// 获取用户昵称头像手机号
+export async function getUserProfileInfo() {
+    return request('/wechat_mp/users/profile_info')
+}
+
+// 用户直接修改手机号
+export async function updatePhone(data) {
+    return request('/wechat_mp/users/update_phone_number_by_user', {
+        method: 'PUT',
+        data
+    })
+}
+
+

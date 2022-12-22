@@ -2,8 +2,10 @@ import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
 import { getAssessmentDetail } from '../../utils/query'
-import ShareContainer from '../../components/shareContainer'
+import ShareFixed from '../../components/shareFixed'
 import wxIcon from '../../images/wx_icon.png'
+import arrowUp from '../../images/arrow_up.png'
+import arrowDown from '../../images/arrow_down.png'
 import './index.less'
 
 const app = getApp()
@@ -26,6 +28,7 @@ export default class Detail extends Component {
 
   componentDidHide() { }
 
+  // 分享配置
   onShareAppMessage(res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
@@ -48,6 +51,7 @@ export default class Detail extends Component {
     }
   }
 
+  // 获取测试详情数据
   _getAssessmentDetail = async (assessmentID) => {
     const res = await getAssessmentDetail(assessmentID)
     if (res.status === 'success') {
@@ -56,6 +60,11 @@ export default class Detail extends Component {
         title: res.data.title
       })
     }
+  }
+
+  //展开收起
+  control = (id) => {
+    this.setState({ [`open${id}`]: !this.state[`open${id}`] })
   }
 
   clickStart = () => {
@@ -77,7 +86,6 @@ export default class Detail extends Component {
 
   render() {
     const { data } = this.state
-    const { body_image_urls = [], is_enabled } = data
     const shareOptions = [
       {
         icon: wxIcon,
@@ -85,86 +93,85 @@ export default class Detail extends Component {
         type: 'assessment'
       }
     ]
+
+    const plain_content = '本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。'
     return (
       <View className='detail'>
-        {/* {body_image_urls.map((img, index) => (
-          <Image className='detail-img' src={img} key={index} mode='widthFix' />
-        ))} */}
-        <Image className='detail-img' mode='widthFix' />
+
+        <Image className='detail-img' src={data.banner_image_url} mode='widthFix' />
 
         <View className='container'>
           <View className='tag-bar'>
-            <View className='tag'>11</View>
-            <View className='tag'>22</View>
-            <View className='tag'>33</View>
+            {data.tags?.map((tag, index) => (
+              <View className='tag' key={index}>{tag}</View>
+            ))}
           </View>
 
           <View className='title'>
-            测一测你有多依赖你的另一半测一测你有多依赖你的另一半测一测你有多依赖你的另一半测一测你有多依赖你的另一半测一测你有多依赖你的另一半测一测你有多依赖你的另一半
+            {data.title}
           </View>
 
           <View className='desc'>
-            本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。
+            {data.short_desc}
           </View>
 
           <View className='quantity-bar'>
             <View className='tag'>
-              <View className='quantity-num'>33道</View>
-              <View className='quantity-matter'>123124123</View>
+              <View className='quantity-num'>
+                {data.assessment_questions_count}道
+              </View>
+              <View className='quantity-matter'>
+                测试题目数量
+              </View>
             </View>
             <View className='tag'>
-              <View className='quantity-num'>122道</View>
-              <View className='quantity-matter'>阿斯顿发</View>
+              <View className='quantity-num'>
+                {data.duration_minutes}分钟
+              </View>
+              <View className='quantity-matter'>
+                完成所需时间
+              </View>
             </View>
           </View>
 
-          <View className='source'>
-            <View className='label'>
-              文献来源
+          {data.references?.lenngth > 0 && (
+            <View className='source'>
+              <View className='label'>
+                文献来源
+              </View>
+              {data.references.map((item, index) => (
+                <View className='item' key={index}>
+                  {item}
+                </View>
+              ))}
             </View>
-            <View className='item'>
-              [1]  Haltiwanger, J., & Harter, S. (1988). The behavioral rating scale of presented self-esteem in young children. Denver: University of Denver.
-            </View>
-            <View className='item'>
-              [2]  Haltiwanger, J., & Harter, S. (1988). The behavioral rating scale of presented self-esteem in young children.
-            </View>
-          </View>
+          )}
 
-          <View className='description'>
-            <View className='title'>
-              <View className='decorate'></View>
-              这是个什么样的测试？
+          {data.intro_items?.map(item => (
+            <View className='description' key={item.id}>
+              <View className='title'>
+                <View className='decorate'></View>
+                {item.title}
+              </View>
+              <View className={(item.plain_content.length > 100 && !this.state[`open${item.id}`]) ? 'content-hide' : 'content'}>
+                {item.plain_content}
+              </View>
+              {item.plain_content.length > 100 && (
+                <View
+                  className='control'
+                  onClick={() => this.control(item.id)}
+                >
+                  {this.state[`open${item.id}`] ? '收起' : '展开'}
+                  <Image className='icon' src={this.state[`open${item.id}`] ? arrowDown : arrowUp} />
+                </View>
+              )}
             </View>
-            <View className='content'>
-              本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。
-            </View>
-          </View>
-
-          <View className='description'>
-            <View className='title'>
-              <View className='decorate'></View>
-              这个测试有什么用？
-            </View>
-            <View className='content'>
-            本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。本测试于2018年由美...
-            </View>
-          </View>
-
-          <View className='description'>
-            <View className='title'>
-              <View className='decorate'></View>
-              我可以收获什么？
-            </View>
-            <View className='content'>
-              本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。
-            </View>
-          </View>
-
+          ))}
         </View>
 
 
         <View className='btn-wrap'>
-          {is_enabled ? (
+          {data.is_enabled ? (
             <View className='btn' onClick={this.clickStart}>
               开始测试
             </View>
@@ -175,7 +182,7 @@ export default class Detail extends Component {
           )}
         </View>
 
-        <ShareContainer options={shareOptions} />
+        <ShareFixed options={shareOptions} />
       </View>
     )
   }

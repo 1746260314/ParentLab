@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { View, Text, Image, Progress } from '@tarojs/components'
 import { RadioBars2 } from '../../components/formElements'
 import { getAssessmentQuestions, updateProgress, assessmentFinished } from '../../utils/query'
-import ShareContainer from '../../components/shareContainer'
+import ShareFixed from '../../components/shareFixed'
 import prevDisabledIcon from '../../images/prev_disabled.png'
 import prevIcon from '../../images/prev.png'
 import nextDisabledIcon from '../../images/next_disabled.png'
@@ -228,7 +228,7 @@ export default class Assessment extends Component {
           </View>
         </View>
 
-        <ShareContainer options={shareOptions} />
+        <ShareFixed options={shareOptions} />
       </View>
     )
   }
