@@ -1,15 +1,14 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Textarea } from '@tarojs/components'
-import { } from '../../utils/query'
+import { feedbacks } from '../../utils/query'
 import './index.less'
 
-const app = getApp()
 const tagData = ['测的不准', '过程体验不好', '报告解读看不懂', '视觉不够好看', '哪儿哪儿都不行',]
 export default class Feedback extends Component {
 
   state = {
-    slotPoint: [],
+    tags: [],
     content: '',
   }
 
@@ -24,31 +23,38 @@ export default class Feedback extends Component {
   componentDidHide() { }
 
   handleClickTag = (value) => {
-    const { slotPoint } = this.state
+    const { tags } = this.state
     let result = []
-    if (slotPoint.includes(value)) {
-      result = slotPoint.filter(i => i !== value)
+    if (tags.includes(value)) {
+      result = tags.filter(i => i !== value)
     } else {
-      result = [...slotPoint, value]
+      result = [...tags, value]
     }
-    this.setState({ slotPoint: result })
+    this.setState({ tags: result })
   }
 
   handleChangeContent = (e) => {
-    this.setState({ content: e.target.value })
+    this.setState({ content: e.detail.value })
   }
 
-  submit = () => {
-    const { slotPoint, content } = this.state
-    if(slotPoint.length > 0 || content) {
-
+  submit = async () => {
+    const { tags, content } = this.state
+    if(tags.length > 0 || content) {
+      const res = await feedbacks({tags, content})
+      if(res.status === 'success') {
+        Taro.showToast({
+          title: '提交成功',
+          icon: 'success',
+          duration: 2000
+      })
+      }
     } else {
       return
     }
   }
 
   render() {
-    const { slotPoint, content } = this.state
+    const { tags, content } = this.state
 
     return (
       <View className='feedback'>
@@ -64,7 +70,7 @@ export default class Feedback extends Component {
           <View className='multiple-tags'>
             {tagData.map((item, index) => (
               <View
-                className={slotPoint.includes(item) ? 'option-active' : 'option'}
+                className={tags.includes(item) ? 'option-active' : 'option'}
                 key={index}
                 onClick={() => this.handleClickTag(item)}
               >
@@ -85,7 +91,7 @@ export default class Feedback extends Component {
         </View>
 
         <View 
-          className={(slotPoint.length > 0 || content) ? 'btn' : 'btn-disabled'}
+          className={(tags.length > 0 || content) ? 'btn' : 'btn-disabled'}
           onClick={this.submit}
         >
           告诉大老板

@@ -48,16 +48,16 @@ export default class MyAssessment extends Component {
   }
 
   // 继续
-  handleContinue = (assessmentID) => {
+  handleContinue = ({ is_sub_assessment, assessment }) => {
     Taro.navigateTo({
-      url: `/pages/assessment/index?assessmentID=${assessmentID}`
+      url: `/pages/${is_sub_assessment ? 'assessmentV2' : 'assessment'}/index?assessmentID=${assessment.id}`
     })
   }
 
   // 查看报告
-  viewReport = (relationsID) => {
+  viewReport = ({ id, is_sub_assessment }) => {
     Taro.navigateTo({
-      url: `/pages/report/index?relationsID=${relationsID}`
+      url: `/pages/${is_sub_assessment ? 'reportV2' : 'report'}/index?relationsID=${id}`
     })
   }
 
@@ -83,14 +83,14 @@ export default class MyAssessment extends Component {
                 {item.state === 'in_progress' ? (
                   <View
                     className='btn-full'
-                    onClick={() => this.handleContinue(item.assessment.id)}
+                    onClick={() => this.handleContinue(item)}
                   >
                     继续
                   </View>
                 ) : (
                   <View
                     className='btn-line'
-                    onClick={() => this.viewReport(item.id)}
+                    onClick={() => this.viewReport(item)}
                   >
                     查看报告
                   </View>

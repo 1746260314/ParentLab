@@ -4,8 +4,6 @@ import { View, Image } from '@tarojs/components'
 import { getAssessmentDetail } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import wxIcon from '../../images/wx_icon.png'
-import arrowUp from '../../images/arrow_up.png'
-import arrowDown from '../../images/arrow_down.png'
 import './index.less'
 
 const app = getApp()
@@ -28,7 +26,6 @@ export default class Detail extends Component {
 
   componentDidHide() { }
 
-  // 分享配置
   onShareAppMessage(res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
@@ -51,7 +48,6 @@ export default class Detail extends Component {
     }
   }
 
-  // 获取测试详情数据
   _getAssessmentDetail = async (assessmentID) => {
     const res = await getAssessmentDetail(assessmentID)
     if (res.status === 'success') {
@@ -60,11 +56,6 @@ export default class Detail extends Component {
         title: res.data.title
       })
     }
-  }
-
-  //展开收起
-  control = (id) => {
-    this.setState({ [`open${id}`]: !this.state[`open${id}`] })
   }
 
   clickStart = () => {
@@ -86,6 +77,7 @@ export default class Detail extends Component {
 
   render() {
     const { data } = this.state
+    const { body_image_urls = [], is_enabled } = data
     const shareOptions = [
       {
         icon: wxIcon,
@@ -93,87 +85,15 @@ export default class Detail extends Component {
         type: 'assessment'
       }
     ]
-
-    const plain_content = '本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。本测试于2018年由美国心理学家Susan Harter以及早期学习专家Jane Haltiwanger共同设计而成，旨在帮助家长（或者教师）了解孩子对自我价值的认可水平。'
     return (
       <View className='detail'>
-
-        <Image className='detail-img' src={data.banner_image_url} mode='widthFix' />
-
-        <View className='container'>
-          <View className='tag-bar'>
-            {data.tags?.map((tag, index) => (
-              <View className='tag' key={index}>{tag}</View>
-            ))}
-          </View>
-
-          <View className='title'>
-            {data.title}
-          </View>
-
-          <View className='desc'>
-            {data.short_desc}
-          </View>
-
-          <View className='quantity-bar'>
-            <View className='tag'>
-              <View className='quantity-num'>
-                {data.assessment_questions_count}道
-              </View>
-              <View className='quantity-matter'>
-                测试题目数量
-              </View>
-            </View>
-            <View className='tag'>
-              <View className='quantity-num'>
-                {data.duration_minutes}分钟
-              </View>
-              <View className='quantity-matter'>
-                完成所需时间
-              </View>
-            </View>
-          </View>
-
-          {data.references?.lenngth > 0 && (
-            <View className='source'>
-              <View className='label'>
-                文献来源
-              </View>
-              {data.references.map((item, index) => (
-                <View className='item' key={index}>
-                  {item}
-                </View>
-              ))}
-            </View>
-          )}
-
-          {data.intro_items?.map(item => (
-            <View className='description' key={item.id}>
-              <View className='title'>
-                <View className='decorate'></View>
-                {item.title}
-              </View>
-              <View className={(item.plain_content.length > 100 && !this.state[`open${item.id}`]) ? 'content-hide' : 'content'}>
-                {item.plain_content}
-              </View>
-              {item.plain_content.length > 100 && (
-                <View
-                  className='control'
-                  onClick={() => this.control(item.id)}
-                >
-                  {this.state[`open${item.id}`] ? '收起' : '展开'}
-                  <Image className='icon' src={this.state[`open${item.id}`] ? arrowDown : arrowUp} />
-                </View>
-              )}
-            </View>
-          ))}
-        </View>
-
-
+        {body_image_urls.map((img, index) => (
+          <Image className='detail-img' src={img} key={index} mode='widthFix' />
+        ))}
         <View className='btn-wrap'>
-          {data.is_enabled ? (
+          {is_enabled ? (
             <View className='btn' onClick={this.clickStart}>
-              开始测试
+              开始答题
             </View>
           ) : (
             <View className='btn-disable'>

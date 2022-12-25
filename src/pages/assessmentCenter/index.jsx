@@ -68,10 +68,11 @@ export default class AssessmentCenter extends Component {
   }
 
   // 前往详情页
-  toDetail = (assessmentID) => {
+  toDetail = (assessment) => {
+    const { id, is_sub_assessment } = assessment
     app.td_app_sdk.event({ id: '测评页面-开始测评' });
     Taro.navigateTo({
-      url: `/pages/assessmentDetail/index?assessmentID=${assessmentID}`
+      url: `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
     })
   }
 
@@ -98,7 +99,7 @@ export default class AssessmentCenter extends Component {
           <View
             className='assessment-card'
             key={assessment.id}
-            onClick={() => this.toDetail(assessment.id)}
+            onClick={() => this.toDetail(assessment)}
           >
             {assessment.tags.map(tag => (
               <View

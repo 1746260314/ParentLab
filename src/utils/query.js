@@ -186,7 +186,7 @@ export async function assessmentFinished(relationsID) {
     })
 }
 
-// 更新答题进度
+// 获取测评报告
 export async function getReportInfo(relationsID) {
     return request(`/wechat_mp/assessment_user_relations/${relationsID}`)
 }
@@ -222,4 +222,30 @@ export async function updatePhone(data) {
     })
 }
 
+// 获取更多深度解读
+export async function getMoreInsights(assessmentID) {
+    return request(`/wechat_mp/assessments/${assessmentID}/insights`)
+}
 
+// 获取更多测试推荐
+export async function getMoreAssessments(assessmentID) {
+    return request(`/wechat_mp/assessments/${assessmentID}/recommended_assessments`)
+}
+
+// 获取测评推荐的服务
+export async function getRecommendedEvent(assessmentID) {
+    return request(`/wechat_mp/assessments/${assessmentID}/recommended_events`)
+}
+
+// 上报用户吐槽
+export async function feedbacks(data) {
+    return request('/wechat_mp/feedbacks', {
+        method: 'POST',
+        data
+    })
+}
+
+// 获取其他详情解读
+export async function getOtherInsights(insightID) {
+    return request(`/wechat_mp/sub_assessment_reports/${insightID}`)
+}
