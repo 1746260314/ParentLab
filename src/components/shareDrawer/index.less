@@ -1,58 +1,93 @@
 .share-drawer {
     width: 100%;
-    height: 227px;
-    overflow: hidden;
+}
 
-    .title {
+.share-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    .share-drawer {
         width: 100%;
-        padding: 24px 16px 0;
-        height: 64px;
-        display: flex;
-        justify-content: space-between;
-        font-weight: 600;
-        font-size: 20px;
-        line-height: 24px;
-        color: #17505C;
-        border-bottom: 1px solid #ECF1F2;
-    }
+        height: 227px;
+        overflow: hidden;
+        background: #ffffff;
+        border-top-right-radius: 30px;
+        border-top-left-radius: 30px;
 
-    .down-icon {
-        width: 24px;
-        height: 24px;
-    }
-
-    .options {
-        width: 100%;
-        padding-top: 16px;
-        display: flex;
-        align-items: center;
-
-        .option {
-            flex: 1;
+        .title {
+            width: 100%;
+            height: 64px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-
-            .shaer-btn {
-                width: 64px;
-                height: 64px;
-                padding: 0;
-                background: none;
-                border-radius: 50%;
-
-                .icon {
-                    width: 64px;
-                    height: 64px;
-                }
-            }
-
-            .share-text {
-                margin-top: 8px;
-                font-size: 14px;
-                line-height: 16px;
+        
+            .title-text {
+                padding: 0 16px;
+                font-weight: 600;
+                font-size: 20px;
+                line-height: 24px;
                 color: #17505C;
+            }
+            .down-icon {
+                font-weight: 600;
+                width: 35px;
+                height: 35px;
+                margin-right:16px;
+                font-size: 20px;
+                line-height: 35px;
+                text-align: center;
+                color: #a5c1c7;
             }
         }
 
+        .options {
+            border-top: 1px solid #ECF1F2;
+            width: 100%;
+            padding-top: 16px;
+            display: flex;
+            align-items: center;
+
+            .option {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .shaer-btn {
+                    width: 64px;
+                    height: 64px;
+                    padding: 0;
+                    background: none;
+                    border-radius: 50%;
+
+                    cover-image {
+                        width: 64px;
+                        height: 64px;
+                    }
+
+                    .icon {
+                        width: 64px;
+                        height: 64px;
+                    }
+                }
+
+                .share-text {
+                    margin-top: 8px;
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: #17505C;
+                }
+            }
+
+        }
     }
+
 }

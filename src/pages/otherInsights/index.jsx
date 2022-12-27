@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Button } from '@tarojs/components'
+import { View, Image, Button, CoverView, CoverImage } from '@tarojs/components'
 import { getOtherInsights } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import PieChart from '../../components/pieChart'
@@ -37,7 +37,7 @@ export default class OtherInsights extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
-      const { insightData: {assessment} } = this.state
+      const { insightData: { assessment } } = this.state
       return {
         title: assessment.title,
         path: `/pages/assessmentDetailV2/index?assessmentID=${assessment.id}`,
@@ -87,7 +87,7 @@ export default class OtherInsights extends Component {
     Taro.navigateTo({ url: '/pages/feedback/index' })
   }
 
-  // 返回测试首页
+  // 返回评测首页
   goAssessmentLists = () => {
     if (this.state.needDetainment) {
       this.showDetainmentModal()
@@ -141,43 +141,50 @@ export default class OtherInsights extends Component {
           className='more-btn'
           onClick={this.goAssessmentLists}
         >
-          返回测试首页
+          返回评测首页
         </View>
 
         <ShareFixed options={shareOptions} />
 
         {showDetainment && (
-          <View className='detainment-modal'>
-            <View className='detainment-content'>
-              <Image className='title-bg' src={modalTitleBg} />
-              <Image className='close' src={close} onClick={this.onHideDetainmentModal} />
-              <View className='title'>
+          <CoverView className='detainment-modal'>
+            <CoverView className='detainment-content'>
+              <CoverView className='title-bg'>
+                <CoverImage src={modalTitleBg} />
+              </CoverView>
+              <CoverView className='close' onClick={this.onHideDetainmentModal} >
+                X
+              </CoverView>
+
+              <CoverView className='title'>
                 好厉害
-              </View>
-              <View className='desc'>
+              </CoverView>
+              <CoverView className='desc'>
                 您读完了报告的详细解读，如果您觉得
-              </View>
-              <View className='label'>
+              </CoverView>
+              <CoverView className='label'>
                 这个测评还不错
-              </View>
+              </CoverView>
               <Button
                 className='btn-full'
                 openType='share'
                 onClick={this.toShare}
               >
-                邀请好友测一测
+                <CoverView className='btn-wrap'>
+                  邀请好友测一测
+                </CoverView>
               </Button>
-              <View className='label'>
+              <CoverView className='label'>
                 我有意见要说
-              </View>
-              <View
+              </CoverView>
+              <CoverView
                 className='btn-line'
                 onClick={this.toFeedback}
               >
                 吐槽我们
-              </View>
-            </View>
-          </View>
+              </CoverView>
+            </CoverView>
+          </CoverView>
         )}
 
       </View>

@@ -29,28 +29,29 @@ export default class SharePoster extends Component {
     ctx.fillStyle = '#FEFBEF';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.clearRect(0, 0, 0, 0);
+    if (this.props.poster) {
+      await Taro.getImageInfo({ src: this.props.poster })
+        .then(res => {
+          ctx.drawImage(res.path, 0, 0, canvasWidth, canvasHeight);
+          ctx.restore()
+          ctx.save();
 
-    await Taro.getImageInfo({ src: this.props.poster })
-      .then(res => {
-        ctx.drawImage(res.path, 0, 0, canvasWidth, canvasHeight);
-        ctx.restore()
-        ctx.save();
+          ctx.font = 'normal 600 28px PingFang SC'
+          ctx.setFillStyle('#17505C')   //  颜色
+          let nickname = this.props.inviter.nickname;
+          const nicknameWidth = ctx.measureText(nickname).width
+          ctx.fillText(nickname, (canvasWidth - nicknameWidth) / 2, 70); //字体加设计高度
 
-        ctx.font = 'normal 600 28px PingFang SC'
-        ctx.setFillStyle('#17505C')   //  颜色
-        let nickname = this.props.inviter.nickname;
-        const nicknameWidth = ctx.measureText(nickname).width
-        ctx.fillText(nickname, (canvasWidth - nicknameWidth) / 2, 70); //字体加设计高度
-
-        ctx.font = 'normal 500 24px PingFang SC'
-        ctx.setFillStyle('#17505C')   //  颜色
-        let desc = '您的好友正在邀请你参与测评';
-        const descWidth = ctx.measureText(desc).width
-        ctx.fillText(desc, (canvasWidth - descWidth) / 2, 108); 
-        ctx.draw(true, () => {
-          this.saveImage()
+          ctx.font = 'normal 500 24px PingFang SC'
+          ctx.setFillStyle('#17505C')   //  颜色
+          let desc = '您的好友正在邀请你参与测评';
+          const descWidth = ctx.measureText(desc).width
+          ctx.fillText(desc, (canvasWidth - descWidth) / 2, 108);
+          ctx.draw(true, () => {
+            this.saveImage()
+          })
         })
-      })
+    }
 
     // await Taro.getImageInfo({ src: this.props.inviter.headimgurl })
     //   .then(res => {

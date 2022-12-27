@@ -6,8 +6,6 @@ import ShareDrawer from '../../components/shareDrawer'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
 import wxIcon from '../../images/wx_icon.png'
-import shareReportIcon from '../../images/share_icon_report.png'
-import shareCircleIcon from '../../images/share_icon_circle.png'
 import './index.less'
 
 const app = getApp()
@@ -152,7 +150,6 @@ export default class Report extends Component {
   toReportInsights = () => {
     Taro.navigateTo({url: `/pages/reportInsights/index?relationsID=${this.state.relationsID}`})
   }
-  
 
   render() {
     const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, show } = this.state
@@ -218,6 +215,7 @@ export default class Report extends Component {
         {showPoster && (
           <SharePoster poster={report.moment_share_image_url} inviter={wechatInfo} onHide={this.hidePoster} success={this.saveSuccess} />
         )}
+        
         {showAlert && (
           <AlertModal title='保存成功' desc='已经保存到手机，到朋友圈炫一把' btnText='我知道了' handleClick={this.hideAlert} />
         )}

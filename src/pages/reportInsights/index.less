@@ -38,7 +38,7 @@
     }
 
     .result-bar {
-        margin-top: 16px;
+        margin: 16px 0 40px;
         height: 32px;
         background: linear-gradient(270deg, rgba(236, 241, 242, 0) -12.28%, #ECF1F2 49.09%, rgba(254, 251, 239, 0) 110.78%, rgba(236, 241, 242, 0) 110.78%);
         display: flex;
@@ -58,7 +58,7 @@
     }
 
     .content-item {
-        padding-top: 40px;
+        padding-bottom: 40px;
 
         .title {
             margin-bottom: 16px;
@@ -275,7 +275,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 9999;
+        z-index: 99999;
         width: 100%;
         height: 100vh;
         background: rgba(0, 0, 0, 0.8);
@@ -285,7 +285,7 @@
         .modal {
             width: 100%;
             margin: 0 16px;
-            height: 90%;
+            max-height: 90%;
             background: #FFFFFF;
             border-radius: 16px;
             position: relative;
@@ -323,7 +323,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 9999;
+        z-index: 999999;
         width: 100%;
         height: 100vh;
         background: rgba(0, 0, 0, 0.8);
@@ -355,22 +355,33 @@
             }
 
             .share-btn {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 270px;
-                height: 54px;
-                border: 2px solid #A4C1C8;
+                width: 272px;
+                height: 56px;
+                border: none;
+                background: none;
                 border-radius: 100px;
-                font-weight: 500;
-                font-size: 16px;
-                color: #02323D;
-                background: #FEFBEF;
 
-                .icon {
-                    width: 16px;
-                    height: 16px;
-                    margin-right: 4px;
+                .btn-wrap {
+                    border: 2px solid #A4C1C8;
+                    border-radius: 100px;
+                    background: #FEFBEF;
+                    width: 270px;
+                    height: 54px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 54px;
+                    color: #02323D;
+
+                    .icon {
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 4px;
+                        background: url('../../images/wechat_black.png') no-repeat;
+                        background-size: 100% 100%;
+                    }
                 }
             }
         }

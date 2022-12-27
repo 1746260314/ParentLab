@@ -39,14 +39,17 @@ export default class Feedback extends Component {
 
   submit = async () => {
     const { tags, content } = this.state
-    if(tags.length > 0 || content) {
-      const res = await feedbacks({tags, content})
-      if(res.status === 'success') {
+    if (tags.length > 0 || content) {
+      const res = await feedbacks({ tags, content })
+      if (res.status === 'success') {
         Taro.showToast({
           title: '提交成功',
           icon: 'success',
           duration: 2000
-      })
+        })
+        Taro.navigateBack({
+          delta: 1
+        })
       }
     } else {
       return
@@ -90,7 +93,7 @@ export default class Feedback extends Component {
           />
         </View>
 
-        <View 
+        <View
           className={(tags.length > 0 || content) ? 'btn' : 'btn-disabled'}
           onClick={this.submit}
         >

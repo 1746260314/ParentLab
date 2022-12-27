@@ -66,7 +66,7 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 999;
+        z-index: 99999;
         background: rgba(0, 0, 0, 0.8);
         display: flex;
         align-items: center;
@@ -86,15 +86,23 @@
                 margin: 0 24px;
                 width: 318px;
                 height: 40px;
+
+                cover-image {
+                    width: 318px;
+                    height: 40px;
+                }
             }
 
             .close {
                 position: absolute;
                 display: block;
-                top: 24px;
-                right: 24px;
-                width: 16px;
-                height: 16px;
+                top: 14px;
+                right: 14px;
+                width: 36px;
+                height: 36px;
+                font-size: 24px;
+                text-align: center;
+                line-height: 36px;
             }
 
             .title {
@@ -142,7 +150,12 @@
             }
 
             .btn-full {
-                background: #FFC19E;
+                background: none;
+
+                .btn-wrap {
+                    background: #FFC19E;
+                    line-height: 40px;
+                }
             }
 
             .btn-line {

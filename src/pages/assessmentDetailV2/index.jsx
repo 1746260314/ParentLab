@@ -122,9 +122,6 @@ export default class AssessmentDetailV2 extends Component {
             {data.tags?.map((tag, index) => (
               <View className='tag' key={index}>{tag}</View>
             ))}
-            {data.tags?.map((tag, index) => (
-              <View className='tag' key={index}>{tag}</View>
-            ))}
           </View>
 
           <View className='title'>

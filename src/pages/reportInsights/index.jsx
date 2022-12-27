@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Button } from '@tarojs/components'
+import { View, Image, Button, CoverView } from '@tarojs/components'
 import { getReportInfo, getMoreInsights, getMoreAssessments, getRecommendedEvent } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import PieChart from '../../components/pieChart'
@@ -9,7 +9,6 @@ import wxIcon from '../../images/wx_icon.png'
 import arrowRight from '../../images/arrow_right_32.png'
 import pageview from '../../images/pageview.png'
 import close from '../../images/close.png'
-import wechatIcon from '../../images/wechat_black.png'
 
 import './index.less'
 
@@ -107,7 +106,7 @@ export default class ReportInsights extends Component {
     })
   }
 
-  // 返回测试首页
+  // 返回评测首页
   goAssessmentLists = () => {
     Taro.redirectTo({ url: '/pages/assessmentCenter/index' })
   }
@@ -211,7 +210,7 @@ export default class ReportInsights extends Component {
 
           <View className='content-item'>
             <View className='title'>
-              更多养鱼支持服务
+              更多养育支持服务
             </View>
 
             {recommendedEvents.map(event => (
@@ -301,7 +300,7 @@ export default class ReportInsights extends Component {
           className='more-btn'
           onClick={this.goAssessmentLists}
         >
-          返回测试首页
+          返回评测首页
         </View>
 
         <ShareFixed options={shareOptions} />
@@ -326,24 +325,28 @@ export default class ReportInsights extends Component {
         )}
 
         {showOtherInsightModal && (
-          <View className='other-insight-modal-mask'>
-            <View className='modal'>
-              <View className='title'>
-                查看其他测评报告
-              </View>
-              <View className='desc'>
+          <CoverView className='other-insight-modal-mask'>
+            <CoverView className='modal'>
+              <CoverView className='title'>
+                查看其他评测报告
+              </CoverView>
+              <CoverView className='desc'>
                 分享到微信，即可查看更多报告
-              </View>
+              </CoverView>
               <Button
                 className='share-btn'
                 openType='share'
                 onClick={this.unlock}
               >
-                <Image className='icon' src={wechatIcon} />
-                立即分享
+                <CoverView className='btn-wrap'>
+                  <CoverView className='icon'>
+                    
+                  </CoverView>
+                  立即分享
+                </CoverView>
               </Button>
-            </View>
-          </View>
+            </CoverView>
+          </CoverView>
         )}
 
       </View>
