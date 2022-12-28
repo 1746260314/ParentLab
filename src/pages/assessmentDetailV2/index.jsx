@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image } from '@tarojs/components'
+import { View, Image, RichText } from '@tarojs/components'
 import { getAssessmentDetail } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import wxIcon from '../../images/wx_icon.png'
@@ -23,7 +23,6 @@ export default class AssessmentDetailV2 extends Component {
     const { assessmentID } = this.state
     console.log(Taro.getStorageSync(`showHintPop${assessmentID}`))
     const showHintPop = !Taro.getStorageSync(`assessment_detail_hint_pop_${assessmentID}`)
-    console.log(showHintPop)
     this.setState({ showHintPop })
     this._getAssessmentDetail(assessmentID)
     setTimeout(() => {
@@ -170,9 +169,17 @@ export default class AssessmentDetailV2 extends Component {
                 <View className='decorate'></View>
                 {item.title}
               </View>
-              <View className={(item.plain_content.length > 100 && !this.state[`open${item.id}`]) ? 'content-hide' : 'content'}>
-                {item.plain_content}
-              </View>
+
+              {this.state[`open${item.id}`] ? (
+                <View className='content'>
+                  <RichText nodes={item.content_html} />
+                </View>
+              ) : (
+                <View className='content-hide'>
+                  {item.plain_content}
+                </View>
+              )}
+
               {item.plain_content.length > 100 && (
                 <View
                   className='control'
@@ -185,7 +192,6 @@ export default class AssessmentDetailV2 extends Component {
             </View>
           ))}
         </View>
-
 
         <View className='btn-wrap'>
           {data.is_enabled ? (
