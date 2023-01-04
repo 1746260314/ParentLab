@@ -207,39 +207,40 @@ export default class ReportInsights extends Component {
               ))}
             </View>
           ))}
-
-          <View className='content-item'>
-            <View className='title'>
-              更多养育支持服务
-            </View>
-
-            {recommendedEvents.map(event => (
-              <View
-                key={event.id}
-                className='event-card'
-                onClick={() => this.toEventDetail(event.id)}
-              >
-                <View className='head-image' style={{ backgroundImage: `url(${event.banner_image_url})` }} >
-                  {event.tags?.map(tag => (
-                    <View className='tag' key={tag} >
-                      {tag}
-                    </View>
-                  ))}
-                </View>
-                <View className='event-content' >
-                  <View className='title' >
-                    {event.title}
-                  </View>
-                  <View className='time' >
-                    {event.time_desc}
-                  </View>
-                  <View className='desc' >
-                    {event.brief_introduction}
-                  </View>
-                </View>
+          {recommendedEvents.length > 0 && (
+            <View className='content-item'>
+              <View className='title'>
+                更多养育支持服务
               </View>
-            ))}
-          </View>
+
+              {recommendedEvents.map(event => (
+                <View
+                  key={event.id}
+                  className='event-card'
+                  onClick={() => this.toEventDetail(event.id)}
+                >
+                  <View className='head-image' style={{ backgroundImage: `url(${event.banner_image_url})` }} >
+                    {event.tags?.map(tag => (
+                      <View className='tag' key={tag} >
+                        {tag}
+                      </View>
+                    ))}
+                  </View>
+                  <View className='event-content' >
+                    <View className='title' >
+                      {event.title}
+                    </View>
+                    <View className='time' >
+                      {event.time_desc}
+                    </View>
+                    <View className='desc' >
+                      {event.brief_introduction}
+                    </View>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
 
         <View className='other-title' >
@@ -340,7 +341,7 @@ export default class ReportInsights extends Component {
               >
                 <CoverView className='btn-wrap'>
                   <CoverView className='icon'>
-                    
+
                   </CoverView>
                   立即分享
                 </CoverView>
