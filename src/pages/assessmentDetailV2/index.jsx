@@ -186,7 +186,7 @@ export default class AssessmentDetailV2 extends Component {
                   onClick={() => this.control(item.id)}
                 >
                   {this.state[`open${item.id}`] ? '收起' : '展开'}
-                  <Image className='icon' src={this.state[`open${item.id}`] ? arrowDown : arrowUp} />
+                  <Image className='icon' src={this.state[`open${item.id}`] ? arrowUp : arrowDown} />
                 </View>
               )}
             </View>

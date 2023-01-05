@@ -202,7 +202,7 @@ export default class Report extends Component {
 
         <View className='btn-wrap'>
           <View className='btn-line' onClick={this.handleShowDrawer}>
-            邀请另一半测试
+            邀请Ta一起测试
           </View>
 
           <View className='btn-full' onClick={this.toReportInsights}>

@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Button, CoverView } from '@tarojs/components'
+import { View, Image, Button, CoverView, RichText } from '@tarojs/components'
 import { getReportInfo, getMoreInsights, getMoreAssessments, getRecommendedEvent } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import PieChart from '../../components/pieChart'
@@ -25,6 +25,7 @@ export default class ReportInsights extends Component {
     recommendedEvents: [],
     needShare: true,
     showOtherInsightModal: false,
+    otherInsightID: '',
   }
 
   componentWillMount() { }
@@ -139,6 +140,7 @@ export default class ReportInsights extends Component {
   // 点击饼图 
   clickPie = (data) => {
     const { needShare } = this.state
+    this.setState({otherInsightID: data.id})
     if (needShare) {
       this.showOrHideOtherInsightModal()
     } else {
@@ -155,6 +157,7 @@ export default class ReportInsights extends Component {
   unlock = () => {
     this.showOrHideOtherInsightModal()
     this.setState({ needShare: false })
+    Taro.navigateTo({ url: `/pages/otherInsights/index?insightID=${this.state.otherInsightID}` })
   }
 
   render() {
@@ -319,7 +322,7 @@ export default class ReportInsights extends Component {
                 {insightModalContent.title}
               </View>
               <View className='insight-content'>
-                {insightModalContent.plain_content}
+                <RichText nodes={insightModalContent.content_html} />
               </View>
             </View>
           </View>
@@ -336,8 +339,8 @@ export default class ReportInsights extends Component {
               </CoverView>
               <Button
                 className='share-btn'
-                openType='share'
                 onClick={this.unlock}
+                openType='share'
               >
                 <CoverView className='btn-wrap'>
                   <CoverView className='icon'>
