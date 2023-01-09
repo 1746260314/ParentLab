@@ -204,7 +204,7 @@ export default class ReportInsights extends Component {
                     {item.title}
                   </View>
                   <View className='content'>
-                    {item.plain_content}
+                    <RichText nodes={item.content_html} />
                   </View>
                 </View>
               ))}
