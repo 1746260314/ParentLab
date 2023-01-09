@@ -140,7 +140,7 @@ export default class ReportInsights extends Component {
   // 点击饼图 
   clickPie = (data) => {
     const { needShare } = this.state
-    this.setState({otherInsightID: data.id})
+    this.setState({ otherInsightID: data.id })
     if (needShare) {
       this.showOrHideOtherInsightModal()
     } else {
@@ -210,94 +210,98 @@ export default class ReportInsights extends Component {
               ))}
             </View>
           ))}
-          {recommendedEvents.length > 0 && (
-            <View className='content-item'>
-              <View className='title'>
-                更多养育支持服务
-              </View>
 
-              {recommendedEvents.map(event => (
-                <View
-                  key={event.id}
-                  className='event-card'
-                  onClick={() => this.toEventDetail(event.id)}
-                >
-                  <View className='head-image' style={{ backgroundImage: `url(${event.banner_image_url})` }} >
-                    {event.tags?.map(tag => (
-                      <View className='tag' key={tag} >
-                        {tag}
-                      </View>
-                    ))}
-                  </View>
-                  <View className='event-content' >
-                    <View className='title' >
-                      {event.title}
-                    </View>
-                    <View className='time' >
-                      {event.time_desc}
-                    </View>
-                    <View className='desc' >
-                      {event.brief_introduction}
-                    </View>
-                  </View>
-                </View>
-              ))}
+          <View className='content-item' style={{ display: recommendedEvents.length > 0 ? 'block' : 'none' }}>
+            <View className='title'>
+              更多养育支持服务
             </View>
-          )}
-        </View>
 
-        <View className='other-title' >
-          更多深度解读
-        </View>
-
-        {moreInsights.map((insight, index) => (
-          <View
-            key={index}
-            className='other-item'
-            onClick={() => this.showModal(insight)}
-          >
-            {insight.title}
-            <Image className='icon' src={arrowRight} />
-          </View>
-        ))}
-
-        <View className='other-title' >
-          测试推荐
-        </View>
-        <View className='recommend-wrap' >
-          {moreAssessments.map(moreAssessment => (
-            <View
-              className='recommend-card'
-              key={moreAssessment.id}
-            >
-              <View className='tags'>
-                {moreAssessment.tags.map((tag, index) => (
-                  <View className='tag' key={index}>
-                    {tag}
+            {recommendedEvents.map(event => (
+              <View
+                key={event.id}
+                className='event-card'
+                onClick={() => this.toEventDetail(event.id)}
+              >
+                <View className='head-image' style={{ backgroundImage: `url(${event.banner_image_url})` }} >
+                  {event.tags?.map(tag => (
+                    <View className='tag' key={tag} >
+                      {tag}
+                    </View>
+                  ))}
+                </View>
+                <View className='event-content' >
+                  <View className='title' >
+                    {event.title}
                   </View>
-                ))}
+                  <View className='time' >
+                    {event.time_desc}
+                  </View>
+                  <View className='desc' >
+                    {event.brief_introduction}
+                  </View>
+                </View>
               </View>
+            ))}
+          </View>
 
-              <View className='title' >
-                {moreAssessment.title}
-              </View>
-              <View className='desc' >
-                {moreAssessment.short_desc}
-              </View>
-              <View className='btn-bar' >
-                <View className='data-block' >
-                  <Image className='icon' src={pageview} />
-                  {moreAssessment.take_counts}人已测过
-                </View>
-                <View
-                  className='btn'
-                  onClick={() => this.startAssessment(moreAssessment)}
-                >
-                  开始测试
-                </View>
-              </View>
+        </View>
+
+        <View className='content-item' style={{ display: moreInsights.length > 0 ? 'block' : 'none' }}>
+          <View className='title'>
+            更多深度解读
+          </View>
+
+          {moreInsights.map((insight, index) => (
+            <View
+              key={index}
+              className='other-item'
+              onClick={() => this.showModal(insight)}
+            >
+              {insight.title}
+              <Image className='icon' src={arrowRight} />
             </View>
           ))}
+        </View>
+
+        <View className='content-item' style={{ display: moreAssessments.length > 0 ? 'block' : 'none' }}>
+          <View className='title' >
+            测试推荐
+          </View>
+          <View className='recommend-wrap' >
+            {moreAssessments.map(moreAssessment => (
+              <View
+                className='recommend-card'
+                key={moreAssessment.id}
+              >
+                <View className='tags'>
+                  {moreAssessment.tags.map((tag, index) => (
+                    <View className='tag' key={index}>
+                      {tag}
+                    </View>
+                  ))}
+                </View>
+
+                <View className='title' >
+                  {moreAssessment.title}
+                </View>
+                <View className='desc' >
+                  {moreAssessment.short_desc}
+                </View>
+                <View className='btn-bar' >
+                  <View className='data-block' >
+                    <Image className='icon' src={pageview} />
+                    {moreAssessment.take_counts}人已测过
+                  </View>
+                  <View
+                    className='btn'
+                    onClick={() => this.startAssessment(moreAssessment)}
+                  >
+                    开始测试
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
         </View>
 
         <View
