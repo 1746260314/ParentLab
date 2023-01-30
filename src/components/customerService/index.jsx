@@ -1,20 +1,25 @@
+import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { Button, Image } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import customerService from '../../images/customer_service.png'
 import './index.less'
 
 export default class CustomerService extends Component {
 
   handleClick = () => {
+    Taro.openCustomerServiceChat({
+      extInfo: {url: 'https://work.weixin.qq.com/kfid/kfc0c9e5be8f3287b99'},
+      corpId: 'ww4a9a6e350546d299',
+    })
     const { onClick } = this.props;
     onClick && onClick()
   }
   
   render() {
     return (
-      <Button openType='contact' className='customer-service' onClick={this.handleClick} >
+      <View className='customer-service' onClick={this.handleClick} >
         <Image className='icon' src={customerService} />
-      </Button>
+      </View>
     )
   }
 }

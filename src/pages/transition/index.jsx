@@ -210,6 +210,10 @@ export default class Transition extends Component {
   }
 
   clickCustomerServiceEventTracking = () => {
+    Taro.openCustomerServiceChat({
+      extInfo: {url: 'https://work.weixin.qq.com/kfid/kfc0c9e5be8f3287b99'},
+      corpId: 'ww4a9a6e350546d299',
+    })
     app.td_app_sdk.event({ id: '分流页面-客服按钮点击' });
   }
 
@@ -225,9 +229,9 @@ export default class Transition extends Component {
           <View className='desc'>
             请点击这里
           </View>
-          <Button className='btn btn-line' openType='contact' onClick={this.clickCustomerServiceEventTracking} >
+          <View className='btn btn-line' onClick={this.clickCustomerServiceEventTracking} >
             我要咨询客服
-          </Button>
+          </View>
         </View>
 
         <View className='block'>
