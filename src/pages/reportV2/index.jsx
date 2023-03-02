@@ -1,11 +1,12 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { getReportInfo, getUserProfile, getUserPublicInfo } from '../../utils/query'
+import { getReportInfo, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo } from '../../utils/query'
 import ShareDrawer from '../../components/shareDrawer'
-import SharePoster from '../../components/sharePoster'
+import SharePosterV2 from '../../components/sharePosterV2'
 import AlertModal from '../../components/alertModal'
 import wxIcon from '../../images/wx_icon.png'
+import sharePosterIcon from '../../images/share_poster.png'
 import './index.less'
 
 const app = getApp()
@@ -13,25 +14,21 @@ export default class Report extends Component {
 
   state = {
     relationsID: Taro.getCurrentInstance().router.params.relationsID,
-    inviterOpenid: Taro.getCurrentInstance().router.params.inviterOpenid,
     assessment: {},
     report: {},
     showPoster: false,
     showAlert: false,
-    wechatInfo: {},
     inviter: {},
+    assessmentShareData: {},
+    asessmentUserRelationsShare: {},
     show: false,
   }
 
   componentWillMount() { }
 
   componentDidMount() {
-    const { inviterOpenid } = this.state
     this._getReportInfo()
-    this._getUserProfile()
-    if (inviterOpenid) {
-      this._getUserPublicInfo(inviterOpenid)
-    }
+    this._getAssessmentUserRelationsShareInfo()
   }
 
   componentWillUnmount() { }
@@ -45,25 +42,18 @@ export default class Report extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
-      app.td_app_sdk.event({ id: '报告-分享' });
       const { type } = res.target.dataset
-      const { assessment, report, relationsID, wechatInfo } = this.state
+      const { assessmentShareData: { mp_share_title, mp_share_image_url }, assessment } = this.state
       if (type === 'assessment') {
-        app.td_app_sdk.event({ id: '报告-分享pop1' });
+        app.td_app_sdk.event({ id: '主报告分享-主报告分2' });
         return {
-          title: assessment.wechat_share_title,
+          title: mp_share_title,
           path: `/pages/assessmentDetailV2/index?assessmentID=${assessment.id}`,
-          imageUrl: assessment.wechat_share_image_url
-        }
-      } else if (type === 'report') {
-        app.td_app_sdk.event({ id: '报告-分享pop2' });
-        return {
-          title: report.mp_share_title,
-          path: `/pages/report/index?relationsID=${relationsID}&inviterOpenid=${wechatInfo.openid}`,
-          imageUrl: report.mp_share_image_url
+          imageUrl: mp_share_image_url
         }
       }
     }
+    app.td_app_sdk.event({ id: '主报告分享-主报告分1' });
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -87,26 +77,28 @@ export default class Report extends Component {
           title: assessment.title
         })
       }
+      this._getAssessmentsShareInfo(assessment.id)
     }
   }
 
-  // 获取当前用户信息
-  _getUserProfile = async () => {
-    const res = await getUserProfile()
+  // 获取某测评的分享信息
+  _getAssessmentsShareInfo = async (assessmentID) => {
+    const res = await getAssessmentsShareInfo(assessmentID)
     if (res.status === 'success') {
-      this.setState({ wechatInfo: res.data.wechat_info })
+      this.setState({ assessmentShareData: res.data })
     }
   }
 
-  // 获取邀请人信息
-  _getUserPublicInfo = async (inviterOpenid) => {
-    const res = await getUserPublicInfo(inviterOpenid)
-    if (res.status === 'success') {
-      this.setState({ inviter: res.data })
+    // 获取某测评报告的分享信息
+    _getAssessmentUserRelationsShareInfo = async () => {
+      const res = await getAssessmentUserRelationsShareInfo(this.state.relationsID)
+      if (res.status === 'success') {
+        this.setState({ asessmentUserRelationsShare: res.data })
+      }
     }
-  }
 
   handleShowDrawer = () => {
+    app.td_app_sdk.event({ id: '主报告分享-点击底部分享按钮' });
     this.setState({ show: true })
   }
 
@@ -116,11 +108,13 @@ export default class Report extends Component {
 
   // 显示海报弹窗
   showPoster = () => {
-    app.td_app_sdk.event({ id: '报告-分享pop3' });
+    app.td_app_sdk.event({ id: '主报告分享-主报告分3' });
+    this.onHide()
     this.setState({ showPoster: true })
   }
 
   hidePoster = () => {
+
     this.setState({ showPoster: false })
   }
 
@@ -132,7 +126,7 @@ export default class Report extends Component {
     this.setState({ showAlert: false })
   }
 
-  saveSuccess = () => {
+  savePosterSuccess = () => {
     this.hidePoster()
     this.showAlert()
   }
@@ -148,26 +142,21 @@ export default class Report extends Component {
   }
 
   toReportInsights = () => {
-    Taro.navigateTo({url: `/pages/reportInsights/index?relationsID=${this.state.relationsID}`})
+    app.td_app_sdk.event({ id: '点击查看详情报告-点击底部查看详情报告' });
+    Taro.navigateTo({ url: `/pages/reportInsights/index?relationsID=${this.state.relationsID}` })
   }
 
   render() {
-    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, show } = this.state
+    const { report, inviterOpenid, assessment, inviter, showPoster, asessmentUserRelationsShare, showAlert, show } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
       type: 'assessment'
-    }
-    // , {
-    //   icon: shareReportIcon,
-    //   text: '分享报告',
-    //   type: 'report'
-    // }, {
-    //   icon: shareCircleIcon,
-    //   text: '生成我的卡片',
-    //   type: 'poster'
-    // }
-  ]
+    }, {
+      icon: sharePosterIcon,
+      text: '生成报告卡片',
+      type: 'poster'
+    }]
 
     return (
       <View className='report'>
@@ -213,9 +202,9 @@ export default class Report extends Component {
         <ShareDrawer show={show} options={shareOptions} showPoster={this.showPoster} onHide={this.onHide} />
 
         {showPoster && (
-          <SharePoster poster={report.moment_share_image_url} inviter={wechatInfo} onHide={this.hidePoster} success={this.saveSuccess} />
+          <SharePosterV2 data={asessmentUserRelationsShare} success={this.savePosterSuccess} onHide={this.hidePoster} />
         )}
-        
+
         {showAlert && (
           <AlertModal title='保存成功' desc='已经保存到手机，到朋友圈炫一把' btnText='我知道了' handleClick={this.hideAlert} />
         )}

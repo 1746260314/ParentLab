@@ -3,7 +3,6 @@ import { Component } from 'react'
 import { View, Text, Image, Progress } from '@tarojs/components'
 import { RadioBars2 } from '../../components/formElements'
 import { getAssessmentQuestions, updateProgress, assessmentFinished } from '../../utils/query'
-import ShareFixed from '../../components/shareFixed'
 import prevDisabledIcon from '../../images/prev_disabled.png'
 import prevIcon from '../../images/prev.png'
 import nextDisabledIcon from '../../images/next_disabled.png'
@@ -37,17 +36,17 @@ export default class Assessment extends Component {
 
   // 配置分享
   onShareAppMessage(res) {
-    if (res.from === 'button') {
-      // 来自页面内转发按钮
-      // console.log(res.target)
-      app.td_app_sdk.event({ id: '答题-分享' });
-      const { assessment, assessmentID } = this.state
-      return {
-        title: assessment.wechat_share_title,
-        path: `/pages/assessmentDetailV2/index?assessmentID=${assessmentID}`,
-        imageUrl: assessment.wechat_share_image_url
-      }
-    }
+    // if (res.from === 'button') {
+    //   // 来自页面内转发按钮
+    //   // console.log(res.target)
+    //   app.td_app_sdk.event({ id: '答题-分享' });
+    //   const { assessment, assessmentID } = this.state
+    //   return {
+    //     title: assessment.wechat_share_title,
+    //     path: `/pages/assessmentDetailV2/index?assessmentID=${assessmentID}`,
+    //     imageUrl: assessment.wechat_share_image_url
+    //   }
+    // }
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -228,7 +227,6 @@ export default class Assessment extends Component {
           </View>
         </View>
 
-        <ShareFixed options={shareOptions} />
       </View>
     )
   }

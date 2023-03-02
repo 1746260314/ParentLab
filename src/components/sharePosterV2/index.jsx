@@ -6,33 +6,39 @@ import './index.less'
 export default class SharePoster extends Component {
 
   state = {
-    canvasWidth: 668,
-    canvasHeight: 1004,
+    canvasWidth: 600,
+    canvasHeight: 1044,
+    imgHeight: 800,
   }
 
   componentDidMount() {
-    // Taro.getImageInfo({ src: this.props.poster })
-    //   .then(res => {
-    //     this.setState(
-    //       { canvasWidth: res.width, canvasHeight: res.height },
-    //       () => this.draw()
-    //     )
-    //   })
-
-    this.draw()
+    const { canvasWidth } = this.state
+    const { data: { summary_image_url } } = this.props
+    Taro.getImageInfo({ src: summary_image_url })
+      .then(res => {
+        const imgHeight = res.height * 2 / (res.width * 2 / canvasWidth)
+        this.setState(
+          { canvasHeight: imgHeight + 240, imgHeight },
+          () => this.draw()
+        )
+      })
+    // this.draw()
   }
 
   draw = async () => {
-    const { canvasWidth, canvasHeight } = this.state
+    const { canvasWidth, canvasHeight, imgHeight } = this.state
+    const { data: { summary_image_url, qr_code_url } } = this.props
     await Taro.showLoading({ title: '海报生成中', mask: true });
     var ctx = Taro.createCanvasContext('shareCanvas', this.$scope)
-    ctx.fillStyle = '#FEFBEF';
+    ctx.fillStyle = '#FCF1C8';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.clearRect(0, 0, 0, 0);
-    if (this.props.poster) {
-      await Taro.getImageInfo({ src: this.props.poster })
+
+    // 上半区
+    if (summary_image_url) {
+      await Taro.getImageInfo({ src: summary_image_url })
         .then(res => {
-          ctx.drawImage(res.path, 0, 0, canvasWidth, canvasHeight);
+          ctx.drawImage(res.path, 0, 0, canvasWidth, imgHeight);
           ctx.restore()
           ctx.save();
           ctx.draw(true, () => {
@@ -41,43 +47,30 @@ export default class SharePoster extends Component {
         })
     }
 
-    ctx.font = 'normal 600 28px PingFang SC'
-    ctx.setFillStyle('#17505C')   //  颜色
-    let nickname = this.props.inviter?.nickname;
-    const nicknameWidth = ctx.measureText(nickname).width
-    ctx.fillText(nickname, (canvasWidth - nicknameWidth) / 2, 70); //字体加设计高度
+    // 二维码
+    if (qr_code_url) {
+      await Taro.getImageInfo({ src: qr_code_url })
+        .then(res => {
+          ctx.drawImage(res.path, 112, imgHeight + 52, 144, 144);
+          ctx.restore()
+          ctx.save();
+          ctx.draw(true, () => {
+            this.saveImage()
+          })
+        })
+    }
 
-    ctx.font = 'normal 500 24px PingFang SC'
+    ctx.font = 'normal 500 22px PingFang SC'
     ctx.setFillStyle('#17505C')   //  颜色
-    let desc = '您的好友正在邀请你参与测评';
-    const descWidth = ctx.measureText(desc).width
-    ctx.fillText(desc, (canvasWidth - descWidth) / 2, 108);
+    let desc1 = '我刚刚做了一个';
+    ctx.fillText(desc1, 288, imgHeight + 90);
+    let desc2 = '有趣的养育测试，';
+    ctx.fillText(desc2, 288, imgHeight + 130);
+    let desc3 = '你也来一起测测吧。';
+    ctx.fillText(desc3, 288, imgHeight + 170);
     ctx.draw(true, () => {
       this.saveImage()
     })
-
-    // await Taro.getImageInfo({ src: this.props.inviter.headimgurl })
-    //   .then(res => {
-    //     ctx.arc(28, 525, 12, 0, 2 * Math.PI);
-    //     ctx.strokeStyle = '#FD8868'
-    //     ctx.lineWidth = '2'
-    //     ctx.stroke();
-    //     ctx.beginPath();
-    //     //圆心x、y的坐标，半径，起始角，结束角，顺时针画
-    //     ctx.arc(30, 527, 10, 0, Math.PI * 2)
-    //     //将圆形剪切
-    //     ctx.clip();
-    //     ctx.beginPath();
-    //     ctx.drawImage(res.path, 18, 515, 20, 20)
-    //     ctx.restore()
-    //     ctx.font = 'normal 500 14px PingFang SC'
-    //     ctx.setFillStyle('#17505C')   //  颜色
-    //     let str = this.props.inviter.nickname
-    //     ctx.fillText(str, 48, 530); //字体加设计高度
-    //     ctx.draw(true, () => {
-    //       this.saveImage()
-    //     })
-    //   })
 
     await Taro.hideLoading()
   }
@@ -96,7 +89,7 @@ export default class SharePoster extends Component {
       canvasId: 'shareCanvas',
       success: function (res) {
         that.setState({
-          posterImage: res.tempFilePath
+          posterImage: res.tempFilePath,
         })
       }
     }, that.$scope)
@@ -158,7 +151,6 @@ export default class SharePoster extends Component {
     })
   }
 
-
   render() {
     const { canvasWidth, canvasHeight, posterImage } = this.state
     return (
@@ -180,6 +172,7 @@ export default class SharePoster extends Component {
           保存到相册
         </View>
         <Canvas className='canvas' canvasId='shareCanvas' style={{ width: canvasWidth + 'px', height: canvasHeight + 'px' }}></Canvas>
+
       </View>
     )
   }

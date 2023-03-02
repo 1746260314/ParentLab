@@ -1,9 +1,12 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, RichText } from '@tarojs/components'
-import { getAssessmentDetail } from '../../utils/query'
+import { getAssessmentDetail, getAssessmentsShareInfo } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
+import SharePoster from '../../components/sharePoster'
+import AlertModal from '../../components/alertModal'
 import wxIcon from '../../images/wx_icon.png'
+import wxCircleIcon from '../../images/share_icon_circle.png'
 import arrowUp from '../../images/arrow_up.png'
 import arrowDown from '../../images/arrow_down.png'
 import './index.less'
@@ -14,21 +17,27 @@ export default class AssessmentDetailV2 extends Component {
   state = {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
     data: {},
+    assessmentShareData: {},
     showHintPop: false,
+    showPoster: false,
+    showAlert: false,
   }
 
   componentWillMount() { }
 
   componentDidMount() {
     const { assessmentID } = this.state
-    console.log(Taro.getStorageSync(`showHintPop${assessmentID}`))
     const showHintPop = !Taro.getStorageSync(`assessment_detail_hint_pop_${assessmentID}`)
     this.setState({ showHintPop })
     this._getAssessmentDetail(assessmentID)
+
+    // 引导分享，六秒后自动关闭
     setTimeout(() => {
       Taro.setStorageSync(`assessment_detail_hint_pop_${assessmentID}`, true)
       this.setState({ showHintPop: false })
     }, 6000)
+
+    this._getAssessmentsShareInfo(assessmentID)
   }
 
   componentWillUnmount() { }
@@ -42,15 +51,15 @@ export default class AssessmentDetailV2 extends Component {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       // console.log(res.target)
-      app.td_app_sdk.event({ id: '评测详情-分享2' });
-      const { data: { wechat_share_title, wechat_share_image_url }, assessmentID } = this.state
+      app.td_app_sdk.event({ id: 'assessment详情页面-详情分享2' });
+      const { assessmentShareData: { mp_share_title, mp_share_image_url }, assessmentID } = this.state
       return {
-        title: wechat_share_title,
+        title: mp_share_title,
         path: `/pages/assessmentDetailV2/index?assessmentID=${assessmentID}`,
-        imageUrl: wechat_share_image_url
+        imageUrl: mp_share_image_url
       }
     }
-    app.td_app_sdk.event({ id: '评测详情-分享1' });
+    app.td_app_sdk.event({ id: 'assessment详情页面-详情分享1' });
     const shareTitle = Taro.getStorageSync('shareTitle')
     const shareImg = Taro.getStorageSync('shareImg')
     return {
@@ -68,6 +77,14 @@ export default class AssessmentDetailV2 extends Component {
       Taro.setNavigationBarTitle({
         title: res.data.title
       })
+    }
+  }
+
+  // 获取某测评的分享信息
+  _getAssessmentsShareInfo = async (assessmentID) => {
+    const res = await getAssessmentsShareInfo(assessmentID)
+    if (res.status === 'success') {
+      this.setState({ assessmentShareData: res.data })
     }
   }
 
@@ -93,13 +110,40 @@ export default class AssessmentDetailV2 extends Component {
     }
   }
 
+  // 显示海报弹窗
+  showPoster = () => {
+    app.td_app_sdk.event({ id: 'assessment详情页面-详情分享3' });
+    this.setState({ showPoster: true })
+  }
+
+  hidePoster = () => {
+    this.setState({ showPoster: false })
+  }
+
+  showAlert = () => {
+    this.setState({ showAlert: true })
+  }
+
+  hideAlert = () => {
+    this.setState({ showAlert: false })
+  }
+
+  savePosterSuccess = () => {
+    this.hidePoster()
+    this.showAlert()
+  }
+
   render() {
-    const { data, showHintPop } = this.state
+    const { data, showHintPop, showPoster, assessmentShareData, showAlert } = this.state
     const shareOptions = [
       {
         icon: wxIcon,
         text: '邀请好友测一测',
         type: 'assessment'
+      }, {
+        icon: wxCircleIcon,
+        text: '分享到朋友圈',
+        type: 'poster'
       }
     ]
 
@@ -205,7 +249,15 @@ export default class AssessmentDetailV2 extends Component {
           )}
         </View>
 
-        <ShareFixed options={shareOptions} />
+        <ShareFixed options={shareOptions} showPoster={this.showPoster} />
+
+        {showPoster && (
+          <SharePoster poster={assessmentShareData.moment_share_image_url} inviter={assessmentShareData.user} onHide={this.hidePoster} success={this.savePosterSuccess} />
+        )}
+
+        {showAlert && (
+          <AlertModal title='保存成功' desc='已经保存到手机，到朋友圈炫一把' btnText='我知道了' handleClick={this.hideAlert} />
+        )}
       </View>
     )
   }

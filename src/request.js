@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro'
 
 const proTarget = 'https://admin.parentlab.cn';
 const dev = 'https://staging-api.parentlab.cn';
-export const target = proTarget
+export const target = dev
 
 export const request = async (url, option = {}) => {
     const params = Object.assign({

@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { View, CoverView, CoverImage, Button } from '@tarojs/components'
-import downIcon from '../../images/down.png'
+import downIcon from '../../images/down.jpg'
 import './index.less'
 
 export default class ShareDrawer extends Component {
@@ -12,14 +12,18 @@ export default class ShareDrawer extends Component {
         {show && (
           <CoverView className='share-mask'>
             <CoverView className='share-drawer'>
-              <CoverView className='title'>
+              <CoverView className='drawer-title-bar'>
                 <CoverView className='title-text'>
                   分享
                 </CoverView>
-                <CoverView className='down-icon'  onClick={onHide}>
-                  X
+                <CoverView className='down-icon' onClick={onHide}>
+                  <CoverImage
+                    className='icon'
+                    src={downIcon}
+                  />
                 </CoverView>
               </CoverView>
+              <CoverView className='divdev'></CoverView>
               <CoverView className='options'>
                 {options.map(option => (
                   <CoverView className='option' key={option.type}>

@@ -228,7 +228,7 @@ export default class Assessment extends Component {
           </View>
         </View>
 
-        <ShareFixed options={shareOptions} />
+        {/* <ShareFixed options={shareOptions} /> */}
       </View>
     )
   }

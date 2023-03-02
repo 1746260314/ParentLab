@@ -249,3 +249,13 @@ export async function feedbacks(data) {
 export async function getOtherInsights(insightID) {
     return request(`/wechat_mp/sub_assessment_reports/${insightID}`)
 }
+
+// 获取某测评的分享信息
+export async function getAssessmentsShareInfo(assessmentID) {
+    return request(`/wechat_mp/assessments/${assessmentID}/share_object`)
+}
+
+// 获取某测评报告的分享信息
+export async function getAssessmentUserRelationsShareInfo(relationsID) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}/share_object`)
+}

@@ -1,13 +1,15 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, Button, CoverView, CoverImage } from '@tarojs/components'
-import { getOtherInsights } from '../../utils/query'
+import { getOtherInsights, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
+import SharePosterV2 from '../../components/sharePosterV2'
+import AlertModal from '../../components/alertModal'
 import PieChart from '../../components/pieChart'
 import underline from '../../images/underline2.png'
 import wxIcon from '../../images/wx_icon.png'
+import sharePosterIcon from '../../images/share_poster.png'
 import modalTitleBg from '../../images/modal_title_bg.png'
-import close from '../../images/close.png'
 
 import './index.less'
 
@@ -15,15 +17,21 @@ export default class OtherInsights extends Component {
 
   state = {
     insightID: Taro.getCurrentInstance().router.params.insightID,
+    relationsID: Taro.getCurrentInstance().router.params.relationsID,
     insightData: {},
     needDetainment: true,
     showDetainment: false,
+    assessmentShareData: {},
+    showPoster: false,
+    showAlert: false,
+    asessmentUserRelationsShare: {}
   }
 
   componentWillMount() { }
 
   componentDidMount() {
     this._getOtherInsights()
+    this._getAssessmentUserRelationsShareInfo()
   }
 
   componentWillUnmount() { }
@@ -36,12 +44,14 @@ export default class OtherInsights extends Component {
   onShareAppMessage(res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
-      // console.log(res.target)
-      const { insightData: { assessment } } = this.state
-      return {
-        title: assessment.title,
-        path: `/pages/assessmentDetailV2/index?assessmentID=${assessment.id}`,
-        imageUrl: assessment.wechat_share_image_url
+      const { type } = res.target.dataset
+      const { insightData: { assessment }, assessmentShareData } = this.state
+      if (type === 'assessment') {
+        return {
+          title: assessmentShareData.mp_share_title,
+          path: `/pages/assessmentDetailV2/index?assessmentID=${assessment.id}`,
+          imageUrl: assessmentShareData.mp_share_image_url
+        }
       }
     }
     const shareTitle = Taro.getStorageSync('shareTitle')
@@ -58,6 +68,24 @@ export default class OtherInsights extends Component {
     const res = await getOtherInsights(this.state.insightID)
     if (res.status === 'success') {
       this.setState({ insightData: res.data })
+      this._getAssessmentsShareInfo(res.data.assessment.id)
+    }
+  }
+
+  // 获取某测评的分享信息
+  _getAssessmentsShareInfo = async (assessmentID) => {
+    const res = await getAssessmentsShareInfo(assessmentID)
+    if (res.status === 'success') {
+      this.setState({ assessmentShareData: res.data })
+    }
+  }
+
+
+  // 获取某测评报告的分享信息
+  _getAssessmentUserRelationsShareInfo = async () => {
+    const res = await getAssessmentUserRelationsShareInfo(this.state.relationsID)
+    if (res.status === 'success') {
+      this.setState({ asessmentUserRelationsShare: res.data })
     }
   }
 
@@ -101,12 +129,39 @@ export default class OtherInsights extends Component {
     return data.map(item => ({ name: item.sub_assessment_report_title, data: item.count, id: item.sub_assessment_report_id }))
   }
 
+
+  // 显示海报弹窗
+  showPoster = () => {
+    this.setState({ showPoster: true })
+  }
+
+  hidePoster = () => {
+    this.setState({ showPoster: false })
+  }
+
+  showAlert = () => {
+    this.setState({ showAlert: true })
+  }
+
+  hideAlert = () => {
+    this.setState({ showAlert: false })
+  }
+
+  savePosterSuccess = () => {
+    this.hidePoster()
+    this.showAlert()
+  }
+
   render() {
-    const { insightData, showDetainment } = this.state
+    const { insightData, showDetainment, showPoster, showAlert, asessmentUserRelationsShare } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
       type: 'assessment'
+    }, {
+      icon: sharePosterIcon,
+      text: '生成报告卡片',
+      type: 'poster'
     }]
 
     return (
@@ -117,11 +172,16 @@ export default class OtherInsights extends Component {
             {insightData.title}
             <Image className='underline' src={underline} />
           </View>
+          
           {insightData.chart_data && (
-            <PieChart
-              id={1}
-              data={this.transitionData(insightData.chart_data)}
-            />
+            <View className='pie-chart-wrap'>
+              {!showPoster && !showAlert && (
+                <PieChart
+                  id={1}
+                  data={this.transitionData(insightData.chart_data)}
+                />
+              )}
+            </View>
           )}
 
           {insightData.items?.map((item, i) => (
@@ -144,7 +204,7 @@ export default class OtherInsights extends Component {
           返回评测首页
         </View>
 
-        <ShareFixed options={shareOptions} />
+        <ShareFixed options={shareOptions} showPoster={this.showPoster} />
 
         {showDetainment && (
           <CoverView className='detainment-modal'>
@@ -185,6 +245,14 @@ export default class OtherInsights extends Component {
               </CoverView>
             </CoverView>
           </CoverView>
+        )}
+
+        {showPoster && (
+          <SharePosterV2 data={asessmentUserRelationsShare} success={this.savePosterSuccess} onHide={this.hidePoster} />
+        )}
+
+        {showAlert && (
+          <AlertModal title='保存成功' desc='已经保存到手机，到朋友圈炫一把' btnText='我知道了' handleClick={this.hideAlert} />
         )}
 
       </View>
