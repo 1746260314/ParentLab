@@ -5,10 +5,9 @@ import customerService from '../../images/customer_service.png'
 import './index.less'
 
 export default class CustomerService extends Component {
-
   handleClick = () => {
     Taro.openCustomerServiceChat({
-      extInfo: {url: 'https://work.weixin.qq.com/kfid/kfc0c9e5be8f3287b99'},
+      extInfo: {url: 'https://work.weixin.qq.com/kfid/kfc3772c1116a398a6b'},
       corpId: 'ww4a9a6e350546d299',
     })
     const { onClick } = this.props;
