@@ -259,3 +259,13 @@ export async function getAssessmentsShareInfo(assessmentID) {
 export async function getAssessmentUserRelationsShareInfo(relationsID) {
     return request(`/wechat_mp/assessment_user_relations/${relationsID}/share_object`)
 }
+
+// 获取某测评报告对比信息
+export async function getAssessmentUserRelationsIsComparable(relationsID) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}/is_comparable`)
+}
+
+// 获取某测评报告对比详情
+export async function getAssessmentUserRelationsCompare(relationsID) {
+    return request(`/wechat_mp/assessment_user_relations/${relationsID}/compare`)
+}

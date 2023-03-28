@@ -1,7 +1,8 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, Button, CoverView, RichText } from '@tarojs/components'
-import { getReportInfo, getMoreInsights, getMoreAssessments, getRecommendedEvent, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo } from '../../utils/query'
+import { getReportInfo, getMoreInsights, getMoreAssessments, getRecommendedEvent, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo, getAssessmentUserRelationsIsComparable } from '../../utils/query'
+import { formatSeconds } from '../../utils/util'
 import ShareFixed from '../../components/shareFixed'
 import PieChart from '../../components/pieChart'
 import SharePosterV2 from '../../components/sharePosterV2'
@@ -21,6 +22,7 @@ export default class ReportInsights extends Component {
   state = {
     relationsID: Taro.getCurrentInstance().router.params.relationsID,
     assessment: {},
+    compareData: {},
     moreInsights: [],
     sub_reports: [],
     showModal: false,
@@ -40,6 +42,7 @@ export default class ReportInsights extends Component {
 
   componentDidMount() {
     this._getAssessmentUserRelationsShareInfo()
+    this._getAssessmentUserRelationsIsComparable()
     this._getReportInfo()
   }
 
@@ -105,6 +108,16 @@ export default class ReportInsights extends Component {
       this.setState({ asessmentUserRelationsShare: res.data })
     }
   }
+
+    // 获取某测评报告的分享信息
+    _getAssessmentUserRelationsIsComparable = async () => {
+      const res = await getAssessmentUserRelationsIsComparable(this.state.relationsID)
+      if (res.status === 'success') {
+        this.setState({ compareData: res.data })
+      }
+    }
+
+  
 
   // 获取推荐的服务
   _getRecommendedEvent = async (assessmentID) => {
@@ -216,8 +229,12 @@ export default class ReportInsights extends Component {
     this.showAlert()
   }
 
+  viewComparison = () => {
+    Taro.redirectTo({ url: `/pages/comparison/index?relationsID=${this.state.relationsID}&assessmentID=${this.state.assessment.id}` })
+  }
+
   render() {
-    const { assessment, sub_reports, showModal, moreInsights, insightModalContent, moreAssessments, recommendedEvents, showOtherInsightModal, showPoster, showAlert, asessmentUserRelationsShare } = this.state
+    const { assessment, sub_reports, showModal, moreInsights, insightModalContent, moreAssessments, recommendedEvents, showOtherInsightModal, showPoster, showAlert, asessmentUserRelationsShare, compareData: { is_comparable, first_test_at, current_test_at } } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -230,6 +247,26 @@ export default class ReportInsights extends Component {
 
     return (
       <View className='report-insights'>
+
+        {is_comparable && (
+          <View className='comparison-wrap'>
+            <View className='comparison-info'>
+              <View>
+                距首次完成此评测已过去
+              </View>
+              <View className='time'>
+              {(first_test_at && current_test_at) && formatSeconds(Date.parse(new Date(current_test_at)) / 1000 - Date.parse(new Date(first_test_at)) / 1000)}
+              </View>
+              <View>
+                点击这里查看两次对比解读
+              </View>
+            </View>
+            <View className='view-comparison-btn' onClick={this.viewComparison}>
+              查看对比
+            </View>
+          </View>
+        )}
+
         <View className='container'>
           <View className='assessment-title'>
             您的《{assessment?.title}》结果是

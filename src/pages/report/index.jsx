@@ -1,7 +1,8 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, RichText } from '@tarojs/components'
-import { getReportInfo, getUserProfile, getUserPublicInfo } from '../../utils/query'
+import { getReportInfo, getUserProfile, getUserPublicInfo, getAssessmentUserRelationsIsComparable } from '../../utils/query'
+import { formatTime } from '../../utils/util'
 import ShareFixed from '../../components/shareFixed'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
@@ -22,7 +23,8 @@ export default class Report extends Component {
     showPoster: false,
     showAlert: false,
     wechatInfo: {},
-    inviter: {}
+    inviter: {},
+    compareData: {},
   }
 
   componentWillMount() { }
@@ -84,11 +86,20 @@ export default class Report extends Component {
         report,
         assessment,
       })
+      // this._getAssessmentUserRelationsIsComparable(assessment.id)
       if (this.state.inviterOpenid) {
         Taro.setNavigationBarTitle({
           title: assessment.title
         })
       }
+    }
+  }
+
+  // 获取某测评对比信息
+  _getAssessmentUserRelationsIsComparable = async (assessmentID) => {
+    const res = await getAssessmentUserRelationsIsComparable(assessmentID)
+    if (res.status === 'success') {
+      this.setState({ compareData: res.data })
     }
   }
 
@@ -141,8 +152,12 @@ export default class Report extends Component {
     Taro.redirectTo({ url: `/pages/assessmentDetail/index?assessmentID=${assessment.id}` })
   }
 
+  viewComparison = () => {
+    Taro.navigateTo({ url: `/pages/comparison/index?relationsID=${this.state.relationsID}&assessmentID=${this.state.assessment.id}` })
+  }
+
   render() {
-    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert } = this.state
+    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, compareData: { is_comparable, first_test_at } } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -182,7 +197,25 @@ export default class Report extends Component {
             >
               我也要测一测
             </View>
+          </View>
+        )}
 
+        {is_comparable && (
+          <View className='comparison-wrap'>
+            <View className='comparison-info'>
+              <View>
+                距首次完成此评测已过去
+              </View>
+              <View className='time'>
+                {first_test_at && formatTime(new Date() - new Date(first_test_at), 'D天h小时m分')}
+              </View>
+              <View>
+                点击这里查看两次对比解读
+              </View>
+            </View>
+            <View className='view-comparison-btn' onClick={this.viewComparison}>
+              查看对比
+            </View>
           </View>
         )}
 

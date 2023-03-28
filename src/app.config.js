@@ -31,6 +31,7 @@ export default defineAppConfig({
     'pages/reportInsights/index',   // 详情解读
     'pages/otherInsights/index',   // 其他详情解读
     'pages/feedback/index',   // 吐槽我们
+    'pages/comparison/index',   // 对比报告
   ],
   window: {
     backgroundTextStyle: 'light',

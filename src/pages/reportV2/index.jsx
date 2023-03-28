@@ -1,7 +1,8 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { getReportInfo, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo } from '../../utils/query'
+import { getReportInfo, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo, getAssessmentUserRelationsIsComparable } from '../../utils/query'
+import { formatSeconds } from '../../utils/util'
 import ShareDrawer from '../../components/shareDrawer'
 import SharePosterV2 from '../../components/sharePosterV2'
 import AlertModal from '../../components/alertModal'
@@ -13,12 +14,12 @@ const app = getApp()
 export default class Report extends Component {
 
   state = {
-    relationsID: Taro.getCurrentInstance().router.params.relationsID,
+    relationsID: Taro.getCurrentInstance().router.params.relationsID, // 419
     assessment: {},
     report: {},
+    compareData: {},
     showPoster: false,
     showAlert: false,
-    inviter: {},
     assessmentShareData: {},
     asessmentUserRelationsShare: {},
     show: false,
@@ -29,6 +30,7 @@ export default class Report extends Component {
   componentDidMount() {
     this._getReportInfo()
     this._getAssessmentUserRelationsShareInfo()
+    this._getAssessmentUserRelationsIsComparable()
   }
 
   componentWillUnmount() { }
@@ -89,13 +91,21 @@ export default class Report extends Component {
     }
   }
 
-    // 获取某测评报告的分享信息
-    _getAssessmentUserRelationsShareInfo = async () => {
-      const res = await getAssessmentUserRelationsShareInfo(this.state.relationsID)
-      if (res.status === 'success') {
-        this.setState({ asessmentUserRelationsShare: res.data })
-      }
+  // 获取某测评对比信息
+  _getAssessmentUserRelationsIsComparable = async () => {
+    const res = await getAssessmentUserRelationsIsComparable(this.state.relationsID)
+    if (res.status === 'success') {
+      this.setState({ compareData: res.data })
     }
+  }
+
+  // 获取某测评报告的分享信息
+  _getAssessmentUserRelationsShareInfo = async () => {
+    const res = await getAssessmentUserRelationsShareInfo(this.state.relationsID)
+    if (res.status === 'success') {
+      this.setState({ asessmentUserRelationsShare: res.data })
+    }
+  }
 
   handleShowDrawer = () => {
     app.td_app_sdk.event({ id: '主报告分享-点击底部分享按钮' });
@@ -146,8 +156,13 @@ export default class Report extends Component {
     Taro.navigateTo({ url: `/pages/reportInsights/index?relationsID=${this.state.relationsID}` })
   }
 
+
+  viewComparison = () => {
+    Taro.navigateTo({ url: `/pages/comparison/index?relationsID=${this.state.relationsID}&assessmentID=${this.state.assessment.id}` })
+  }
+
   render() {
-    const { report, inviterOpenid, assessment, inviter, showPoster, asessmentUserRelationsShare, showAlert, show } = this.state
+    const { report, showPoster, asessmentUserRelationsShare, showAlert, show, compareData: { is_comparable, first_test_at, current_test_at } } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -160,30 +175,22 @@ export default class Report extends Component {
 
     return (
       <View className='report'>
-        {inviterOpenid && (
-          <View className='assessment'>
-            <View className='assessment-title'>
-              {assessment.title}
-            </View>
-            <View className='inviter'>
-              <Image className='avatar' src={inviter.headimgurl} />
-              <View className='name'>
-                {inviter.nickname}
+        {is_comparable && (
+          <View className='comparison-wrap'>
+            <View className='comparison-info'>
+              <View>
+                距首次完成此评测已过去
               </View>
-              分享
+              <View className='time'>
+                {(first_test_at && current_test_at) && formatSeconds(Date.parse(new Date(current_test_at)) / 1000 - Date.parse(new Date(first_test_at)) / 1000)}
+              </View>
+              <View>
+                点击这里查看两次对比解读
+              </View>
             </View>
-
-            <View className='advertisement'>
-              我刚刚完成了这个测试，这是我的测试结果，你要不要也来测一测？
+            <View className='view-comparison-btn' onClick={this.viewComparison}>
+              查看对比
             </View>
-
-            <View
-              className='assessment-btn'
-              onClick={this.handleAssessment}
-            >
-              我也要测一测
-            </View>
-
           </View>
         )}
 

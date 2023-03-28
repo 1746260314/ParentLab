@@ -93,3 +93,22 @@ export function IDCodeType(code) {
             return ''
     }
 }
+
+
+// 时间格式转换 （秒转时间格式）
+export function formatSeconds(time) {
+    let d = ''
+    let h = ''
+    let m = ''
+    //传入的时间为空或小于0
+    if (time == null || time < 0 || !time) {
+        return '0天0小时0分';
+    }
+    //得到天
+    d = (time / 86400) | 0;
+    //得到分
+    h = parseInt((time - d * 86400) / 3600);
+    // 得到秒
+    m = parseInt((time - d * 86400 - h * 3600) / 60);
+    return d + '天' + h + '小时' + m + '分';
+}
