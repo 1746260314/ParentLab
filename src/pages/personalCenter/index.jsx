@@ -27,10 +27,7 @@ export default class PersonalCenter extends Component {
   componentWillMount() { }
 
   componentDidMount() {
-    var token = Taro.getStorageSync('token')
-    if(!token) {
-      Taro.redirectTo({ url: '/pages/login/index?redirectUrl=/pages/personalCenter/index' })
-    }
+  
   }
 
   componentWillUnmount() { }

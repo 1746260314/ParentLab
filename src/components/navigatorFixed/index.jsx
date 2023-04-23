@@ -28,9 +28,14 @@ export default class NavigatorFixed extends Component {
     if (item.key === this.props.selected) return
     const { onClick } = this.props
     onClick && onClick()
-    Taro.redirectTo({
-      url: item.path
-    })
+    var token = Taro.getStorageSync('token')
+    if(item.key === 4 && !token) {
+      Taro.redirectTo({ url: '/pages/login/index?redirectUrl=/pages/personalCenter/index' })
+    }  else {
+      Taro.redirectTo({
+        url: item.path
+      })
+    }
   }
 
   navData = [

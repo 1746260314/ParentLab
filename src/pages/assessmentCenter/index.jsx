@@ -168,9 +168,7 @@ export default class AssessmentCenter extends Component {
             key={newAssessment.id}
             onClick={() => this.toDetail(newAssessment)}
           >
-            {newAssessment.banner_image_url && (
-              <Image className='assessment-banner' src={newAssessment.banner_image_url} />
-            )}
+            <Image className='assessment-banner' src={newAssessment.banner_image_url} />
 
             <View className='tab-wrap'>
               {newAssessment.tags.map(tag => (
