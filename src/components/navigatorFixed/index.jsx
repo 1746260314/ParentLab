@@ -3,6 +3,8 @@ import { Component } from 'react'
 import { View, Text, Image } from '@tarojs/components'
 import home from '../../images/home.png'
 import homeActive from '../../images/home_active.png'
+import book from '../../images/book.png'
+import bookActive from '../../images/book_active.png'
 import personal from '../../images/personal.png'
 import personalActive from '../../images/personal_active.png'
 import assessment from '../../images/assessment.png'
@@ -32,9 +34,10 @@ export default class NavigatorFixed extends Component {
   }
 
   navData = [
-    { key: 1, activeIcon: homeActive, icon: home, label: '首页', path: '/pages/index/index' },
-    { key: 2, activeIcon: assessmentActive, icon: assessment, label: '养育测试', path: '/pages/assessmentCenter/index' },
-    { key: 3, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
+    { key: 1, activeIcon: homeActive, icon: home, label: '成长营', path: '/pages/index/index' },
+    { key: 2, activeIcon: bookActive, icon: book, label: '家长教练', path: '/pages/parentCoach/index' },
+    { key: 3, activeIcon: assessmentActive, icon: assessment, label: '养育测试', path: '/pages/assessmentCenter/index' },
+    { key: 4, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
   ]
   render() {
     const { selected } = this.props

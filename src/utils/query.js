@@ -269,3 +269,33 @@ export async function getAssessmentUserRelationsIsComparable(relationsID) {
 export async function getAssessmentUserRelationsCompare(relationsID) {
     return request(`/wechat_mp/assessment_user_relations/${relationsID}/compare`)
 }
+
+/**
+ * 获取成长营/家长教练but配置项
+ * @param key
+ * 成⻓营 growth_camp
+ * 家⻓教练 parent_coach
+ * */ 
+export async function getHomeSetting(key) {
+    return request(`/wechat_mp/home_setting?key=${key}`)
+}
+
+/**
+ * 获取成长营/家长教练数据
+ * @param banner_type
+ * 成⻓营 growth_camp
+ * 家⻓教练 parent_coach
+ * */ 
+export async function getHomeLinks(banner_type) {
+    return request(`/wechat_mp/home_links?banner_type=${banner_type}`)
+}
+
+// 获取最新测评
+export async function getLatestAssessments() {
+    return request('/wechat_mp/assessments/latest')
+}
+
+// 获取最热测评
+export async function getPopularAssessments() {
+    return request('/wechat_mp/assessments/popular')
+}

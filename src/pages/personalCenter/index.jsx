@@ -1,32 +1,70 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image } from '@tarojs/components'
-import { logout } from '../../utils/query'
+import { View, Image, Button } from '@tarojs/components'
+import { PLInput } from '../../components/formElements'
+import { logout, getUserProfile, updateUsersWechatInfo } from '../../utils/query'
 import NavigatorFixed from '../../components/navigatorFixed'
-import underline from '../../images/underline.png'
 import arrowRight from '../../images/arrow_right.png'
 import calendarIcon from '../../images/calendar.png'
 import orderIcon from '../../images/my_order.png'
 import testIcon from '../../images/my_test.png'
 import profileIcon from '../../images/my_profile.png'
+import avatar from '../../images/avatar.png'
+import edit from '../../images/edit.png'
+import arrowLift from '../../images/arrow_lift.png'
+import editAvatorIcon from '../../images/edit_avator.png'
 import './index.less'
 
 const app = getApp()
 export default class PersonalCenter extends Component {
 
+  state = {
+    showModal: false,
+    avatarUrl: avatar,
+    nickname: '用户昵称'
+  }
+
   componentWillMount() { }
 
-  componentDidMount() { }
+  componentDidMount() {
+    var token = Taro.getStorageSync('token')
+    if(!token) {
+      Taro.redirectTo({ url: '/pages/login/index?redirectUrl=/pages/personalCenter/index' })
+    }
+  }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getUserProfile()
+  }
 
   componentDidHide() { }
 
+  // 配置分享
+  onShareAppMessage() {
+    const shareTitle = Taro.getStorageSync('shareTitle')
+    const shareImg = Taro.getStorageSync('shareImg')
+    return {
+      title: shareTitle,
+      path: '/pages/index/index',
+      imageUrl: shareImg
+    }
+  }
 
-  travelTo = ({path, TDEventID}) => {
-    if(TDEventID) {
+  _getUserProfile = async () => {
+    const res = await getUserProfile()
+    if (res.status === 'success') {
+      const { wechat_info = {} } = res.data
+      this.setState({
+        nickname: wechat_info.nickname || '用户昵称',
+        avatarUrl: wechat_info.headimgurl
+      })
+    }
+  }
+
+  travelTo = ({ path, TDEventID }) => {
+    if (TDEventID) {
       app.td_app_sdk.event({ id: `个人中心-${TDEventID}` });
     }
     if (path) {
@@ -35,6 +73,71 @@ export default class PersonalCenter extends Component {
       Taro.showToast({
         title: '敬请期待。。。',
         icon: 'none',
+        duration: 2000
+      })
+    }
+  }
+
+  _logout = async () => {
+    const res = await logout()
+    if (res.status === 'success') {
+      await Taro.showToast({
+        title: '退出成功',
+        icon: 'success',
+        duration: 2000
+      })
+      this.setState({
+        avatarUrl: avatar,
+        nickname: '用户昵称'
+      })
+    } else {
+      await Taro.showToast({
+        title: '您已退出登录',
+        icon: 'error',
+        duration: 2000
+      })
+    }
+    await Taro.removeStorageSync('token')
+    await Taro.removeStorageSync('hasUserWeChatInfo')
+    await Taro.removeStorageSync('hasUserPhoneNumber')
+    await Taro.redirectTo({
+      url: '/pages/index/index'
+    })
+  }
+
+  handleEdit = () => {
+    this.setState({ showModal: true })
+  }
+
+  closeModal = () => {
+    this.setState({ showModal: false })
+  }
+
+  onChooseAvatar = (e) => {
+    const { avatarUrl } = e.detail
+    this.setState({ avatarUrl })
+  }
+
+  handleChangeNickname = (e) => {
+    const { value } = e.target
+    
+    this.setState({ nickname: value })
+  }
+
+  submit = async () => {
+    const { nickname, avatarUrl } = this.state
+    this.closeModal()
+    const params = {
+      wechat_user: {
+        headimgurl: avatarUrl,
+        nickname,
+      }
+    }
+    const res = await updateUsersWechatInfo(params)
+    if (res.status === 'success') {
+      await Taro.showToast({
+        title: '保存成功',
+        icon: 'success',
         duration: 2000
       })
     }
@@ -62,57 +165,75 @@ export default class PersonalCenter extends Component {
     })
   }
 
-  _logout = async () => {
-    const res = await logout()
-    if(res.status === 'success') {
-      await Taro.showToast({
-        title: '退出成功',
-        icon: 'success',
-        duration: 2000
-      })
-    } else {
-      await Taro.showToast({
-        title: '您已退出登录',
-        icon: 'error',
-        duration: 2000
-      })
-    }
-    await Taro.removeStorageSync('token')
-    await Taro.removeStorageSync('hasUserWeChatInfo')
-    await Taro.removeStorageSync('hasUserPhoneNumber')
-  }
-
-  // 配置分享
-  onShareAppMessage () {
-    const shareTitle = Taro.getStorageSync('shareTitle')
-    const shareImg = Taro.getStorageSync('shareImg')
-    return {
-      title: shareTitle,
-      path: '/pages/index/index',
-      imageUrl: shareImg
-    }
-  }
-
   render() {
+    const { showModal, nickname, avatarUrl } = this.state
     return (
       <View className='personal-center'>
-        <View className='title'>
-          个人中心
-          <Image className='underline' src={underline} />
+        <View
+          className='user-bar'
+          onClick={this.handleEdit}
+        >
+          <View className='user-info'>
+            <Image className='avatar' src={avatarUrl} />
+            <View className='user-name'>
+              {nickname}
+            </View>
+          </View>
+          <Image className='edit-icon' src={edit} />
         </View>
 
         <View className='menu-wrap'>
           {this.renderMenu()}
         </View>
 
-        <View 
+        <View
           className='logout'
           onClick={this._logout}
         >
           退出登录
         </View>
 
-        <NavigatorFixed selected={3} />
+        {showModal && (
+          <View className='mask'>
+            <View className='modal'>
+              <Image
+                className='close-btn'
+                src={arrowLift}
+                onClick={this.closeModal}
+              />
+              <View className='avatar-wrap'>
+                <Image className='edit' src={editAvatorIcon} />
+                <Button
+                  className='avatar-btn'
+                  openType='chooseAvatar'
+                  onChooseAvatar={this.onChooseAvatar}
+                >
+                  <Image className='avatar' src={avatarUrl || avatar} />
+                </Button>
+              </View>
+
+              <View className='user-name-bar'>
+                <View className='label'>
+                  我的昵称
+                </View>
+                <PLInput
+                  type='nickname'
+                  value={nickname}
+                  handleChange={this.handleChangeNickname}
+                />
+              </View>
+
+              <View
+                className='submit-btn'
+                onClick={this.submit}
+              >
+                保存
+              </View>
+            </View>
+          </View>
+        )}
+
+        <NavigatorFixed selected={4} />
       </View>
     )
   }

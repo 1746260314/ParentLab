@@ -32,6 +32,8 @@ export default defineAppConfig({
     'pages/otherInsights/index',   // 其他详情解读
     'pages/feedback/index',   // 吐槽我们
     'pages/comparison/index',   // 对比报告
+    'pages/parentCoach/index',   // 家长教练
+    
   ],
   window: {
     backgroundTextStyle: 'light',

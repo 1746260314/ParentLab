@@ -30,8 +30,6 @@ export default class Login extends Component {
   componentDidHide() { }
 
   handleLogin = () => {
-    const token = Taro.getStorageSync('token')
-    const hasUserWeChatInfo = Taro.getStorageSync('hasUserWeChatInfo')
     const { agreed } = this.state
     if (!agreed) {
       Taro.showToast({
@@ -40,25 +38,9 @@ export default class Login extends Component {
         duration: 2000
       })
       return
-    } else {
-      !token && login()
-      !hasUserWeChatInfo && getUserProfile((res) => {
-        if (res) {
-          const { redirectUrl, paramsKey, paramsValue } = this.state
-          const hasUserPhoneNumber = Taro.getStorageSync('hasUserPhoneNumber')
-          hasUserPhoneNumber && Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
-        } else {
-          Taro.showToast({
-            title: '授权昵称头像失败',
-            icon: 'error',
-            duration: 2000
-          })
-          Taro.reLaunch({
-            url: '/pages/index/index'
-          })
-        }
-      })
     }
+    const token = Taro.getStorageSync('token')
+    !token && login()
   }
 
   getPhoneNumber = (data) => {
@@ -66,8 +48,11 @@ export default class Login extends Component {
       Taro.setStorageSync('hasUserPhoneNumber', true)
       const { redirectUrl, paramsKey, paramsValue } = this.state
       updatePhoneNumber({ code: data.detail.code })
-      const hasUserWeChatInfo = Taro.getStorageSync('hasUserWeChatInfo')
-      hasUserWeChatInfo && Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
+      if (redirectUrl) {
+        Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
+      } else {
+        Taro.navigateBack()
+      }
     } else {
       Taro.showToast({
         title: '授权手机号失败',

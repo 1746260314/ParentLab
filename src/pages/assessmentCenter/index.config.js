@@ -1,3 +1,4 @@
 export default definePageConfig({
-  navigationBarTitleText: 'Parent Lab 养育实验室',
+  navigationBarTitleText: '测一测',
+  navigationBarBackgroundColor: '#ffffff',
 })

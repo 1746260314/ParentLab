@@ -1,8 +1,7 @@
 import Taro from '@tarojs/taro'
+import config from './config/index'
 
-const proTarget = 'https://admin.parentlab.cn';
-const dev = 'https://staging-api.parentlab.cn';
-export const target = proTarget
+export const target = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 
 export const request = async (url, option = {}) => {
     const params = Object.assign({
