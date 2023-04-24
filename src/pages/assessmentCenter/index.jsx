@@ -168,8 +168,8 @@ export default class AssessmentCenter extends Component {
             key={newAssessment.id}
             onClick={() => this.toDetail(newAssessment)}
           >
-            <Image className='assessment-banner' src={newAssessment.banner_image_url} />
-
+            <Image className='assessment-banner' src={newAssessment.banner_image_url} mode='aspectFill' />
+ 
             <View className='tab-wrap'>
               {newAssessment.tags.map(tag => (
                 <View
@@ -241,7 +241,7 @@ export default class AssessmentCenter extends Component {
           ))}
         </View>
 
-        <View className='label-bar' style={{ marginTop: '40px' }}>
+        <View className='label-bar'>
           所有测试
         </View>
         <View className={isFixed ? 'tabs-bar fixed' : 'tabs-bar'} id='tags_bar'>
@@ -275,7 +275,7 @@ export default class AssessmentCenter extends Component {
             key={assessment.id}
             onClick={() => this.toDetail(assessment)}
           >
-            <Image className='assessment-banner' src={assessment.banner_image_url} />
+            <Image className='assessment-banner' src={assessment.banner_image_url} mode='aspectFill' />
             <View className='tab-wrap'>
               {assessment.tags.map(tag => (
                 <View
