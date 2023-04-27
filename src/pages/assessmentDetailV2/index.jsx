@@ -103,7 +103,7 @@ export default class AssessmentDetailV2 extends Component {
       if (token && hasUserPhoneNumber) {
         Taro.navigateTo({ url })
       } else {
-        Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessment/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })
+        Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessmentV2/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })
       }
     } catch (e) {
       // Do something when catch error
