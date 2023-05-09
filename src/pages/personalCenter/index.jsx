@@ -95,8 +95,6 @@ export default class PersonalCenter extends Component {
       })
     }
     await Taro.removeStorageSync('token')
-    await Taro.removeStorageSync('hasUserWeChatInfo')
-    await Taro.removeStorageSync('hasUserPhoneNumber')
     await Taro.redirectTo({
       url: '/pages/index/index'
     })

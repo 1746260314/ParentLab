@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { getAssessmentDetail } from '../../utils/query'
+import { getAssessmentDetail, getUserProfile } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import wxIcon from '../../images/wx_icon.png'
 import './index.less'
@@ -12,12 +12,14 @@ export default class Detail extends Component {
   state = {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
     data: {},
+    phone: '',
   }
 
   componentWillMount() { }
 
   componentDidMount() {
     this._getAssessmentDetail(this.state.assessmentID)
+    this._getUserProfile()
   }
 
   componentWillUnmount() { }
@@ -58,14 +60,21 @@ export default class Detail extends Component {
     }
   }
 
+  _getUserProfile = async () => {
+    const res = await getUserProfile()
+    if (res.status === 'success') {
+      const { profile = {} } = res.data
+      this.setState({phone: profile.phone || ''})
+    }
+  }
+
   clickStart = () => {
     app.td_app_sdk.event({ id: '评测详情-开始答题' });
     try {
-      const { assessmentID } = this.state
+      const { assessmentID, phone } = this.state
       const token = Taro.getStorageSync('token')
-      const hasUserPhoneNumber = Taro.getStorageSync('hasUserPhoneNumber')
       const url = `/pages/assessment/index?assessmentID=${assessmentID}`
-      if (token && hasUserPhoneNumber) {
+      if (token && phone) {
         Taro.navigateTo({ url })
       } else {
         Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessment/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })

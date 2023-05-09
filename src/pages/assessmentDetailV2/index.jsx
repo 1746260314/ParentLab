@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image, RichText } from '@tarojs/components'
-import { getAssessmentDetail, getAssessmentsShareInfo } from '../../utils/query'
+import { getAssessmentDetail, getAssessmentsShareInfo, getUserProfile } from '../../utils/query'
 import ShareFixed from '../../components/shareFixed'
 import SharePoster from '../../components/sharePoster'
 import AlertModal from '../../components/alertModal'
@@ -17,6 +17,7 @@ export default class AssessmentDetailV2 extends Component {
   state = {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
     data: {},
+    phone: '',
     assessmentShareData: {},
     showHintPop: false,
     showPoster: false,
@@ -38,6 +39,7 @@ export default class AssessmentDetailV2 extends Component {
     }, 6000)
 
     this._getAssessmentsShareInfo(assessmentID)
+    this._getUserProfile()
   }
 
   componentWillUnmount() { }
@@ -88,6 +90,14 @@ export default class AssessmentDetailV2 extends Component {
     }
   }
 
+  _getUserProfile = async () => {
+    const res = await getUserProfile()
+    if (res.status === 'success') {
+      const { profile = {} } = res.data
+      this.setState({phone: profile.phone || ''})
+    }
+  }
+
   //展开收起
   control = (id) => {
     this.setState({ [`open${id}`]: !this.state[`open${id}`] })
@@ -96,11 +106,10 @@ export default class AssessmentDetailV2 extends Component {
   clickStart = () => {
     app.td_app_sdk.event({ id: '评测详情-开始答题' });
     try {
-      const { assessmentID } = this.state
+      const { assessmentID, phone } = this.state
       const token = Taro.getStorageSync('token')
-      const hasUserPhoneNumber = Taro.getStorageSync('hasUserPhoneNumber')
       const url = `/pages/assessmentV2/index?assessmentID=${assessmentID}`
-      if (token && hasUserPhoneNumber) {
+      if (token && phone) {
         Taro.navigateTo({ url })
       } else {
         Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessmentV2/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })

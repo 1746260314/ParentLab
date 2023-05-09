@@ -43,15 +43,26 @@ export default class Login extends Component {
     !token && login()
   }
 
-  getPhoneNumber = (data) => {
+  getPhoneNumber = async (data) => {
     if (data.detail.errMsg === "getPhoneNumber:ok") {
       Taro.setStorageSync('hasUserPhoneNumber', true)
       const { redirectUrl, paramsKey, paramsValue } = this.state
-      updatePhoneNumber({ code: data.detail.code })
-      if (redirectUrl) {
-        Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
+      const res = await updatePhoneNumber({ code: data.detail.code })
+      if (res.status === 'success') {
+        if (redirectUrl) {
+          Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
+        } else {
+          Taro.navigateBack()
+        }
       } else {
-        Taro.navigateBack()
+        Taro.showToast({
+          title: '获取手机号失败',
+          icon: 'error',
+          duration: 2000
+        })
+        Taro.reLaunch({
+          url: '/pages/index/index'
+        })
       }
     } else {
       Taro.showToast({
