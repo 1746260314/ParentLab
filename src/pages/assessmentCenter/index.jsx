@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { getAssessmentCategories, getAssessmentsForCategoriesID, getLatestAssessments, getPopularAssessments } from '../../utils/query'
+import { getAssessmentCategories, getAssessmentsForCategoriesID, getLatestAssessments, getPopularAssessments, getUserProfile } from '../../utils/query'
 import NavigatorFixed from '../../components/navigatorFixed'
 import pageviewIcon from '../../images/pageview.png'
 import closeIcon from '../../images/fork.png'
@@ -35,6 +35,7 @@ export default class AssessmentCenter extends Component {
     this._getAssessmentsForCategoriesID()
     this._getLatestAssessments()
     this._getPopularAssessments()
+    this._getUserProfile()
   }
 
   componentWillUnmount() { }
@@ -145,8 +146,16 @@ export default class AssessmentCenter extends Component {
     })
   }
 
+  _getUserProfile = async () => {
+    const res = await getUserProfile()
+    if (res.status === 'success') {
+      const { profile = {} } = res.data
+      this.setState({phone: profile.phone || ''})
+    }
+  }
+
   // 前往详情页
-  toDetail = (assessment) => {
+  toDetail = (assessment) => {  
     const { id, is_sub_assessment } = assessment
     app.td_app_sdk.event({ id: '测评页面-开始测评' });
     const { phone } = this.state
@@ -154,8 +163,8 @@ export default class AssessmentCenter extends Component {
     let url = `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
     if (!(token && phone)) {
       url = `/pages/login/index?&redirectUrl=/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index&paramsKey=assessmentID&paramsValue=${id}`
-      Taro.navigateTo({ url })
     }
+    Taro.navigateTo({ url })
   }
 
   render() {
