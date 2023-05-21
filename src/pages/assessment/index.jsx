@@ -16,6 +16,7 @@ export default class Assessment extends Component {
 
   state = {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
+    id: Taro.getCurrentInstance().router.params.id,
     questions: [],
     answer_snapshot: [],
     current: 0,
@@ -26,7 +27,9 @@ export default class Assessment extends Component {
   componentWillMount() { }
 
   componentDidMount() {
-    this._getAssessmentQuestions({ assessment_id: this.state.assessmentID })
+    const {id, assessmentID} = this.state
+    const params = id ? {id} : {assessment_id: assessmentID}
+    this._getAssessmentQuestions(params)
   }
 
   componentWillUnmount() { }

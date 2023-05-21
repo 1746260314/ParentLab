@@ -48,9 +48,9 @@ export default class MyAssessment extends Component {
   }
 
   // 继续
-  handleContinue = ({ is_sub_assessment, id }) => {
+  handleContinue = ({ is_sub_assessment, id, assessment }) => {
     Taro.navigateTo({
-      url: `/pages/${is_sub_assessment ? 'assessmentV2' : 'assessment'}/index?assessmentID=${id}`
+      url: `/pages/${is_sub_assessment ? 'assessmentV2' : 'assessment'}/index?assessmentID=${assessment.id}&id=${id}`
     })
   }
 
