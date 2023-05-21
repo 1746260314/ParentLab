@@ -149,9 +149,13 @@ export default class AssessmentCenter extends Component {
   toDetail = (assessment) => {
     const { id, is_sub_assessment } = assessment
     app.td_app_sdk.event({ id: '测评页面-开始测评' });
-    Taro.navigateTo({
-      url: `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
-    })
+    const { phone } = this.state
+    const token = Taro.getStorageSync('token')
+    let url = `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
+    if (!(token && phone)) {
+      url = `/pages/login/index?&redirectUrl=/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index&paramsKey=assessmentID&paramsValue=${id}`
+      Taro.navigateTo({ url })
+    }
   }
 
   render() {
@@ -169,7 +173,7 @@ export default class AssessmentCenter extends Component {
             onClick={() => this.toDetail(newAssessment)}
           >
             <Image className='assessment-banner' src={newAssessment.banner_image_url} mode='aspectFill' />
- 
+
             <View className='tab-wrap'>
               {newAssessment.tags.map(tag => (
                 <View

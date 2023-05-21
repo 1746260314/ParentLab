@@ -21,7 +21,9 @@ export default class Login extends Component {
 
   componentWillMount() { }
 
-  componentDidMount() { }
+  componentDidMount() { 
+    console.log('redirectUrl', this.state.redirectUrl)
+  }
 
   componentWillUnmount() { }
 
