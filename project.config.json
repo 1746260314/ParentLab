@@ -31,7 +31,8 @@
     "useCompilerPlugins": false,
     "minifyWXML": false,
     "ignoreDevUnusedFiles": false,
-    "ignoreUploadUnusedFiles": false
+    "ignoreUploadUnusedFiles": false,
+    "condition": false
   },
   "compileType": "miniprogram",
   "libVersion": "2.25.1",
