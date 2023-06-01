@@ -39,7 +39,7 @@ export default class ConfirmModal extends Component {
                 className='option-icon'
                 src={prompt ? selectedIcon : uncheckIcon}
               />
-              不再提示
+              24小时内不再提示
             </View>
           )}
 
