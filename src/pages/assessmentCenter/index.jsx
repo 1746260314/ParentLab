@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
-import { getAssessmentCategories, getAssessmentsForCategoriesID, getLatestAssessments, getPopularAssessments } from '../../utils/query'
+import { getAssessmentCategories, getAssessmentsForCategoriesID, getLatestAssessments, getPopularAssessments, getUserProfile } from '../../utils/query'
 import NavigatorFixed from '../../components/navigatorFixed'
 import pageviewIcon from '../../images/pageview.png'
 import closeIcon from '../../images/fork.png'
@@ -26,6 +26,7 @@ export default class AssessmentCenter extends Component {
     hotAssessments: [],
     isFixed: false,
     currentScrollTop: '',
+    phone: '',
   }
 
   componentWillMount() { }
@@ -39,7 +40,9 @@ export default class AssessmentCenter extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getUserProfile()
+  }
 
   componentDidHide() { }
 
@@ -145,17 +148,31 @@ export default class AssessmentCenter extends Component {
     })
   }
 
+  _getUserProfile = async () => {
+    const token = Taro.getStorageSync('token')
+    if(!token) return
+    const res = await getUserProfile()
+    if (res.status === 'success') {
+      const { profile: { phone = '' } } = res.data
+      this.setState({ phone })
+    }
+  }
+
   // 前往详情页
   toDetail = (assessment) => {
     const { id, is_sub_assessment } = assessment
     app.td_app_sdk.event({ id: '测评页面-开始测评' });
-    Taro.navigateTo({
-      url: `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
-    })
+    const { phone } = this.state
+    const token = Taro.getStorageSync('token')
+    let url = `/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index?assessmentID=${id}`
+    if (!(token && phone)) {
+      url = `/pages/login/index?&redirectUrl=/pages/${is_sub_assessment ? 'assessmentDetailV2' : 'assessmentDetail'}/index&paramsKey=assessmentID&paramsValue=${id}`
+    }
+    Taro.navigateTo({ url })
   }
 
   render() {
-    const { tabs, assessments, selects, newAssessments, hotAssessments, selectAll, isFixed } = this.state
+    const { tabs, assessments, selects, newAssessments, hotAssessments, selectAll, isFixed, showModal, phone } = this.state
     return (
       <View className='assessment-center'>
         <View className='label-bar'>
@@ -169,7 +186,7 @@ export default class AssessmentCenter extends Component {
             onClick={() => this.toDetail(newAssessment)}
           >
             <Image className='assessment-banner' src={newAssessment.banner_image_url} mode='aspectFill' />
- 
+
             <View className='tab-wrap'>
               {newAssessment.tags.map(tag => (
                 <View

@@ -1,0 +1,92 @@
+.userinfo-modal-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0.8);
+    padding-top: 20%;
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: #FFFFFF;
+        border-radius: 24px 24px 0px 0px;
+        overflow: hidden;
+        position: relative;
+
+        .close-btn {
+            width: 30px;
+            height: 24px;
+            margin: 24px;
+        }
+
+        .avatar-wrap {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            // border: 2px solid #d3e3e7;
+            border-radius: 50%;
+            margin: 70px auto 48px;
+
+            .edit {
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1;
+                width: 24px;
+                height: 24px;
+            }
+
+            .avatar-btn {
+                width: 80px;
+                height: 80px;
+                padding: 0;
+                border-radius: 50%;
+                background-color: none;
+                border: none;
+
+                .avatar {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
+            button::after {
+                border: none;
+            }
+        }
+
+        .user-name-bar {
+            padding: 0 20px;
+            margin-bottom: 20px;
+
+            .label {
+                font-size: 14px;
+                line-height: 16px;
+                color: #02323D;
+                margin-bottom: 4px;
+            }
+        }
+
+        .submit-btn {
+            position: absolute;
+            left: 0;
+            bottom: 34px;
+            margin: 0 16px;
+            width: -webkit-fill-available;
+            height: 54px;
+            box-sizing: border-box;
+            background: #FFC19E;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .submit-btn-disabled {
+            background: #ECF1F2
+        }
+    }
+}

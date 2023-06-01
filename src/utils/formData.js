@@ -18,7 +18,6 @@ export const radioData2 = [
 export const radioData3 = [
     '男生',
     '女生',
-    '保密',
 ]
 
 export const radioData4 = [

@@ -8,8 +8,11 @@ export default class PLTextarea extends Component {
     focus: false
   }
 
-  handleBlur = (e) => {
+  handleBlur = () => {
     this.setState({ focus: false })
+  }
+
+  handleChange = (e) => {
     this.props.handleChange(e)
   }
 
@@ -23,6 +26,7 @@ export default class PLTextarea extends Component {
         className={`pl-textarea ${focus ? 'pl-textarea-focus' : ''} ${error ? 'pl-textarea-error' : ''}`}
         {...other}
         onBlur={this.handleBlur}
+        onInput={this.handleChange}
         onFocus={this.handleFocus}
       />
     )

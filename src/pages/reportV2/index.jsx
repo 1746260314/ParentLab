@@ -1,6 +1,6 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Text } from '@tarojs/components'
 import { getReportInfo, getAssessmentsShareInfo, getAssessmentUserRelationsShareInfo, getAssessmentUserRelationsIsComparable } from '../../utils/query'
 import { formatSeconds } from '../../utils/util'
 import ShareDrawer from '../../components/shareDrawer'
@@ -8,13 +8,15 @@ import SharePosterV2 from '../../components/sharePosterV2'
 import AlertModal from '../../components/alertModal'
 import wxIcon from '../../images/wx_icon.png'
 import sharePosterIcon from '../../images/share_poster.png'
+import closeIcon from '../../images/close_white.png'
+
 import './index.less'
 
 const app = getApp()
-export default class Report extends Component {
+export default class ReportV2 extends Component {
 
   state = {
-    relationsID: Taro.getCurrentInstance().router.params.relationsID, // 419
+    relationsID: Taro.getCurrentInstance().router.params.relationsID,
     assessment: {},
     report: {},
     compareData: {},
@@ -23,6 +25,8 @@ export default class Report extends Component {
     assessmentShareData: {},
     asessmentUserRelationsShare: {},
     show: false,
+    show_review_content_toast: false,
+    coach: {}
   }
 
   componentWillMount() { }
@@ -69,10 +73,12 @@ export default class Report extends Component {
   _getReportInfo = async () => {
     const res = await getReportInfo(this.state.relationsID)
     if (res.status === 'success') {
-      const { assessment, report } = res.data
+      const { assessment, report, show_review_content_toast, coach } = res.data
       this.setState({
         report,
         assessment,
+        show_review_content_toast,
+        coach,
       })
       if (this.state.inviterOpenid) {
         Taro.setNavigationBarTitle({
@@ -161,8 +167,12 @@ export default class Report extends Component {
     Taro.navigateTo({ url: `/pages/comparison/index?relationsID=${this.state.relationsID}&assessmentID=${this.state.assessment.id}` })
   }
 
+  closeCommentToast = () => {
+    this.setState({ show_review_content_toast: false })
+  }
+
   render() {
-    const { report, showPoster, asessmentUserRelationsShare, showAlert, show, compareData: { is_comparable, first_test_at, current_test_at } } = this.state
+    const { report, showPoster, asessmentUserRelationsShare, showAlert, show, compareData: { is_comparable, first_test_at, current_test_at }, show_review_content_toast, coach } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -195,6 +205,28 @@ export default class Report extends Component {
         )}
 
         <Image className='summary-img' src={report?.summary_image_url} mode='widthFix' />
+
+        {show_review_content_toast && (
+          <View className='comment-toast'>
+            <View className='content'>
+              <View >
+                {coach.title}
+                <Text className='coach-name'>
+                  【{coach.name}】
+                </Text>
+              </View>
+              <View >
+                根据您的测试结果给出了建议，点击查看详细解读
+              </View>
+            </View>
+            <Image
+              className='close-icon'
+              src={closeIcon}
+              onClick={this.closeCommentToast}
+            />
+            <View className='angle' />
+          </View>
+        )}
 
         <View className='btn-wrap'>
           <View className='btn-line' onClick={this.handleShowDrawer}>

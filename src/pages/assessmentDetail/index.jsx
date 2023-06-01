@@ -2,7 +2,9 @@ import Taro from '@tarojs/taro'
 import { Component } from 'react'
 import { View, Image } from '@tarojs/components'
 import { getAssessmentDetail, getUserProfile } from '../../utils/query'
+import { formatTime } from '../../utils/util'
 import ShareFixed from '../../components/shareFixed'
+import ConfirmModal from '../../components/confirmModal'
 import wxIcon from '../../images/wx_icon.png'
 import './index.less'
 
@@ -12,7 +14,10 @@ export default class Detail extends Component {
   state = {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
     data: {},
-    phone: '',
+    finish_onboarding_survey: true,
+    has_kids: true,
+    showKidsToast: false,
+    showOnboardingToast: false,
   }
 
   componentWillMount() { }
@@ -63,30 +68,96 @@ export default class Detail extends Component {
   _getUserProfile = async () => {
     const res = await getUserProfile()
     if (res.status === 'success') {
-      const { profile = {} } = res.data
-      this.setState({phone: profile.phone || ''})
+      const { finish_onboarding_survey, has_kids } = res.data
+      this.setState({
+        finish_onboarding_survey,
+        has_kids,
+      })
     }
   }
 
+  // 点击开始测试
   clickStart = () => {
+    const stopOnboardingPrompt = Taro.getStorageSync('stopOnboardingPrompt')
+    const stopKidsPrompt = Taro.getStorageSync('stopKidsPrompt')
+    const today = formatTime(new Date().getTime(), 'Y-M-D')
+    const showOnboardingPrompt = today !== stopOnboardingPrompt
+    const showKidsPrompt = today !== stopKidsPrompt
+    const { finish_onboarding_survey, has_kids } = this.state
+    //如果都填写了，直接开始
+    if (finish_onboarding_survey && has_kids) {
+      this.onStart()
+    } else if (has_kids) {
+      if (!finish_onboarding_survey && showOnboardingPrompt) {
+        this.setState({ showOnboardingToast: true })
+      } else {
+        this.onStart()
+      }
+    } else if (showKidsPrompt) {
+      this.setState({ showKidsToast: true })
+    } else if (!finish_onboarding_survey) {
+      if (showOnboardingPrompt) {
+        this.setState({ showOnboardingToast: true })
+      } else {
+        this.onStart()
+      }
+    }
+  }
+
+  onStart = () => {
     app.td_app_sdk.event({ id: '评测详情-开始答题' });
     try {
-      const { assessmentID, phone } = this.state
-      const token = Taro.getStorageSync('token')
+      const { assessmentID } = this.state
       const url = `/pages/assessment/index?assessmentID=${assessmentID}`
-      if (token && phone) {
-        Taro.navigateTo({ url })
-      } else {
-        Taro.navigateTo({ url: `/pages/login/index?&redirectUrl=/pages/assessment/index&paramsKey=assessmentID&paramsValue=${assessmentID}` })
-      }
+      Taro.navigateTo({ url })
     } catch (e) {
       // Do something when catch error
     }
   }
 
+  laterOn = () => {
+    this.setState({
+      showKidsToast: false,
+      showOnboardingToast: false
+    })
+    this.onStart()
+  }
+
+  // 设置当天是否提示kids
+  setKidsPrompt = (flag) => {
+    const value = flag ? formatTime(new Date().getTime(), 'Y-M-D') : ''
+    Taro.setStorageSync('stopKidsPrompt', value)
+  }
+
+  //去填写孩子信息
+  toMyChildren = () => {
+    this.setState({ showKidsToast: false })
+    const { finish_onboarding_survey, assessmentID } = this.state
+    let url = `/pages/myChildren/index?assessmentID=${assessmentID}&version=assessment`
+    if (!finish_onboarding_survey) {
+      url += '&needOnboarding=yes'
+    }
+    Taro.navigateTo({ url })
+  }
+
+  // 设置当天是否提示Onboarding
+  setOnboardingPrompt = (flag) => {
+    const value = flag ? formatTime(new Date().getTime(), 'Y-M-D') : ''
+    Taro.setStorageSync('stopOnboardingPrompt', value)
+  }
+
+  //去填写养育信息
+  toMyChildRearing = () => {
+    const { assessmentID } = this.state
+    this.setState({ showOnboardingToast: false })
+    Taro.navigateTo({
+      url: `/pages/myChildRearing/index?assessmentID=${assessmentID}&version=assessment`
+    })
+  }
+
   render() {
-    const { data } = this.state
-    const { body_image_urls = [], is_enabled } = data
+    const { data, showKidsToast, showOnboardingToast } = this.state
+    const { body_image_urls = [], is_enabled, is_sharable } = data
     const shareOptions = [
       {
         icon: wxIcon,
@@ -110,8 +181,36 @@ export default class Detail extends Component {
             </View>
           )}
         </View>
+        {is_sharable && (
+          <ShareFixed options={shareOptions} />
+        )}
 
-        <ShareFixed options={shareOptions} />
+        {showKidsToast && (
+          <ConfirmModal
+            title='请完善孩子的信息'
+            desc={['为了向您提供个性化的养育支持', '我们邀请您完善您的孩子信息']}
+            cancelText='稍后'
+            saveText='立即填写'
+            showPrompt
+            setPrompt={this.setKidsPrompt}
+            onCancel={this.laterOn}
+            onSave={this.toMyChildren}
+          />
+        )}
+
+        {showOnboardingToast && (
+          <ConfirmModal
+            title='请完善您的养育基础信息'
+            desc={['为了向您提供个性化的养育支持', '我们邀请您完善您的养育基础信息']}
+            cancelText='稍后'
+            saveText='立即填写'
+            showPrompt
+            setPrompt={this.setOnboardingPrompt}
+            onCancel={this.laterOn}
+            onSave={this.toMyChildRearing}
+          />
+        )}
+
       </View>
     )
   }

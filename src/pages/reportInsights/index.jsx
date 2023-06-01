@@ -36,6 +36,10 @@ export default class ReportInsights extends Component {
     asessmentUserRelationsShare: {},
     showPoster: false,
     showAlert: false,
+    is_sharable: false,
+    review_content_html: '',
+    coach: {},
+    coachBioModal: false,
   }
 
   componentWillMount() { }
@@ -81,10 +85,13 @@ export default class ReportInsights extends Component {
   _getReportInfo = async () => {
     const res = await getReportInfo(this.state.relationsID)
     if (res.status === 'success') {
-      const { assessment, sub_reports = [], assessment_id } = res.data
+      const { assessment, sub_reports = [], assessment_id, is_sharable, review_content_html, coach } = res.data
       this.setState({
         assessment,
         sub_reports,
+        is_sharable,
+        review_content_html,
+        coach,
       })
       this._getMoreInsights(assessment_id)
       this._getMoreAssessments(assessment_id)
@@ -109,15 +116,15 @@ export default class ReportInsights extends Component {
     }
   }
 
-    // 获取某测评报告的分享信息
-    _getAssessmentUserRelationsIsComparable = async () => {
-      const res = await getAssessmentUserRelationsIsComparable(this.state.relationsID)
-      if (res.status === 'success') {
-        this.setState({ compareData: res.data })
-      }
+  // 获取某测评报告的分享信息
+  _getAssessmentUserRelationsIsComparable = async () => {
+    const res = await getAssessmentUserRelationsIsComparable(this.state.relationsID)
+    if (res.status === 'success') {
+      this.setState({ compareData: res.data })
     }
+  }
 
-  
+
 
   // 获取推荐的服务
   _getRecommendedEvent = async (assessmentID) => {
@@ -233,8 +240,16 @@ export default class ReportInsights extends Component {
     Taro.redirectTo({ url: `/pages/comparison/index?relationsID=${this.state.relationsID}&assessmentID=${this.state.assessment.id}` })
   }
 
+  showCoachBioModal = () => {
+    this.setState({ coachBioModal: true })
+  }
+
+  hideCoachBioModal = () => {
+    this.setState({ coachBioModal: false })
+  }
+
   render() {
-    const { assessment, sub_reports, showModal, moreInsights, insightModalContent, moreAssessments, recommendedEvents, showOtherInsightModal, showPoster, showAlert, asessmentUserRelationsShare, compareData: { is_comparable, first_test_at, current_test_at } } = this.state
+    const { assessment, sub_reports, showModal, moreInsights, insightModalContent, moreAssessments, recommendedEvents, showOtherInsightModal, showPoster, showAlert, asessmentUserRelationsShare, compareData: { is_comparable, first_test_at, current_test_at }, is_sharable, coach, review_content_html, coachBioModal } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -248,6 +263,62 @@ export default class ReportInsights extends Component {
     return (
       <View className='report-insights'>
 
+        {review_content_html && (
+          <View className='coach-comment'>
+            <View className='coach-avator'>
+              <Image
+                src={coach.avatar_url}
+                onClick={this.showCoachBioModal}
+              />
+            </View>
+            <View className='coach-bar'>
+              <View className='coach-name'>
+                {coach.name}
+              </View>
+              <View className='divder' />
+              <View className='coach-title'>
+                {coach.title}
+              </View>
+            </View>
+            <View className='comment-content'>
+              <RichText nodes={review_content_html} />
+            </View>
+          </View>
+        )}
+
+        {coachBioModal && (
+          <View className='coach-bio-mask'>
+            <View className='content'>
+              <View className='close-bar'>
+                <Image
+                  className='close-icon'
+                  src={close}
+                  onClick={this.hideCoachBioModal}
+                />
+              </View>
+              <View className='content-title'>
+                教练简介
+              </View>
+              <View className='coach-bar'>
+                <View className='coach-avator'>
+                  <Image src={coach.avatar_url} />
+                </View>
+                <View className='coach-info'>
+                  <View className='coach-name'>
+                    {coach.name}
+                  </View>
+                  <View className='coach-title'>
+                    {coach.title}
+                  </View>
+                </View>
+              </View>
+              <View className='bio'>
+                {coach.bio}
+              </View>
+            </View>
+          </View>
+        )}
+
         {is_comparable && (
           <View className='comparison-wrap'>
             <View className='comparison-info'>
@@ -255,7 +326,7 @@ export default class ReportInsights extends Component {
                 距首次完成此评测已过去
               </View>
               <View className='time'>
-              {(first_test_at && current_test_at) && formatSeconds(Date.parse(new Date(current_test_at)) / 1000 - Date.parse(new Date(first_test_at)) / 1000)}
+                {(first_test_at && current_test_at) && formatSeconds(Date.parse(new Date(current_test_at)) / 1000 - Date.parse(new Date(first_test_at)) / 1000)}
               </View>
               <View>
                 点击这里查看两次对比解读
@@ -416,7 +487,9 @@ export default class ReportInsights extends Component {
           返回评测首页
         </View>
 
-        <ShareFixed options={shareOptions} showPoster={this.showPoster} />
+        {is_sharable && (
+          <ShareFixed options={shareOptions} showPoster={this.showPoster} />
+        )}
 
         {/* 更多深度解读详情弹窗 */}
         {showModal && (

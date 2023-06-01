@@ -1,18 +1,19 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Button } from '@tarojs/components'
-import { PLInput } from '../../components/formElements'
+import { View, Image } from '@tarojs/components'
 import { logout, getUserProfile, updateUsersWechatInfo } from '../../utils/query'
 import NavigatorFixed from '../../components/navigatorFixed'
+import UserinfoModal from '../../components/userinfoModal'
 import arrowRight from '../../images/arrow_right.png'
 import calendarIcon from '../../images/calendar.png'
 import orderIcon from '../../images/my_order.png'
 import testIcon from '../../images/my_test.png'
 import profileIcon from '../../images/my_profile.png'
+import children from '../../images/children.png'
+import start from '../../images/start.png'
 import avatar from '../../images/avatar.png'
 import edit from '../../images/edit.png'
-import arrowLift from '../../images/arrow_lift.png'
-import editAvatorIcon from '../../images/edit_avator.png'
+
 import './index.less'
 
 const app = getApp()
@@ -21,18 +22,19 @@ export default class PersonalCenter extends Component {
   state = {
     showModal: false,
     avatarUrl: avatar,
-    nickname: '用户昵称'
+    nickname: '用户昵称',
+    phone: '',
   }
 
   componentWillMount() { }
 
   componentDidMount() {
-  
+
   }
 
   componentWillUnmount() { }
 
-  componentDidShow() { 
+  componentDidShow() {
     this._getUserProfile()
   }
 
@@ -52,15 +54,17 @@ export default class PersonalCenter extends Component {
   _getUserProfile = async () => {
     const res = await getUserProfile()
     if (res.status === 'success') {
-      const { wechat_info = {} } = res.data
+      const { wechat_info: { nickname = '用户昵称', headimgurl = avatar }, profile: { phone = '' } } = res.data
       this.setState({
-        nickname: wechat_info.nickname || '用户昵称',
-        avatarUrl: wechat_info.headimgurl
+        nickname: nickname,
+        avatarUrl: headimgurl,
+        phone
       })
     }
   }
 
   travelTo = ({ path, TDEventID }) => {
+    console.log('path', path);
     if (TDEventID) {
       app.td_app_sdk.event({ id: `个人中心-${TDEventID}` });
     }
@@ -108,24 +112,14 @@ export default class PersonalCenter extends Component {
     this.setState({ showModal: false })
   }
 
-  onChooseAvatar = (e) => {
-    const { avatarUrl } = e.detail
-    this.setState({ avatarUrl })
-  }
-
-  handleChangeNickname = (e) => {
-    const { value } = e.target
-    
-    this.setState({ nickname: value })
-  }
-
-  submit = async () => {
-    const { nickname, avatarUrl } = this.state
-    this.closeModal()
+  submit = async ({ avatarUrl, nickname, phone }) => {
     const params = {
       wechat_user: {
-        headimgurl: avatarUrl,
-        nickname,
+        avatarUrl,
+        nickname
+      },
+      profile: {
+        phone
       }
     }
     const res = await updateUsersWechatInfo(params)
@@ -135,13 +129,17 @@ export default class PersonalCenter extends Component {
         icon: 'success',
         duration: 2000
       })
+      this.setState({ avatarUrl, nickname, phone })
     }
+    await this.closeModal()
   }
 
   renderMenu = () => {
     const Menus = [
       // { icon: calendarIcon, label: '我的报名活动', path: '/pages/myRegistered/index' },
-      { icon: orderIcon, label: '我的订单', path: '/pages/myOrder/index', TDEventID: '订单列表' },
+      // { icon: orderIcon, label: '我的订单', path: '/pages/myOrder/index', TDEventID: '我的订单' },
+      { icon: children, label: '我的孩子', path: '/pages/myChildren/index', TDEventID: '我的孩子' },
+      { icon: start, label: '我的养育基础信息', path: '/pages/myChildRearing/index', TDEventID: '我的养育基础信息' },
       { icon: testIcon, label: '我的测评', path: '/pages/myAssessment/index', TDEventID: '我的测评' },
       // { icon: profileIcon, label: '我的基本信息', path: '/pages/myProfile/index' },
     ]
@@ -153,6 +151,11 @@ export default class PersonalCenter extends Component {
             <View className='label' >
               {item.label}
             </View>
+            {item.prompt && (
+              <View className='prompt' >
+                {item.prompt}
+              </View>
+            )}
             <Image className='arrow-icon' src={arrowRight} />
           </View>
         </View>
@@ -161,7 +164,7 @@ export default class PersonalCenter extends Component {
   }
 
   render() {
-    const { showModal, nickname, avatarUrl } = this.state
+    const { showModal, nickname, avatarUrl, phone } = this.state
     return (
       <View className='personal-center'>
         <View
@@ -189,43 +192,13 @@ export default class PersonalCenter extends Component {
         </View>
 
         {showModal && (
-          <View className='mask'>
-            <View className='modal'>
-              <Image
-                className='close-btn'
-                src={arrowLift}
-                onClick={this.closeModal}
-              />
-              <View className='avatar-wrap'>
-                <Image className='edit' src={editAvatorIcon} />
-                <Button
-                  className='avatar-btn'
-                  openType='chooseAvatar'
-                  onChooseAvatar={this.onChooseAvatar}
-                >
-                  <Image className='avatar' src={avatarUrl || avatar} />
-                </Button>
-              </View>
-
-              <View className='user-name-bar'>
-                <View className='label'>
-                  我的昵称
-                </View>
-                <PLInput
-                  type='nickname'
-                  value={nickname}
-                  handleChange={this.handleChangeNickname}
-                />
-              </View>
-
-              <View
-                className='submit-btn'
-                onClick={this.submit}
-              >
-                保存
-              </View>
-            </View>
-          </View>
+          <UserinfoModal
+            onClose={this.closeModal}
+            avatarUrl={avatarUrl}
+            nickname={nickname}
+            phone={phone}
+            onSubmit={this.submit}
+          />
         )}
 
         <NavigatorFixed selected={4} />
