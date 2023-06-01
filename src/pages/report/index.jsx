@@ -25,6 +25,7 @@ export default class Report extends Component {
     wechatInfo: {},
     inviter: {},
     compareData: {},
+    is_sharable: false,
   }
 
   componentWillMount() { }
@@ -81,10 +82,11 @@ export default class Report extends Component {
   _getReportInfo = async () => {
     const res = await getReportInfo(this.state.relationsID)
     if (res.status === 'success') {
-      const { assessment, report } = res.data
+      const { assessment, report, is_sharable } = res.data
       this.setState({
         report,
         assessment,
+        is_sharable
       })
       // this._getAssessmentUserRelationsIsComparable(assessment.id)
       if (this.state.inviterOpenid) {
@@ -157,7 +159,7 @@ export default class Report extends Component {
   }
 
   render() {
-    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, compareData: { is_comparable, first_test_at } } = this.state
+    const { report, inviterOpenid, assessment, inviter, showPoster, wechatInfo, showAlert, compareData: { is_comparable, first_test_at }, is_sharable } = this.state
     const shareOptions = [{
       icon: wxIcon,
       text: '邀请好友测一测',
@@ -240,8 +242,10 @@ export default class Report extends Component {
           去做更多测试
         </View>
 
-        <ShareFixed options={shareOptions} showPoster={this.showPoster} />
-
+        {is_sharable && (
+          <ShareFixed options={shareOptions} showPoster={this.showPoster} />
+        )}
+        
         {showPoster && (
           <SharePoster poster={report.moment_share_image_url} inviter={wechatInfo} onHide={this.hidePoster} success={this.saveSuccess} />
         )}

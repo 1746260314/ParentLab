@@ -26,6 +26,7 @@ export default class AssessmentCenter extends Component {
     hotAssessments: [],
     isFixed: false,
     currentScrollTop: '',
+    phone: '',
   }
 
   componentWillMount() { }
@@ -35,12 +36,13 @@ export default class AssessmentCenter extends Component {
     this._getAssessmentsForCategoriesID()
     this._getLatestAssessments()
     this._getPopularAssessments()
-    this._getUserProfile()
   }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getUserProfile()
+  }
 
   componentDidHide() { }
 
@@ -147,15 +149,17 @@ export default class AssessmentCenter extends Component {
   }
 
   _getUserProfile = async () => {
+    const token = Taro.getStorageSync('token')
+    if(!token) return
     const res = await getUserProfile()
     if (res.status === 'success') {
-      const { profile = {} } = res.data
-      this.setState({phone: profile.phone || ''})
+      const { profile: { phone = '' } } = res.data
+      this.setState({ phone })
     }
   }
 
   // 前往详情页
-  toDetail = (assessment) => {  
+  toDetail = (assessment) => {
     const { id, is_sub_assessment } = assessment
     app.td_app_sdk.event({ id: '测评页面-开始测评' });
     const { phone } = this.state
@@ -168,7 +172,7 @@ export default class AssessmentCenter extends Component {
   }
 
   render() {
-    const { tabs, assessments, selects, newAssessments, hotAssessments, selectAll, isFixed } = this.state
+    const { tabs, assessments, selects, newAssessments, hotAssessments, selectAll, isFixed, showModal, phone } = this.state
     return (
       <View className='assessment-center'>
         <View className='label-bar'>

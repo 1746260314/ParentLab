@@ -43,6 +43,46 @@
         border-radius: 8px;
     }
 
+    .comment-toast {
+        padding: 16px;
+        position: fixed;
+        right: 16px;
+        bottom: 100px;
+        z-index: 99;
+        width: 300px;
+        height: 80px;
+        background: #17505C;
+        border-radius: 10px;
+        display: flex;
+
+        .content {
+            font-size: 14px;
+            line-height: 16px;
+            color: #FFFFFF;
+            margin-right: 16px;
+
+            .coach-name {
+                color: #FFC19E;
+            }
+        }
+
+        .close-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .angle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            right: 16px;
+            bottom: -5px;
+            background: #17505C;
+            border-radius: 1px;
+            transform: matrix(-0.71, 0.71, 0.71, 0.71, 0, 0);
+        }
+    }
+
     .btn-wrap {
         position: fixed;
         left: 0;

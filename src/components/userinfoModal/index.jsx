@@ -4,47 +4,16 @@ import { View, Image, Button } from '@tarojs/components'
 import { PLInput } from '../formElements'
 import { getUserProfile, updateUsersWechatInfo } from '../../utils/query'
 
-import avatar from '../../images/avatar.png'
 import arrowLift from '../../images/arrow_lift.png'
 import editAvatorIcon from '../../images/edit_avator.png'
 import './index.less'
 
-export default class PersonalCenter extends Component {
+export default class UserinfoModal extends Component {
 
   state = {
-    avatarUrl: avatar,
-    nickname: '用户昵称'
-  }
-
-  componentWillMount() { }
-
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() {
-    this._getUserProfile()
-  }
-
-  componentDidHide() { }
-
-  _getUserProfile = async () => {
-    const res = await getUserProfile()
-    if (res.status === 'success') {
-      const { wechat_info = {} } = res.data
-      this.setState({
-        nickname: wechat_info.nickname || '用户昵称',
-        avatarUrl: wechat_info.headimgurl
-      })
-    }
-  }
-
-  handleEdit = () => {
-    this.setState({ showModal: true })
-  }
-
-  closeModal = () => {
-    this.setState({ showModal: false })
+    avatarUrl: this.props.avatarUrl,
+    nickname: this.props.nickname,
+    phone: this.props.phone,
   }
 
   onChooseAvatar = (e) => {
@@ -57,65 +26,69 @@ export default class PersonalCenter extends Component {
     this.setState({ nickname: value })
   }
 
+  handleChangePhone = (e) => {
+    const { value } = e.target
+    this.setState({ phone: value })
+  }
+
   // 提交
   submit = async () => {
-    const { nickname, avatarUrl } = this.state
-    this.closeModal()
-    const params = {
-      wechat_user: {
-        headimgurl: avatarUrl,
-        nickname,
-      }
-    }
-    const res = await updateUsersWechatInfo(params)
-    if (res.status === 'success') {
-      await Taro.showToast({
-        title: '保存成功',
-        icon: 'success',
-        duration: 2000
-      })
-    }
+    const { nickname, phone } = this.state
+    if (!(nickname && phone)) return
+    this.props.onSubmit(this.state)
   }
 
   render() {
-    const { nickname, avatarUrl } = this.state
+    const { nickname, avatarUrl, phone } = this.state
+    const disabled = !(nickname && phone)
     return (
       <View className='userinfo-modal-mask'>
-          <View className='modal'>
-            <Image
-              className='close-btn'
-              src={arrowLift}
-              onClick={this.closeModal}
-            />
-            <View className='avatar-wrap'>
-              <Image className='edit' src={editAvatorIcon} />
-              <Button
-                className='avatar-btn'
-                openType='chooseAvatar'
-                onChooseAvatar={this.onChooseAvatar}
-              >
-                <Image className='avatar' src={avatarUrl || avatar} />
-              </Button>
-            </View>
-
-            <View className='user-name-bar'>
-              <View className='label'>
-                我的昵称
-              </View>
-              <PLInput
-                type='nickname'
-                value={nickname}
-                handleChange={this.handleChangeNickname}
-              />
-            </View>
-
-            <View
-              className='submit-btn'
-              onClick={this.submit}
+        <View className='modal'>
+          <Image
+            className='close-btn'
+            src={arrowLift}
+            onClick={this.props.onClose}
+          />
+          <View className='avatar-wrap'>
+            <Image className='edit' src={editAvatorIcon} />
+            <Button
+              className='avatar-btn'
+              openType='chooseAvatar'
+              onChooseAvatar={this.onChooseAvatar}
             >
-              保存
-            </View>
+              <Image className='avatar' src={avatarUrl} />
+            </Button>
           </View>
+
+          <View className='user-name-bar'>
+            <View className='label'>
+              我的昵称
+            </View>
+            <PLInput
+              type='nickname'
+              value={nickname}
+              handleChange={this.handleChangeNickname}
+            />
+          </View>
+
+          <View className='user-name-bar'>
+            <View className='label'>
+              手机号
+            </View>
+            <PLInput
+              type='number'
+              value={phone}
+              handleChange={this.handleChangePhone}
+            />
+          </View>
+
+          <View
+            className={`submit-btn ${disabled ? 'submit-btn-disabled' : ''}`}
+            onClick={this.submit}
+          >
+            保存
+          </View>
+        </View>
       </View>
     )
   }

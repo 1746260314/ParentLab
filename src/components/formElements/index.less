@@ -34,12 +34,15 @@
 
 .radio-tag {
     display: flex;
+    flex-flow: wrap;
     margin-bottom: 4px;
 
     .tag,
     .tag-active {
         margin-right: 8px;
+        margin-bottom: 8px;
         flex: 1;
+        min-width: 120px;
         height: 40px;
         text-align: center;
         line-height: 40px;
@@ -111,6 +114,7 @@
         .option-icon {
             width: 24px;
             height: 24px;
+            flex-shrink: 0;
         }
     }
 

@@ -299,3 +299,34 @@ export async function getLatestAssessments() {
 export async function getPopularAssessments() {
     return request('/wechat_mp/assessments/popular')
 }
+
+// 获取用户孩子信息
+export async function getUserChildren() {
+    return request('/wechat_mp/users/user_kids')
+}
+
+// 保存用户孩子信息
+export async function saveUserChildren(data) {
+    return request('/wechat_mp/users/user_kids', {
+        method: 'POST',
+        data
+    })
+}
+
+// 获取养育状态题库
+export async function getOnboarding() {
+    return request('/wechat_mp/surveys/onboarding')
+}
+
+// 保存养育状态题
+export async function saveOnboarding(data) {
+    return request('/wechat_mp/surveys', {
+        method: 'POST',
+        data
+    })
+}
+
+// 获取用户养育状态结果
+export async function getUserOnboarding() {
+    return request('/wechat_mp/user_surveys/onboarding')
+}

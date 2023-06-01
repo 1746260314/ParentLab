@@ -1,0 +1,113 @@
+.my-child-rearing {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .progress-num {
+        margin-top: 20px;
+        padding: 0 32px;
+        height: 24px;
+        text-align: right;
+        font-family: 'Acumin Pro Wide';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: -0.2px;
+        color: #9AADB1;
+    }
+
+    .tips-bar {
+        margin: 16px auto 0;
+        width: 382px;
+        height: 56px;
+        background: #ECF1F2;
+        border-radius: 12px; 
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+    }
+
+    .question-wrap {
+        margin-top: 8px;
+        padding: 0 40px;
+        flex: 1;
+
+        .title {
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 24px;
+            color: #17505C;
+            margin-bottom: 40px;
+        }
+
+    }
+
+    .finished-btn {
+        margin: 16px auto 34px;
+        height: 56px;
+        width: 382px;
+        background: #FFC19E;
+        border-radius: 100px;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 56px;
+        text-align: center;
+        color: #02323D;
+    }
+
+    .controller-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 30px;
+        height: 74px;
+
+        .confirm-btn {
+            width: 154px;
+            height: 40px;
+            background: #FFC19E;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 40px;
+            text-align: center;
+        }
+
+        .controller {
+            height: 48px;
+            width: 132px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            .prev-text,
+            .next-text {
+                font-size: 16px;
+                line-height: 24px;
+                color: #17505C;
+                margin: 0 16px;
+            }
+
+            .disabled {
+                color: #A4C1C8;
+            }
+        }
+    }
+
+    .btn-disabled {
+        background: #ECF1F2 !important;
+    }
+}
