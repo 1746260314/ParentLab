@@ -323,13 +323,13 @@ export default class ReportInsights extends Component {
           <View className='comparison-wrap'>
             <View className='comparison-info'>
               <View>
-                距首次完成此评测已过去
+                距上次完成此评测已过去
               </View>
               <View className='time'>
                 {(first_test_at && current_test_at) && formatSeconds(Date.parse(new Date(current_test_at)) / 1000 - Date.parse(new Date(first_test_at)) / 1000)}
               </View>
               <View>
-                点击这里查看两次对比解读
+                点击这里查看近两次对比解读
               </View>
             </View>
             <View className='view-comparison-btn' onClick={this.viewComparison}>
