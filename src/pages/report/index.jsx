@@ -206,13 +206,13 @@ export default class Report extends Component {
           <View className='comparison-wrap'>
             <View className='comparison-info'>
               <View>
-                距首次完成此评测已过去
+                距上次完成此评测已过去
               </View>
               <View className='time'>
                 {first_test_at && formatTime(new Date() - new Date(first_test_at), 'D天h小时m分')}
               </View>
               <View>
-                点击这里查看两次对比解读
+                点击这里查看近两次对比解读
               </View>
             </View>
             <View className='view-comparison-btn' onClick={this.viewComparison}>
