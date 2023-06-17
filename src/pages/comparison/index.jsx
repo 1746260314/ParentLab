@@ -163,7 +163,7 @@ export default class Comparison extends Component {
           <View className='time'>
             <Image className='icon' src={clockIcon} />
             <Text>
-              首次：
+              上次：
               {first_test_at && formatTime(new Date(first_test_at), 'Y年M月D日 h时m分s秒')}
             </Text>
           </View>
