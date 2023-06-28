@@ -1,5 +1,7 @@
 export default defineAppConfig({
   pages: [
+    // 'pages/index-old/index',   // 首页
+    // 'pages/bannerDetail/index',   // 打开banner 公众号文章
     // 'pages/detail/index',  // 活动详情页
     // 'pages/transition/index',  // 中转页
     // 'pages/questionnaire/index',   // 问卷
@@ -16,7 +18,6 @@ export default defineAppConfig({
     // 'pages/paymentSuccess/index',   // 支付已完成
 
     'pages/index/index',   // 首页
-    'pages/bannerDetail/index',   // 打开banner 公众号文章
     'pages/parentCoach/index',   // 家长教练
     'pages/assessmentCenter/index',   // 养育测试
     'pages/personalCenter/index',  // 个人中心
@@ -36,6 +37,7 @@ export default defineAppConfig({
     'pages/comparison/index',   // 对比报告
     'pages/myChildren/index',   // 我的孩子
     'pages/myChildRearing/index',   // 我的孩子
+    'pages/reportH5/index',   // 报告h5
   ],
   window: {
     backgroundTextStyle: 'light',
