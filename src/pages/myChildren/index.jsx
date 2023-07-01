@@ -18,7 +18,7 @@ export default class MyChildren extends Component {
     assessmentID: Taro.getCurrentInstance().router.params.assessmentID,
     version: Taro.getCurrentInstance().router.params.version,
     needOnboarding: Taro.getCurrentInstance().router.params.needOnboarding,
-    kids: [],
+    kids: [defaultChild],
     kinship: '',
     show: false,
   }
@@ -51,6 +51,7 @@ export default class MyChildren extends Component {
     const res = await getUserChildren()
     if (res.status === 'success') {
       const { kids = [], kinship } = res.data
+      if (kids.length === 0) return
       this.setState({
         kids,
         kinship
@@ -89,27 +90,8 @@ export default class MyChildren extends Component {
   submit = async () => {
     const { loading, kids, kinship, assessmentID, version, needOnboarding } = this.state
     if (loading) return
-
-    let flag = true
-    if (!kinship) {
-      this.setState({ kinship_error: '必填项！' })
-      flag = false
-    }
-
-    if (!(kids[0].age && kids[0].gender && kids[0].name)) {
-      // this.setState({ kids_error: '请最少添加一个孩子的信息' })
-      flag = false
-    }
-
-    if (!flag) {
-      Taro.showToast({
-        title: '请补全信息',
-        icon: 'error',
-        duration: 2000
-      })
-      return
-    }
-
+    const disabled = !kinship || !(kids[0]?.age && kids[0]?.gender && kids[0]?.name)
+    if(disabled) return
     this.setState({ loading: true })
     const params = {
       kinship,
@@ -181,7 +163,8 @@ export default class MyChildren extends Component {
       kinshipOptions[2] = kinship
     }
     const otherKinshipOptions = ['爷爷', '奶奶', '外公', '外婆', '其他养育人']
-
+    const disabled = !kinship || !(kids[0]?.age && kids[0]?.gender && kids[0]?.name)
+    
     return (
       <View className='my-children'>
         <FormItem
@@ -217,21 +200,21 @@ export default class MyChildren extends Component {
               selected={kinship}
               onChange={this.handleOtherKinshipChange}
             />
-
           </View>
         </PageContainer>
-
 
         {kids.map((kid, index) => (
           <FormItem key={index}>
             <View className='kid-wrap'>
               <View className='title-bar'>
                 我的孩子
-                <Image
-                  className='delete-icon'
-                  src={deleteIcon}
-                  onClick={() => this.onClickDelete(index)}
-                />
+                {kids.length > 1 && (
+                  <Image
+                    className='delete-icon'
+                    src={deleteIcon}
+                    onClick={() => this.onClickDelete(index)}
+                  />
+                )}
               </View>
               <View className='kid-container'>
 
@@ -282,7 +265,7 @@ export default class MyChildren extends Component {
           className='submit-btn-wrap'
           onClick={this.submit}
         >
-          <View className='submit-btn'>
+          <View className={`submit-btn ${disabled ? 'btn-disabled' : ''}`}>
             保存
           </View>
         </View>

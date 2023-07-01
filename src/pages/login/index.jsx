@@ -154,8 +154,8 @@ export default class Login extends Component {
           openType={agreed ? 'getPhoneNumber' : ''}
           onGetPhoneNumber={this.getPhoneNumber}
         >
-          <Image className='icon' src={agreed ? wechatBlack : wechatGray} />
-          微信用户一键登录
+          {/* <Image className='icon' src={agreed ? wechatBlack : wechatGray} /> */}
+          手机号快捷登录
         </Button>
         <View className='agreement'>
           <View

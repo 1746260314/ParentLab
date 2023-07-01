@@ -61,6 +61,12 @@ export default class MyAssessment extends Component {
     })
   }
 
+  // 打开H5报告
+  toReportH5 = (code) => {
+    const url = `/pages/reportH5/index?code=${code}`
+    Taro.navigateTo({ url })
+  }
+
   render() {
     const { lists } = this.state
 
@@ -99,6 +105,24 @@ export default class MyAssessment extends Component {
             </View>
             {item.state === 'in_progress' && (
               <Progress percent={item.progress / item.assessment.question_count * 100} strokeWidth={4} active activeColor='#FF8863' backgroundColor='#ECF1F2' activeMode='forwards' />
+            )}
+            {item.h5_page_code && (
+              <View className='report-wrap'>
+                <View>
+                  <View className='title'>
+                    养育评估报告
+                  </View>
+                  <View className='desc'>
+                    您的评估报告已生成，点击查看完整内容
+                  </View>
+                </View>
+                <View
+                  className='btn'
+                  onClick={() => this.toReportH5(item.h5_page_code)}
+                >
+                  立即查看
+                </View>
+              </View>
             )}
           </View>
         ))}
