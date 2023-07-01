@@ -132,8 +132,8 @@ export default class Assessment extends Component {
 
   // 下一题
   handleNext = () => {
-    const { current, progress, answer_snapshot } = this.state
-    const disabled = current === progress || !(answer_snapshot[current]?.answers.length > 0)
+    const { current, progress, answer_snapshot, questions } = this.state
+    const disabled = current === progress || !(answer_snapshot[current]?.answers.length > 0) || current + 1 === questions.length
     if (disabled) return
     this.setState({ current: current + 1 })
   }
