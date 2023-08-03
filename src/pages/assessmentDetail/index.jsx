@@ -24,12 +24,13 @@ export default class Detail extends Component {
 
   componentDidMount() {
     this._getAssessmentDetail(this.state.assessmentID)
-    this._getUserProfile()
   }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getUserProfile()
+  }
 
   componentDidHide() { }
 
@@ -68,10 +69,11 @@ export default class Detail extends Component {
   _getUserProfile = async () => {
     const res = await getUserProfile()
     if (res.status === 'success') {
-      const { finish_onboarding_survey, has_kids } = res.data
+      const { finish_onboarding_survey, has_kids, has_phone_number } = res.data
       this.setState({
         finish_onboarding_survey,
         has_kids,
+        has_phone_number,
       })
     }
   }
@@ -83,7 +85,11 @@ export default class Detail extends Component {
     const today = formatTime(new Date().getTime(), 'Y-M-D')
     const showOnboardingPrompt = today !== stopOnboardingPrompt
     const showKidsPrompt = today !== stopKidsPrompt
-    const { finish_onboarding_survey, has_kids } = this.state
+    const { finish_onboarding_survey, has_kids, has_phone_number } = this.state
+    if(!has_phone_number) {
+      Taro.navigateTo({ url: '/pages/login/index' })
+      return
+    }
     //如果都填写了，直接开始
     if (finish_onboarding_survey && has_kids) {
       this.onStart()
