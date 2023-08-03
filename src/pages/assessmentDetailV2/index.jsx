@@ -28,6 +28,7 @@ export default class AssessmentDetailV2 extends Component {
     has_kids: true,
     showKidsToast: false,
     showOnboardingToast: false,
+    has_phone_number: false,
   }
 
   componentWillMount() { }
@@ -37,20 +38,19 @@ export default class AssessmentDetailV2 extends Component {
     const showHintPop = !Taro.getStorageSync(`assessment_detail_hint_pop_${assessmentID}`)
     this.setState({ showHintPop })
     this._getAssessmentDetail(assessmentID)
-
     // 引导分享，六秒后自动关闭
     setTimeout(() => {
       Taro.setStorageSync(`assessment_detail_hint_pop_${assessmentID}`, true)
       this.setState({ showHintPop: false })
     }, 6000)
-
     this._getAssessmentsShareInfo(assessmentID)
-    this._getUserProfile()
   }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() { 
+    this._getUserProfile()
+  }
 
   componentDidHide() { }
 
@@ -99,10 +99,11 @@ export default class AssessmentDetailV2 extends Component {
   _getUserProfile = async () => {
     const res = await getUserProfile()
     if (res.status === 'success') {
-      const { finish_onboarding_survey, has_kids } = res.data
+      const { finish_onboarding_survey, has_kids, has_phone_number } = res.data
       this.setState({
         finish_onboarding_survey,
         has_kids,
+        has_phone_number,
       })
     }
   }
@@ -119,7 +120,11 @@ export default class AssessmentDetailV2 extends Component {
     const today = formatTime(new Date().getTime(), 'Y-M-D')
     const showOnboardingPrompt = today !== stopOnboardingPrompt
     const showKidsPrompt = today !== stopKidsPrompt
-    const { finish_onboarding_survey, has_kids } = this.state
+    const { finish_onboarding_survey, has_kids, has_phone_number } = this.state
+    if(!has_phone_number) {
+      Taro.navigateTo({ url: '/pages/login/index' })
+      return
+    }
     //如果都填写了，直接开始
     if (finish_onboarding_survey && has_kids) {
       this.onStart()
