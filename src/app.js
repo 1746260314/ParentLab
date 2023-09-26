@@ -19,8 +19,11 @@ class App extends Component {
 
   componentDidCatchError() { }
 
-  onLaunch() {
-    login()
+  onLaunch(options) {
+    console.log('options===', options);
+    console.log('gdt_vid===', options.gdt_vid);
+    let gdt_vid = options.gdt_vid
+    login(gdt_vid)
   }
 
   _getWeChatSettings = async () => {

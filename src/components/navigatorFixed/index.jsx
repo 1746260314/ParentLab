@@ -39,7 +39,7 @@ export default class NavigatorFixed extends Component {
   }
 
   navData = [
-    { key: 1, activeIcon: homeActive, icon: home, label: '成长营', path: '/pages/index/index' },
+    // { key: 1, activeIcon: homeActive, icon: home, label: '成长营', path: '/pages/index/index' },
     { key: 2, activeIcon: bookActive, icon: book, label: '家长教练', path: '/pages/parentCoach/index' },
     { key: 3, activeIcon: assessmentActive, icon: assessment, label: '养育测试', path: '/pages/assessmentCenter/index' },
     { key: 4, activeIcon: personalActive, icon: personal, label: '个人中心', path: '/pages/personalCenter/index' },
