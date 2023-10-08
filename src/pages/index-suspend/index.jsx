@@ -1,12 +1,14 @@
 import Taro from '@tarojs/taro'
 import { Component } from 'react'
-import { View, Image, Navigator } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 import NavigatorFixed from '../../components/navigatorFixed'
 import { getHomeLinks, getHomeSetting } from '../../utils/query'
 import lockIcon from '../../images/lock.png'
 import './index.less'
 
-export default class ParentCoach extends Component {
+const app = getApp()
+export default class GrowthCamp extends Component {
+
   state = {
     setting: {},
     list: [],
@@ -44,14 +46,14 @@ export default class ParentCoach extends Component {
   }
 
   _getHomeSetting = async () => {
-    const res = await getHomeSetting('parent_coach')
+    const res = await getHomeSetting('growth_camp')
     if (res.status === 'success') {
       this.setState({ setting: res.data })
     }
   }
 
   _getHomeLinks = async () => {
-    const res = await getHomeLinks('parent_coach')
+    const res = await getHomeLinks('growth_camp')
     if (res.status === 'success') {
       this.setState({ list: res.data })
     }
@@ -71,7 +73,7 @@ export default class ParentCoach extends Component {
   travelTo = (url) => {
     if(!url) return
     Taro.openCustomerServiceChat({
-      extInfo: { url },
+      extInfo: { url: url },
       corpId: 'ww4a9a6e350546d299',
     })
   }
@@ -79,7 +81,7 @@ export default class ParentCoach extends Component {
   render() {
     const { setting, list, isFixed } = this.state
     return (
-      <View className='parent-coach'>
+      <View className='growth-camp'>
         <View className='list'>
           {list.map((item, index) => (
             <Image
@@ -101,7 +103,7 @@ export default class ParentCoach extends Component {
             </View>
           </View>
         )}
-        <NavigatorFixed selected={2} onClick={this.clickNavigatorEventTracking} />
+        <NavigatorFixed selected={1} onClick={this.clickNavigatorEventTracking} />
       </View>
     )
   }

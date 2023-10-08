@@ -119,7 +119,15 @@ export default class Login extends Component {
         if (redirectUrl) {
           Taro.redirectTo({ url: `${redirectUrl}?${paramsKey}=${paramsValue}` })
         } else {
-          Taro.navigateBack()
+          let pages = Taro.getCurrentPages()
+          if (pages[pages.length - 2]) {
+            //如果有上一页，就返回上一页
+            Taro.navigateBack()
+          } else {
+            Taro.redirectTo({
+              url: '/pages/index/index'
+            })
+          }
         }
       }
     } else {

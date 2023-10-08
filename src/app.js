@@ -23,7 +23,7 @@ class App extends Component {
     console.log('options===', options);
     console.log('gdt_vid===', options.gdt_vid);
     let gdt_vid = options.gdt_vid
-    login(gdt_vid)
+    login(JSON.stringify(options))
   }
 
   _getWeChatSettings = async () => {

@@ -17,8 +17,8 @@ export default defineAppConfig({
     // 'pages/orderExpired/index',   // 订单已失效
     // 'pages/paymentSuccess/index',   // 支付已完成
 
-    // 'pages/index/index',   // 首页
-    'pages/parentCoach/index',   // 家长教练
+    'pages/index/index',   // 首页
+    // 'pages/parentCoach/index',   // 家长教练
     'pages/assessmentCenter/index',   // 养育测试
     'pages/personalCenter/index',  // 个人中心
     'pages/login/index',  // 登录页
